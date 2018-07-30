@@ -18,7 +18,6 @@ class Enemy : public Plane {
     EnemyType getEnemyType();
     Direction getDirection();
     Direction getTurretDirection();
-//    int8_t *getStartingPos();
     int8_t getOffsetX();
     int8_t getOffsetY();
     uint8_t getDelayStart();

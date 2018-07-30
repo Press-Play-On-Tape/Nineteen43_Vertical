@@ -20,7 +20,6 @@ Enemy::Enemy(const EnemyType type,
   _health = 0;
   _explosionImage = 0;
   _turretDirection = Direction::West;
-
 }
 
 const Rect Enemy::getRect() {
