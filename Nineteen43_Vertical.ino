@@ -39,7 +39,7 @@ const int8_t* const sequences[] =        { seq_00, seq_01, seq_02, seq_03 };
 const int8_t obstacleLaunchDelayInc[] =  { OBSTACLE_LAUNCH_DELAY_INC_L0, OBSTACLE_LAUNCH_DELAY_INC_L1, OBSTACLE_LAUNCH_DELAY_INC_L2 };
 const int8_t frameRateInc[] =            { FRAME_RATE_INC_L0, FRAME_RATE_INC_L1, FRAME_RATE_INC_L2 };
 
-const SQ7x8 obstacleBulletsValueDec[] =  { BULLETS_DECREMENT_L0, BULLETS_DECREMENT_L0, BULLETS_DECREMENT_L0 };
+const SQ7x8 obstacleBulletsValueDec[] =  { BULLETS_DECREMENT_L0, BULLETS_DECREMENT_L1, BULLETS_DECREMENT_L2 };
 const SQ7x8 obstacleFuelValueDec[] =     { FUEL_DECREMENT_L0, FUEL_DECREMENT_L1, FUEL_DECREMENT_L2 };
 const SQ7x8 obstacleHealthValueDec[] =   { HEALTH_DECREMENT_L0, HEALTH_DECREMENT_L1, HEALTH_DECREMENT_L2 };
 
@@ -172,7 +172,7 @@ void loop() {
 
     case STATE_GAME_END_OF_MISSION:
     case STATE_GAME_END_OF_GAME:
-      endOfSequence();
+      endOfSequence(level);
       break;
 
     #ifdef HAS_CREDITS
@@ -1136,6 +1136,9 @@ void moveAndRenderPlayerBullets() {
     playerBullets[i].move();
     
     if (playerBullets[i].getEnabled()) {
+      #ifdef RENDER_BULLETS_ON_BLACK
+      arduboy.fillRect(playerBullets[i].getX() - 1, playerBullets[i].getY() - 1, 3, 3, BLACK);
+      #endif
       arduboy.drawPixel(playerBullets[i].getX(), playerBullets[i].getY(), WHITE);
     }
     
@@ -1155,6 +1158,9 @@ void moveAndRenderEnemyBullets() {
     enemyBullets[i].move();
     
     if (enemyBullets[i].getEnabled()) {
+      #ifdef RENDER_BULLETS_ON_BLACK
+      arduboy.fillRect(enemyBullets[i].getX() - 1, enemyBullets[i].getY() - 1, 3, 3, BLACK);
+      #endif
       arduboy.drawPixel(enemyBullets[i].getX(), enemyBullets[i].getY(), WHITE);
     }
     

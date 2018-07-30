@@ -28,6 +28,13 @@
             "compilerPath": "/usr/bin/clang",
             "cStandard": "c11",
             "cppStandard": "c++17"
+        },
+        {
+            "name": "Win32",
+            "includePath": [
+                "C:\\Users\\simon.holmes\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\**",
+                "C:\\Users\\simon.holmes\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.6.20\\**"
+            ]
         }
     ],
     "version": 4

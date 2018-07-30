@@ -4,15 +4,13 @@
  *  End of mission / game loop ..
  * -----------------------------------------------------------------------------------------------------------------------------
  */
-void endOfSequence() {
+void endOfSequence(uint8_t level) {
 
-  uint16_t missionScore = player.getScore();
-  uint16_t grandScore = player.getGrandScore();
   uint16_t high = EEPROMReadInt(EEPROM_SCORE + (level * 2));
   
-  if (grandScore > high) EEPROMWriteInt(EEPROM_SCORE + (level * 2), grandScore);
+  if (player.getGrandScore() > high) EEPROMWriteInt(EEPROM_SCORE + (level * 2), player.getGrandScore());
   
-  for (int16_t i = -20; i < 100; i++) {
+  for (int8_t i = -20; i < 100; i++) {
 
     while (!(arduboy.nextFrame())) {}
 
@@ -54,7 +52,7 @@ void endOfSequence() {
     {
       Sprites::drawOverwrite(61, 4, score_img, 0);
       uint8_t digits[4] = {};
-      extractDigits(digits, missionScore);
+      extractDigits(digits, player.getScore());
       
       for (uint8_t i = 0, y = 56; i < 4; ++i, y -= 6) {
         Sprites::drawSelfMasked(61, y, numbers_vert, digits[i]);
@@ -66,7 +64,7 @@ void endOfSequence() {
     {
       Sprites::drawOverwrite(48, 4, total_img, 0);
       uint8_t digits[4] = {};
-      extractDigits(digits, grandScore);
+      extractDigits(digits, player.getGrandScore());
       
       for (uint8_t i = 0, y = 56; i < 4; ++i, y -= 6) {
         Sprites::drawSelfMasked(48, y, numbers_vert, digits[i]);

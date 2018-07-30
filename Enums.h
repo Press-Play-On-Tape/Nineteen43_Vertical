@@ -9,6 +9,7 @@
 #define _SAVE_MEMORY
 #define HAS_CREDITS 
 #define _SHOW_SOUND
+#define RENDER_BULLETS_ON_BLACK
 
 // Game States ..
 

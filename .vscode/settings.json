@@ -3,6 +3,7 @@
         "rope": "cpp",
         "algorithm": "cpp",
         "locale": "cpp",
-        "ostream": "cpp"
+        "ostream": "cpp",
+        "limits": "cpp"
     }
 }
