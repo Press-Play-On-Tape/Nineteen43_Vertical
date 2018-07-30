@@ -8,8 +8,7 @@
 #define HAS_SCENERY
 #define _SAVE_MEMORY
 #define HAS_CREDITS 
-// Credits 296 bytes
-
+#define _SHOW_SOUND
 
 // Game States ..
 
