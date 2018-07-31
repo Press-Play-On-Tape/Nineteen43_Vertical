@@ -169,6 +169,7 @@
     Wave1,
     Wave2,
     #ifdef MICROCARD
+    Boat2,
     Island1,
     Island2,
     Island3,

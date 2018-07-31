@@ -113,7 +113,7 @@ void initSceneryItems() {
     sceneryItems[2] = { 224, 30, SceneryElement::Wave2};
     sceneryItems[3] = { 272, 35, SceneryElement::Wave1};
   #else
-    sceneryItems[0] = { 128, 20, SceneryElement::Boat,  SceneryElement::Boat};
+    sceneryItems[0] = { 128, 20, SceneryElement::Boat2, SceneryElement::Boat};
     sceneryItems[1] = { 182, 25, SceneryElement::Wave1, SceneryElement::Boat};
     sceneryItems[2] = { 236, 30, SceneryElement::Wave2, SceneryElement::Boat};
     sceneryItems[3] = { 290, 35, SceneryElement::Wave1, SceneryElement::Boat};
@@ -1391,14 +1391,20 @@ void renderScenery(const uint8_t frame) {
         break;
 
       case SceneryElement::Boat:
-        Sprites::drawSelfMasked(sceneryItems[x].x, sceneryItems[x].y, sail_boat, 0);
+        Sprites::drawSelfMasked(sceneryItems[x].x, sceneryItems[x].y, sail_boat_01, 0);
         break;
 
       #ifdef MICROCARD
-      case SceneryElement::Island1 ... SceneryElement::Island3:
-        Sprites::drawSelfMasked(sceneryItems[x].x, sceneryItems[x].y, island_L, static_cast<uint8_t>(sceneryItems[x].element) - static_cast<uint8_t>(SceneryElement::IslandStart));
-        Sprites::drawSelfMasked(sceneryItems[x].x + 24, sceneryItems[x].y, island_R, static_cast<uint8_t>(sceneryItems[x].element2) - static_cast<uint8_t>(SceneryElement::IslandStart));
-        break;
+        case SceneryElement::Boat2:
+          Sprites::drawSelfMasked(sceneryItems[x].x, sceneryItems[x].y, sail_boat_02, 0);
+          break;
+      #endif
+
+      #ifdef MICROCARD
+        case SceneryElement::Island1 ... SceneryElement::Island3:
+          Sprites::drawSelfMasked(sceneryItems[x].x, sceneryItems[x].y, island_L, static_cast<uint8_t>(sceneryItems[x].element) - static_cast<uint8_t>(SceneryElement::IslandStart));
+          Sprites::drawSelfMasked(sceneryItems[x].x + 24, sceneryItems[x].y, island_R, static_cast<uint8_t>(sceneryItems[x].element2) - static_cast<uint8_t>(SceneryElement::IslandStart));
+          break;
       #endif
 
       default: break;
@@ -1458,10 +1464,10 @@ void renderScenery(const uint8_t frame) {
 
           sceneryItems[x].x = 162;
           SceneryElement previousElement = (x > 0 ? sceneryItems[x - 1].element : sceneryItems[NUMBER_OF_SCENERY_ITEMS - 1].element);
-          uint8_t element = random(0, (static_cast<uint8_t>(previousElement) < static_cast<int8_t>(SceneryElement::IslandStart) ? 12 : static_cast<int8_t>(SceneryElement::IslandStart)));
+          uint8_t element = random(0, (static_cast<uint8_t>(previousElement) < static_cast<int8_t>(SceneryElement::IslandStart) ? 15 : static_cast<int8_t>(SceneryElement::IslandStart)));
 
-          if (element < 9) {
-            element = element % 3;
+          if (element < 12) {
+            element = element % 4;
             sceneryItems[x].element = static_cast<SceneryElement>(element);
             sceneryItems[x].y = random( 
                                         clamp(static_cast<int8_t>(4 + upperSceneryInfo[NUMBER_OF_SCENERY_ITEMS - 1].offset), static_cast<int8_t>(0), static_cast<int8_t>(32)), 
@@ -1469,7 +1475,7 @@ void renderScenery(const uint8_t frame) {
                                       );
           }
           else {
-            element = element - 6;
+            element = element - 12;
             sceneryItems[x].element = static_cast<SceneryElement>(element);
             sceneryItems[x].element2 = static_cast<SceneryElement>(random(static_cast<int8_t>(SceneryElement::IslandStart), static_cast<int8_t>(SceneryElement::IslandEnd)));
             sceneryItems[x].y = random( 

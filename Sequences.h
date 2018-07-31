@@ -165,9 +165,9 @@ const int8_t PROGMEM formation_02[] = { /* Leading two cross and disappear top a
   5, 
   (uint8_t)EnemyType::Zero, 1, 0, 5, 0, false, true, 1,
   (uint8_t)EnemyType::Zero, 1, 0, -20, 20, false, false, 1,
-  (uint8_t)EnemyType::ZeroHollow, 0, 0, -23, 50, false, false, 2,
+  (uint8_t)EnemyType::ZeroHollow, 0, 0, -25, 50, false, false, 2,
   (uint8_t)EnemyType::ZeroHollow, 0, 0, -7, 50, false, false, 2,
-  (uint8_t)EnemyType::ZeroHollow, 0, 0, 9, 50, false, false, 2,
+  (uint8_t)EnemyType::ZeroHollow, 0, 0, 11, 50, false, false, 2,
 };
 
 const int8_t PROGMEM formation_03[] = { /* Four straight ahead */
