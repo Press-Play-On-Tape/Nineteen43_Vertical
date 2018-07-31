@@ -126,29 +126,29 @@ void Enemy::setDelayStart(const uint8_t value) {
 
 bool Enemy::getInvertX() {
 
-  return _invertX;
+  return (_invert & 0xF0) > 0;
 
 }
 
 void Enemy::setInvertX(const bool value) {
 
-  _invertX = value;
+  _invert = (_invert & 0x0f) & (value << 4);
 
 }
 
 bool Enemy::getInvertY() {
 
-  return _invertY;
+  return (_invert & 0x0F) > 0;
 
 }
 
 void Enemy::setInvertY(const bool value) {
 
-  _invertY = value;
+  _invert = (_invert & 0xF0) & value;
 
 }
 
-void Enemy::setHealth(SQ7x8 value) {
+void Enemy::setHealth(const SQ7x8 value) {
 
   Plane::setHealth(value);
   _explosionImage = 0;
@@ -269,8 +269,8 @@ void Enemy::move() {
         const uint8_t temp = (uint8_t)pgm_read_byte(&_startingPos[_currentPos + 2]);
         int8_t moveX = (int8_t)pgm_read_byte(&_startingPos[_currentPos + 0]);
         int8_t moveY = (int8_t)pgm_read_byte(&_startingPos[_currentPos + 1]);
-        moveX = (_invertX ? -moveX : moveX);
-        moveY = (_invertY ? -moveY : moveY);
+        moveX = (this->getInvertX() ? -moveX : moveX);
+        moveY = (this->getInvertY() ? -moveY : moveY);
     
         if (temp != END_SEQUENCE_UINT) {
         
@@ -289,9 +289,9 @@ void Enemy::move() {
 
 			      // If the sequence has been inverted then the directions need to be transposed ..
 			
-            if (_invertX && !_invertY) { _direction = inverseX[(uint8_t)_direction]; }
-            if (!_invertX && _invertY) { _direction = inverseY[(uint8_t)_direction]; }
-            if (_invertX && _invertY)  { _direction = inverseXandY[(uint8_t)_direction]; }
+            if (this->getInvertX() && !this->getInvertY())  { _direction = inverseX[(uint8_t)_direction]; }
+            if (!this->getInvertX() && this->getInvertY())  { _direction = inverseY[(uint8_t)_direction]; }
+            if (this->getInvertX() && this->getInvertY())   { _direction = inverseXandY[(uint8_t)_direction]; }
       
           }
           else {

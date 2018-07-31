@@ -7,9 +7,10 @@
 #define PLANES_HAVE_BORDERS
 #define HAS_SCENERY
 #define _SAVE_MEMORY
-#define HAS_CREDITS 
+#define _HAS_CREDITS 
 #define _SHOW_SOUND
 #define RENDER_BULLETS_ON_BLACK
+#define MICROCARD
 
 // Game States ..
 
@@ -166,13 +167,23 @@
   enum class SceneryElement : uint8_t {
     Boat,
     Wave1,
-    Wave2
+    Wave2,
+    #ifdef MICROCARD
+    Island1,
+    Island2,
+    Island3,
+    IslandEnd,
+    IslandStart = Island1
+    #endif
   };
 
   struct SceneryItem {
     int16_t x;
     uint8_t y;
     SceneryElement element;
+    #ifdef MICROCARD
+    SceneryElement element2;
+    #endif
   };
 
 #endif
@@ -287,6 +298,7 @@ void extractDigits(uint8_t (&buffer)[size], uint16_t value) {
 
 }
 
+
 // ----------------------------------------------------------------------------
 //  Clamp the value into a range .. 
 //
@@ -296,3 +308,12 @@ template<typename T> T clamp(const T & v, const T & min, const T & max) {
 
 }
 
+
+// ----------------------------------------------------------------------------
+//  A better absolute as it uses less memory than the standard one .. 
+//
+template<typename T> T absT(const T & v) {
+  
+  return (v < 0) ? -v : v;
+
+}

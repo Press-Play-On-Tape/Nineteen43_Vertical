@@ -107,10 +107,17 @@ SQ7x8 obstacleFuelValue = FUEL_MAX;
 
 #ifdef HAS_SCENERY
 void initSceneryItems() {
-  sceneryItems[0] = { 128, 20, SceneryElement::Boat};
-  sceneryItems[1] = { 176, 25, SceneryElement::Wave1};
-  sceneryItems[2] = { 224, 30, SceneryElement::Wave2};
-  sceneryItems[3] = { 272, 35, SceneryElement::Wave1};
+  #ifndef MICROCARD
+    sceneryItems[0] = { 128, 20, SceneryElement::Boat};
+    sceneryItems[1] = { 176, 25, SceneryElement::Wave1};
+    sceneryItems[2] = { 224, 30, SceneryElement::Wave2};
+    sceneryItems[3] = { 272, 35, SceneryElement::Wave1};
+  #else
+    sceneryItems[0] = { 128, 20, SceneryElement::Boat,  SceneryElement::Boat};
+    sceneryItems[1] = { 182, 25, SceneryElement::Wave1, SceneryElement::Boat};
+    sceneryItems[2] = { 236, 30, SceneryElement::Wave2, SceneryElement::Boat};
+    sceneryItems[3] = { 290, 35, SceneryElement::Wave1, SceneryElement::Boat};
+  #endif
 }
 #endif
 
@@ -1370,6 +1377,7 @@ void renderScenery(const uint8_t frame) {
 
   // Draw scenery elements ..
 
+  
   for (uint8_t x = 0; x < NUMBER_OF_SCENERY_ITEMS; x++) {
 
     switch (sceneryItems[x].element) {
@@ -1377,6 +1385,7 @@ void renderScenery(const uint8_t frame) {
       case SceneryElement::Wave1:
         Sprites::drawSelfMasked(sceneryItems[x].x, sceneryItems[x].y, wave_01, 0);
         break;
+
       case SceneryElement::Wave2:
         Sprites::drawSelfMasked(sceneryItems[x].x, sceneryItems[x].y, wave_02, 0);
         break;
@@ -1385,9 +1394,20 @@ void renderScenery(const uint8_t frame) {
         Sprites::drawSelfMasked(sceneryItems[x].x, sceneryItems[x].y, sail_boat, 0);
         break;
 
+      #ifdef MICROCARD
+      case SceneryElement::Island1 ... SceneryElement::Island3:
+        Sprites::drawSelfMasked(sceneryItems[x].x, sceneryItems[x].y, island_L, static_cast<uint8_t>(sceneryItems[x].element) - static_cast<uint8_t>(SceneryElement::IslandStart));
+        Sprites::drawSelfMasked(sceneryItems[x].x + 24, sceneryItems[x].y, island_R, static_cast<uint8_t>(sceneryItems[x].element2) - static_cast<uint8_t>(SceneryElement::IslandStart));
+        break;
+      #endif
+
+      default: break;
+
     }
 
   }
+
+
 
 
   // Draw ground ..
@@ -1419,16 +1439,48 @@ void renderScenery(const uint8_t frame) {
 
       sceneryItems[x].x--;
 
-      if (sceneryItems[x].x < -48 && gameState != STATE_GAME_END_OF_MISSION) {
+      #ifndef MICROCARD
 
-        sceneryItems[x].x = 144;
-        sceneryItems[x].y = random( 
-                                    clamp(static_cast<int8_t>(4 + upperSceneryInfo[NUMBER_OF_SCENERY_ITEMS - 1].offset), static_cast<int8_t>(0), static_cast<int8_t>(32)), 
-                                    clamp(static_cast<int8_t>(64 + lowerSceneryInfo[NUMBER_OF_SCENERY_ITEMS - 1].offset), static_cast<int8_t>(32), static_cast<int8_t>(48)) 
-                                  );
-        sceneryItems[x].element = static_cast<SceneryElement>(random(0, 3));
+        if (sceneryItems[x].x < -48 && gameState != STATE_GAME_END_OF_MISSION) {
 
-      }
+          sceneryItems[x].x = 144;        
+          sceneryItems[x].element = static_cast<SceneryElement>(random(0, 3));
+          sceneryItems[x].y = random( 
+                                      clamp(static_cast<int8_t>(4 + upperSceneryInfo[NUMBER_OF_SCENERY_ITEMS - 1].offset), static_cast<int8_t>(0), static_cast<int8_t>(32)), 
+                                      clamp(static_cast<int8_t>(64 + lowerSceneryInfo[NUMBER_OF_SCENERY_ITEMS - 1].offset), static_cast<int8_t>(32), static_cast<int8_t>(48)) 
+                                    );
+
+        }
+          
+      #else
+
+        if (sceneryItems[x].x < -54 && gameState != STATE_GAME_END_OF_MISSION) {
+
+          sceneryItems[x].x = 162;
+          SceneryElement previousElement = (x > 0 ? sceneryItems[x - 1].element : sceneryItems[NUMBER_OF_SCENERY_ITEMS - 1].element);
+          uint8_t element = random(0, (static_cast<uint8_t>(previousElement) < static_cast<int8_t>(SceneryElement::IslandStart) ? 12 : static_cast<int8_t>(SceneryElement::IslandStart)));
+
+          if (element < 9) {
+            element = element % 3;
+            sceneryItems[x].element = static_cast<SceneryElement>(element);
+            sceneryItems[x].y = random( 
+                                        clamp(static_cast<int8_t>(4 + upperSceneryInfo[NUMBER_OF_SCENERY_ITEMS - 1].offset), static_cast<int8_t>(0), static_cast<int8_t>(32)), 
+                                        clamp(static_cast<int8_t>(64 + lowerSceneryInfo[NUMBER_OF_SCENERY_ITEMS - 1].offset), static_cast<int8_t>(32), static_cast<int8_t>(48)) 
+                                      );
+          }
+          else {
+            element = element - 6;
+            sceneryItems[x].element = static_cast<SceneryElement>(element);
+            sceneryItems[x].element2 = static_cast<SceneryElement>(random(static_cast<int8_t>(SceneryElement::IslandStart), static_cast<int8_t>(SceneryElement::IslandEnd)));
+            sceneryItems[x].y = random( 
+                                        clamp(static_cast<int8_t>(4 + upperSceneryInfo[NUMBER_OF_SCENERY_ITEMS - 1].offset), static_cast<int8_t>(0), static_cast<int8_t>(20)), 
+                                        clamp(static_cast<int8_t>(64 + lowerSceneryInfo[NUMBER_OF_SCENERY_ITEMS - 1].offset), static_cast<int8_t>(21), static_cast<int8_t>(28)) 
+                                      );
+          }
+
+        }
+
+      #endif  
 
     }
 

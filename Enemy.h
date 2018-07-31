@@ -55,8 +55,7 @@ class Enemy : public Plane {
     
     // Used to track progress along sequence ..
 
-    bool _invertX;
-    bool _invertY;
+    uint8_t _invert;
     uint8_t _delayStart;
     int16_t _currentPos;
     const int8_t *_startingPos;
