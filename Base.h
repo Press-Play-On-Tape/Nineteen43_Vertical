@@ -7,15 +7,15 @@ class Base {
 
   public:
 
-    Base(SQ15x16 x, SQ15x16 y);
+    Base(const SQ15x16 x, const SQ15x16 y);
 
     SQ15x16 getX();
     SQ15x16 getY();
     bool getEnabled();
 
-    void setX(SQ15x16 value);
-    void setY(SQ15x16 value);
-    void setEnabled(bool value);
+    void setX(const SQ15x16 value);
+    void setY(const SQ15x16 value);
+    void setEnabled(const bool value);
 
   protected:
 

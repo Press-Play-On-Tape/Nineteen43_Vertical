@@ -38,13 +38,13 @@ SQ7x8 Player::getFuel() {
 
 }
 
-void Player::setFuel(SQ7x8 value) {
+void Player::setFuel(const SQ7x8 value) {
 
   _fuel = value;
 
 }
 
-void Player::decFuel(SQ7x8 value) {
+void Player::decFuel(const SQ7x8 value) {
 
   if (_fuel > 0) {
     _fuel = _fuel - value;
@@ -59,13 +59,13 @@ uint8_t Player::getBullets() {
 
 }
 
-void Player::setBullets(uint8_t value) {
+void Player::setBullets(const uint8_t value) {
 
   _bullets = value;
 
 }
 
-void Player::addBullets(uint8_t value) {
+void Player::addBullets(const uint8_t value) {
 
   uint16_t newBullets = _bullets + value;
   _bullets = (newBullets > BULLETS_MAX ? BULLETS_MAX : newBullets);
@@ -84,7 +84,7 @@ uint16_t Player::getScore() {
 
 }
 
-void Player::setScore(uint16_t value) {
+void Player::setScore(const uint16_t value) {
 
   _score = value;
 
@@ -96,7 +96,7 @@ uint16_t Player::getGrandScore() {
 
 }
 
-void Player::setGrandScore(uint16_t value) {
+void Player::setGrandScore(const uint16_t value) {
 
   _grandScore = value;
 
@@ -114,7 +114,7 @@ bool Player::inRoll() {
 
 }
 
-void Player::setPowerUp(bool value) {
+void Player::setPowerUp(const bool value) {
 
   _powerUp = (value ? POWER_UP_MAX : 0);
 

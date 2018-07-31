@@ -19,9 +19,9 @@ class Obstacle : public Base {
     ObstacleType getObstacleType();
     Rect getRect();
            
-    void setValue(SQ7x8 value);
-    void setSpeed(SQ7x8 value);
-    void setObstacleType(ObstacleType value);
+    void setValue(const SQ7x8 value);
+    void setSpeed(const SQ7x8 value);
+    void setObstacleType(const ObstacleType value);
     void setBitmap(const uint8_t *value);
     void setMask(const uint8_t *value);
          

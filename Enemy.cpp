@@ -51,7 +51,7 @@ EnemyType Enemy::getEnemyType() {
 
 }
 
-void Enemy::setEnemyType(EnemyType value) {
+void Enemy::setEnemyType(const EnemyType value) {
 
   _type = value;
 
@@ -63,7 +63,7 @@ Direction Enemy::getDirection() {
 
 }
 
-void Enemy::setDirection(Direction value) {
+void Enemy::setDirection(const Direction value) {
 
   _direction = value;
 
@@ -75,7 +75,7 @@ Direction Enemy::getTurretDirection() {
 
 }
 
-void Enemy::setTurretDirection(Direction value) {
+void Enemy::setTurretDirection(const Direction value) {
 
   _turretDirection = value;
 
@@ -94,7 +94,7 @@ int8_t Enemy::getOffsetX() {
 
 }
 
-void Enemy::setOffsetX(int8_t value) {
+void Enemy::setOffsetX(const int8_t value) {
 
   _offsetX = value;
 
@@ -106,7 +106,7 @@ int8_t Enemy::getOffsetY() {
 
 }
 
-void Enemy::setOffsetY(int8_t value) {
+void Enemy::setOffsetY(const int8_t value) {
 
   _offsetY = value;
 
@@ -118,7 +118,7 @@ uint8_t Enemy::getDelayStart() {
 
 }
 
-void Enemy::setDelayStart(uint8_t value) {
+void Enemy::setDelayStart(const uint8_t value) {
 
   _delayStart = value;
 
@@ -130,7 +130,7 @@ bool Enemy::getInvertX() {
 
 }
 
-void Enemy::setInvertX(bool value) {
+void Enemy::setInvertX(const bool value) {
 
   _invertX = value;
 
@@ -142,7 +142,7 @@ bool Enemy::getInvertY() {
 
 }
 
-void Enemy::setInvertY(bool value) {
+void Enemy::setInvertY(const bool value) {
 
   _invertY = value;
 
@@ -155,7 +155,7 @@ void Enemy::setHealth(SQ7x8 value) {
 
 }
 
-void Enemy::decHealth(SQ7x8 value) {
+void Enemy::decHealth(const SQ7x8 value) {
 
   Plane::decHealth(value);
   _explosionImage = 3;

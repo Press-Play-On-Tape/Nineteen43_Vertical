@@ -4,7 +4,7 @@
  *  End of mission / game loop ..
  * -----------------------------------------------------------------------------------------------------------------------------
  */
-void endOfSequence(uint8_t level) {
+void endOfSequence(const uint8_t level) {
 
   uint16_t high = EEPROMReadInt(EEPROM_SCORE + (level * 2));
   

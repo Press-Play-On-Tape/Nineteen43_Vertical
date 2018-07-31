@@ -36,7 +36,7 @@ SQ7x8 Obstacle::getValue() {
 
 }
 
-void Obstacle::setValue(SQ7x8 value) {
+void Obstacle::setValue(const SQ7x8 value) {
 
   _value = value;
 
@@ -48,7 +48,7 @@ SQ7x8 Obstacle::getSpeed() {
 
 }
 
-void Obstacle::setSpeed(SQ7x8 value) {
+void Obstacle::setSpeed(const SQ7x8 value) {
 
   _speed = value;
 
@@ -60,7 +60,7 @@ ObstacleType Obstacle::getObstacleType() {
 
 }
 
-void Obstacle::setObstacleType(ObstacleType value) {
+void Obstacle::setObstacleType(const ObstacleType value) {
 
   _obstacleType = value;
   

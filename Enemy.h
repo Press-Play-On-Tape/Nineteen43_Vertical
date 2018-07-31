@@ -30,16 +30,16 @@ class Enemy : public Plane {
     void setHealth(const SQ7x8 value);
     void decHealth(const SQ7x8 value);    
         
-    void setEnemyType(EnemyType value);
-    void setDirection(Direction value);
-    void setTurretDirection(Direction value);
+    void setEnemyType(const EnemyType value);
+    void setDirection(const Direction value);
+    void setTurretDirection(const Direction value);
     void setStartingPos(const int8_t *startingPos);
-    void setOffsetX(int8_t value);
-    void setOffsetY(int8_t value);
-    void setDelayStart(uint8_t value);
+    void setOffsetX(const int8_t value);
+    void setOffsetY(const int8_t value);
+    void setDelayStart(const uint8_t value);
     void setInvertX(bool value);
     void setInvertY(bool value);
-    void setNumberOfBulletsFired(uint8_t value);
+    void setNumberOfBulletsFired(const uint8_t value);
     void decNumberOfBulletsFired();
        
   private:

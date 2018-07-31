@@ -4,7 +4,7 @@
 EnemyBullet::EnemyBullet() { }
 
 void EnemyBullet::move() {
-  
+
   switch (_direction) {
   
     case Direction::North:
@@ -46,7 +46,7 @@ void EnemyBullet::move() {
     default: break;
       
   }
-  
+
   if (_x > WIDTH - SCOREBOARD_OUTER_RECT_WIDTH) _enabled = false;  
   if (_y > HEIGHT) _enabled = false;
   

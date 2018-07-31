@@ -23,13 +23,13 @@ class Player : public Plane {
     bool inRoll();
     bool getPowerUp();
 
-    void setFuel(SQ7x8 value);
-    void decFuel(SQ7x8 value);
-    void setBullets(uint8_t value);
-    void addBullets(uint8_t value);
+    void setFuel(const SQ7x8 value);
+    void decFuel(const SQ7x8 value);
+    void setBullets(const uint8_t value);
+    void addBullets(const uint8_t value);
     void decBullets();
-    void setScore(uint16_t value);
-    void setGrandScore(uint16_t value);
+    void setScore(const uint16_t value);
+    void setGrandScore(const uint16_t value);
     void setPowerUp(boolean value);
     void decPowerUp();
     void startRoll();

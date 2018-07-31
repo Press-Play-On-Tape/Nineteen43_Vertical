@@ -285,8 +285,9 @@ void introLoop() {
   Sprites::drawOverwrite(50, 30 - intro, zero_S, 0);
 
   #ifdef SHOW_SOUND
-    if (!showLevel) {
 
+    if (!showLevel) {
+      
       if (arduboy.audio.enabled()) {
         Sprites::drawOverwrite(0, 3, bButton_On, 0);
       }
@@ -575,7 +576,7 @@ void gameLoop() {
  *  Launch player bullet.
  * -----------------------------------------------------------------------------------------------------------------------------
  */
-void launchPlayerBullet(uint8_t x, uint8_t y, Direction direction) {
+void launchPlayerBullet(const uint8_t x, const uint8_t y, const Direction direction) {
 
   playerBullets[playerBulletIdx].setX(x + PLAYER_WIDTH);
   playerBullets[playerBulletIdx].setY(y + PLAYER_HEIGHT_HALF);
@@ -792,16 +793,16 @@ void launchFormation(const int8_t *formation) {
  *  Is the nominated enemy facing the player?
  * -----------------------------------------------------------------------------------------------------------------------------
  */
-bool isAimingAtPlayer(uint8_t enemyIdx) {
+bool isAimingAtPlayer(const uint8_t enemyIdx) {
   
-  int16_t playerX = player.getX().getInteger() + PLAYER_WIDTH_HALF;
-  int16_t playerY = player.getY().getInteger() + PLAYER_HEIGHT_HALF;
+  const int16_t playerX = player.getX().getInteger() + PLAYER_WIDTH_HALF;
+  const int16_t playerY = player.getY().getInteger() + PLAYER_HEIGHT_HALF;
 
-  int16_t enemyX = enemies[enemyIdx].getX().getInteger() + (enemies[enemyIdx].getEnemyType() == EnemyType::Boat ? ENEMY_BOAT_TURRENT_CENTER_X : enemies[enemyIdx].getWidth() / 2);
-  int16_t enemyY = enemies[enemyIdx].getY().getInteger() + (enemies[enemyIdx].getEnemyType() == EnemyType::Boat ? ENEMY_BOAT_TURRENT_CENTER_Y : enemies[enemyIdx].getHeight() / 2);
+  const int16_t enemyX = enemies[enemyIdx].getX().getInteger() + (enemies[enemyIdx].getEnemyType() == EnemyType::Boat ? ENEMY_BOAT_TURRENT_CENTER_X : enemies[enemyIdx].getWidth() / 2);
+  const int16_t enemyY = enemies[enemyIdx].getY().getInteger() + (enemies[enemyIdx].getEnemyType() == EnemyType::Boat ? ENEMY_BOAT_TURRENT_CENTER_Y : enemies[enemyIdx].getHeight() / 2);
 
-  int16_t deltaX = playerX - enemyX;
-  int16_t deltaY = playerY - enemyY;
+  const int16_t deltaX = playerX - enemyX;
+  const int16_t deltaY = playerY - enemyY;
 
   SQ15x16 heading = AIM_Q2_MAX;
   if (deltaX != 0) heading = abs((SQ15x16)deltaY / (SQ15x16)deltaX);
@@ -857,7 +858,7 @@ bool isAimingAtPlayer(uint8_t enemyIdx) {
  *  Rotate the boat's turret to aim at the player.
  * -----------------------------------------------------------------------------------------------------------------------------
  */
-Direction aimAtPlayer(uint8_t enemyIdx) {
+Direction aimAtPlayer(const uint8_t enemyIdx) {
 
   int16_t playerX = player.getX().getInteger() + PLAYER_WIDTH_HALF;
   int16_t playerY = player.getY().getInteger() + PLAYER_HEIGHT_HALF;
@@ -890,7 +891,7 @@ Direction aimAtPlayer(uint8_t enemyIdx) {
  *  Get the direction to turn turret towards.
  * -----------------------------------------------------------------------------------------------------------------------------
  */
-Direction getAimDirection(int8_t deltaX, int8_t deltaY, SQ15x16 heading) {
+Direction getAimDirection(const int8_t deltaX, const int8_t deltaY, const SQ15x16 heading) {
 
   if (deltaY <= 0) {
 
@@ -1322,7 +1323,7 @@ void renderScoreboadGauge(const uint8_t imageX, const uint8_t imageY, const uint
  *   it resets the settings ..
  * ----------------------------------------------------------------------------
  */
-void initEEPROM(bool forceOverwrite) {
+void initEEPROM(const bool forceOverwrite) {
 
   uint8_t c1 = EEPROM.read(EEPROM_START_C1);
   uint8_t c2 = EEPROM.read(EEPROM_START_C2);
@@ -1364,7 +1365,7 @@ const int8_t lower_offsets[] = { -4, -4, 0,   0, 0, 4,    0, 0, 4 };
 const int8_t upper_offsets[] = { -4, 0, 0,   -4, 0, 0,    4, 4, 4 };
 
 
-void renderScenery(uint8_t frame) {
+void renderScenery(const uint8_t frame) {
 
 
   // Draw scenery elements ..
@@ -1687,7 +1688,7 @@ Serial.print(".c2.");
 }
 
 
-uint8_t getOffsetsIndex(uint8_t newTile, uint8_t oldTile) {
+uint8_t getOffsetsIndex(const uint8_t newTile, const uint8_t oldTile) {
 
   uint8_t index = 0;
 

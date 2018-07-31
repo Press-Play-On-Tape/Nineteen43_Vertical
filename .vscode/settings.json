@@ -4,6 +4,10 @@
         "algorithm": "cpp",
         "locale": "cpp",
         "ostream": "cpp",
-        "limits": "cpp"
+        "limits": "cpp",
+        "system_error": "cpp",
+        "xfunctional": "cpp",
+        "xlocmon": "cpp",
+        "xtr1common": "cpp"
     }
 }
