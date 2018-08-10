@@ -22,10 +22,7 @@
 #include "Images/Images_Splash.h"
 #include "Images/Images_Scenery.h"
 #include "Images/Images_Arrays.h"
-
-#ifdef HAS_SCENERY
 #include "Images/Images_Scenery.h"
-#endif
 
 Arduboy2Ext arduboy;
 ArduboyTones sound(arduboy.audio.enabled);
@@ -88,24 +85,15 @@ SQ7x8 obstacleBulletsValue = BULLETS_MAX;
 SQ7x8 obstacleHealthValue = HEALTH_MAX;
 SQ7x8 obstacleFuelValue = FUEL_MAX;
 
-#ifdef HAS_SCENERY
+uint8_t sceneryUpper = SCENERY_UPPER_NONE;                  // Defines the current 'trend' for the scenery - NONE, FULL, INCR, DECR
+uint8_t sceneryLower = SCENERY_LOWER_NONE;
 
-  #define NUMBER_OF_SCENERY_TILES 5
-  #define NUMBER_OF_SCENERY_ITEMS 4
-  #define SCENERY_TILE_WIDTH 32
+SceneryInfo upperSceneryInfo[NUMBER_OF_SCENERY_TILES];      // Scenery tiles are rendered across the screen with offset.
+SceneryInfo lowerSceneryInfo[NUMBER_OF_SCENERY_TILES];
+uint8_t sceneryOffset;
 
-  uint8_t sceneryUpper = SCENERY_UPPER_NONE;                  // Defines the current 'trend' for the scenery - NONE, FULL, INCR, DECR
-  uint8_t sceneryLower = SCENERY_LOWER_NONE;
+SceneryItem sceneryItems[NUMBER_OF_SCENERY_ITEMS];
 
-  SceneryInfo upperSceneryInfo[NUMBER_OF_SCENERY_TILES];      // Scenery tiles are rendered across the screen with offset.
-  SceneryInfo lowerSceneryInfo[NUMBER_OF_SCENERY_TILES];
-  uint8_t sceneryOffset;
-
-  SceneryItem sceneryItems[NUMBER_OF_SCENERY_ITEMS];
-
-#endif
-
-#ifdef HAS_SCENERY
 void initSceneryItems() {
   #ifndef MICROCARD
     sceneryItems[0] = { 128, 20, SceneryElement::Boat};
@@ -119,7 +107,6 @@ void initSceneryItems() {
     sceneryItems[3] = { 290, 35, SceneryElement::Wave1, SceneryElement::Boat};
   #endif
 }
-#endif
 
 
 /* -----------------------------------------------------------------------------------------------------------------------------
@@ -354,7 +341,27 @@ void introLoop() {
     gameState = STATE_GAME_INIT;   
     mission = 0; 
     
+  }  
+
+  #ifdef SHOW_SOUND
+  if (arduboy.justPressed(B_BUTTON)) {
+
+    showLevel = false;
+    if (arduboy.audio.enabled()) {
+  
+      arduboy.audio.off(); 
+  
+    }
+    else {
+  
+      arduboy.audio.on(); 
+  
+    }
+
+    arduboy.audio.saveOnOff();
+
   }
+  #endif
     
 }
 
@@ -402,21 +409,17 @@ void gameLoop() {
 
   uint8_t offsetY = (mission > 99 ? 0 : (mission > 9 ? 3 : 6));
   uint8_t offsetNumber = (mission > 99 ? 46 : (mission > 9 ? 44 : 41));
-  #ifdef HAS_SCENERY
-    renderScenery(arduboy.getFrameCount(2));
-  #endif
+
+  renderScenery(arduboy.getFrameCount(2));
   
   switch (intro) {
 
     case 80: 
-
-      #ifdef HAS_SCENERY
-        initSceneryItems();
-        for (uint8_t x = 0; x < NUMBER_OF_SCENERY_TILES; x++) {
-          upperSceneryInfo[x].offset = 0;
-          lowerSceneryInfo[x].offset = 0;
-        }
-      #endif
+      initSceneryItems();
+      for (uint8_t x = 0; x < NUMBER_OF_SCENERY_TILES; x++) {
+        upperSceneryInfo[x].offset = 0;
+        lowerSceneryInfo[x].offset = 0;
+      }
 
     case 2 ... 79:
 
@@ -519,9 +522,19 @@ void gameLoop() {
 
   moveAndRenderPlayerBullets();
   moveAndRenderEnemyBullets();
+
+  #ifndef MICROCARD
   moveAndRenderEnemies();
   moveAndRenderObstacle();
   player.renderImage();
+  #else
+  moveAndRenderEnemies(true);
+  moveAndRenderObstacle();
+  renderScenery_BelowPlanes();
+  player.renderImage();
+  moveAndRenderEnemies(false);
+  renderScenery_AbovePlanes();
+  #endif
 
   renderScoreboard();
   arduboy.display(true);
@@ -679,16 +692,12 @@ void launchMission_FirstFormation(const uint8_t *mission) {
   mission_formations_left = pgm_read_byte(&mission[missionIdx++]);
   mission_formations = mission_formations_left;
 
-  #ifdef HAS_SCENERY
   {
     uint8_t formationPlusScenery = pgm_read_byte(&mission[missionIdx++]);
     formation = formationPlusScenery & SCENERY_MASK_NONE;
     sceneryUpper = formationPlusScenery & SCENERY_MASK_UPPER;
     sceneryLower = formationPlusScenery & SCENERY_MASK_LOWER;
   }
-  #else
-    formation = pgm_read_byte(&mission[missionIdx++]);
-  #endif
 
   launchFormation(formations[formation]);
   --mission_formations_left;
@@ -711,17 +720,11 @@ void launchMission_FirstFormation(const uint8_t *mission) {
  * -----------------------------------------------------------------------------------------------------------------------------
  */
 void launchMission_NextFormation(const uint8_t *mission) {
-  
-  #ifdef HAS_SCENERY
-  {
-    uint8_t formationPlusScenery = pgm_read_byte(&mission[missionIdx++]);
-    formation = formationPlusScenery & SCENERY_MASK_NONE;
-    sceneryUpper = formationPlusScenery & SCENERY_MASK_UPPER;
-    sceneryLower = formationPlusScenery & SCENERY_MASK_LOWER;
-  }
-  #else
-    formation = pgm_read_byte(&mission[missionIdx++]);
-  #endif
+
+  uint8_t formationPlusScenery = pgm_read_byte(&mission[missionIdx++]);
+  formation = formationPlusScenery & SCENERY_MASK_NONE;
+  sceneryUpper = formationPlusScenery & SCENERY_MASK_UPPER;
+  sceneryLower = formationPlusScenery & SCENERY_MASK_LOWER;
 
   launchFormation(formations[formation]);
   --mission_formations_left;
@@ -1144,9 +1147,7 @@ void moveAndRenderPlayerBullets() {
     playerBullets[i].move();
     
     if (playerBullets[i].getEnabled()) {
-      #ifdef RENDER_BULLETS_ON_BLACK
       arduboy.fillRect(playerBullets[i].getX() - 1, playerBullets[i].getY() - 1, 3, 3, BLACK);
-      #endif
       arduboy.drawPixel(playerBullets[i].getX(), playerBullets[i].getY(), WHITE);
     }
     
@@ -1166,9 +1167,7 @@ void moveAndRenderEnemyBullets() {
     enemyBullets[i].move();
     
     if (enemyBullets[i].getEnabled()) {
-      #ifdef RENDER_BULLETS_ON_BLACK
       arduboy.fillRect(enemyBullets[i].getX() - 1, enemyBullets[i].getY() - 1, 3, 3, BLACK);
-      #endif
       arduboy.drawPixel(enemyBullets[i].getX(), enemyBullets[i].getY(), WHITE);
     }
     
@@ -1197,6 +1196,7 @@ void moveAndRenderObstacle() {
  *  Move and render the active enemies ..
  * -----------------------------------------------------------------------------------------------------------------------------
  */
+#ifndef MICROCARD
 void moveAndRenderEnemies() {
   
   for (uint8_t i = 0; i < NUMBER_OF_ENEMIES; ++i) {
@@ -1222,7 +1222,42 @@ void moveAndRenderEnemies() {
   }
 
 }
+#endif
 
+
+/* -----------------------------------------------------------------------------------------------------------------------------
+ *  Move and render the active enemies ..  Boats are handled differently as clouds should always be rendered above them.
+ * -----------------------------------------------------------------------------------------------------------------------------
+ */
+#ifdef MICROCARD
+void moveAndRenderEnemies(bool renderBoats) {
+  
+  for (uint8_t i = 0; i < NUMBER_OF_ENEMIES; ++i) {
+ 
+    if (!renderBoats && enemies[i].getEnemyType() == EnemyType::Boat) { continue; }
+    if (renderBoats && enemies[i].getEnemyType()  != EnemyType::Boat) { continue; }
+    
+    enemies[i].move();
+    Rect enemyRect = enemies[i].getRect();
+    
+    if (enemies[i].getEnabled() && enemies[i].getDelayStart() == 0
+                                && enemyRect.x + enemyRect.width > 0 && enemyRect.x < WIDTH 
+                                && enemyRect.y + enemyRect.height >= 0 && enemyRect.y < HEIGHT ) {
+
+      if (enemies[i].getEnemyType() == EnemyType::Boat) {
+
+        enemies[i].setTurretDirection(aimAtPlayer(i));
+
+      }
+
+      enemies[i].renderImage();
+
+    }
+
+  }
+
+}
+#endif
 
 /* -----------------------------------------------------------------------------------------------------------------------------
  *  Move player off the screen ..
@@ -1232,15 +1267,8 @@ void renderEndOfMission() {
 
   for (uint8_t i = 0; i < 128; ++i) {
 
-    #ifdef HAS_SCENERY
     renderScenery(i % 2);
-    #endif
-
-#ifndef PLANES_HAVE_BORDERS
-    Sprites::drawOverwrite(player.getX().getInteger() + i, player.getY().getInteger(), p38_0, 0);
-#else
     Sprites::drawExternalMask(player.getX().getInteger() + i, player.getY().getInteger(), p38_0, p38_mask_0, 0, 0);
-#endif
 
     renderScoreboard();
     arduboy.display(true);
@@ -1351,23 +1379,6 @@ void initEEPROM(const bool forceOverwrite) {
 
 
 
-#ifdef HAS_SCENERY
-
-#define SCENERY_TILE_DECR 1
-#define SCENERY_TILE_FLAT_BEGIN 2
-#define SCENERY_TILE_FLAT_END 6
-#define SCENERY_TILE_INCR 7
-
-#define SCENERY_LOWER_OFFSET_MIN -20    
-#define SCENERY_LOWER_OFFSET_MIN_PLUS_INC SCENERY_LOWER_OFFSET_MIN + 4       
-#define SCENERY_LOWER_OFFSET_MAX_MINUS_INC 20       
-#define SCENERY_LOWER_OFFSET_MAX SCENERY_LOWER_OFFSET_MAX_MINUS_INC + 4
-
-#define SCENERY_UPPER_OFFSET_MIN -24    
-#define SCENERY_UPPER_OFFSET_MIN_PLUS_INC SCENERY_UPPEROFFSET_MIN + 4       
-#define SCENERY_UPPER_OFFSET_MAX_MINUS_INC 20       
-#define SCENERY_UPPER_OFFSET_MAX SCENERY_UPPER_OFFSET_MAX_MINUS_INC + 4
-
 const int8_t lower_offsets[] = { -4, -4, 0,   0, 0, 4,    0, 0, 4 };
 const int8_t upper_offsets[] = { -4, 0, 0,   -4, 0, 0,    4, 4, 4 };
 
@@ -1398,13 +1409,16 @@ void renderScenery(const uint8_t frame) {
         case SceneryElement::Boat2:
           Sprites::drawSelfMasked(sceneryItems[x].x, sceneryItems[x].y, sail_boat_02, 0);
           break;
-      #endif
 
-      #ifdef MICROCARD
         case SceneryElement::Island1 ... SceneryElement::Island3:
           Sprites::drawSelfMasked(sceneryItems[x].x, sceneryItems[x].y, island_L, static_cast<uint8_t>(sceneryItems[x].element) - static_cast<uint8_t>(SceneryElement::IslandStart));
           Sprites::drawSelfMasked(sceneryItems[x].x + 24, sceneryItems[x].y, island_R, static_cast<uint8_t>(sceneryItems[x].element2) - static_cast<uint8_t>(SceneryElement::IslandStart));
           break;
+
+        case SceneryElement::Cloud_BelowPlanes:
+          Sprites::drawExternalMask(sceneryItems[x].x, sceneryItems[x].y, cloud, cloud_Mask, 0, 0);
+          break;
+
       #endif
 
       default: break;
@@ -1460,22 +1474,56 @@ void renderScenery(const uint8_t frame) {
           
       #else
 
+        #define FREQ_OF_COMMON_ELEMENTS 4
+        #define NUMBER_OF_COMMON_ELEMENTS (static_cast<uint8_t>(SceneryElement::Cloud_AbovePlanes) + 1)
+
         if (sceneryItems[x].x < -54 && gameState != STATE_GAME_END_OF_MISSION) {
 
           sceneryItems[x].x = 162;
           SceneryElement previousElement = (x > 0 ? sceneryItems[x - 1].element : sceneryItems[NUMBER_OF_SCENERY_ITEMS - 1].element);
-          uint8_t element = random(0, (static_cast<uint8_t>(previousElement) < static_cast<int8_t>(SceneryElement::IslandStart) ? 15 : static_cast<int8_t>(SceneryElement::IslandStart)));
+          uint8_t element = 0;
+  
+          switch (previousElement) {
 
-          if (element < 12) {
-            element = element % 4;
+            case SceneryElement::Boat ... SceneryElement::Cloud_BelowPlanes:
+
+              element = random(0, (FREQ_OF_COMMON_ELEMENTS * NUMBER_OF_COMMON_ELEMENTS) + 3 + 1);
+              break;
+
+            default:
+
+              element = random(0, (FREQ_OF_COMMON_ELEMENTS * NUMBER_OF_COMMON_ELEMENTS) + 1);
+              break;
+
+          }
+
+          switch (element / FREQ_OF_COMMON_ELEMENTS) {
+
+            case 0 ... (NUMBER_OF_COMMON_ELEMENTS - 1):
+              element = element / FREQ_OF_COMMON_ELEMENTS;
+              break;
+
+            default:
+              element = static_cast<uint8_t>(SceneryElement::Cloud_AbovePlanes) + element % NUMBER_OF_COMMON_ELEMENTS;
+              break;
+
+          }
+
+          if (element < static_cast<uint8_t>(SceneryElement::Boat2)) {
             sceneryItems[x].element = static_cast<SceneryElement>(element);
             sceneryItems[x].y = random( 
-                                        clamp(static_cast<int8_t>(4 + upperSceneryInfo[NUMBER_OF_SCENERY_ITEMS - 1].offset), static_cast<int8_t>(0), static_cast<int8_t>(32)), 
-                                        clamp(static_cast<int8_t>(64 + lowerSceneryInfo[NUMBER_OF_SCENERY_ITEMS - 1].offset), static_cast<int8_t>(32), static_cast<int8_t>(48)) 
+                                        clamp(static_cast<int8_t>(4 + upperSceneryInfo[NUMBER_OF_SCENERY_ITEMS - 1].offset), static_cast<int8_t>(2), static_cast<int8_t>(32)), 
+                                        clamp(static_cast<int8_t>(64 + lowerSceneryInfo[NUMBER_OF_SCENERY_ITEMS - 1].offset), static_cast<int8_t>(32), static_cast<int8_t>(46)) 
+                                      );
+          }
+          else if (element >= static_cast<uint8_t>(SceneryElement::Cloud_AbovePlanes) && element <= static_cast<uint8_t>(SceneryElement::Cloud_BelowPlanes)) {
+            sceneryItems[x].element = static_cast<SceneryElement>(element);
+            sceneryItems[x].y = random( 
+                                        clamp(static_cast<int8_t>(4 + upperSceneryInfo[NUMBER_OF_SCENERY_ITEMS - 1].offset), static_cast<int8_t>(2), static_cast<int8_t>(32)), 
+                                        clamp(static_cast<int8_t>(64 + lowerSceneryInfo[NUMBER_OF_SCENERY_ITEMS - 1].offset), static_cast<int8_t>(32), static_cast<int8_t>(46)) 
                                       );
           }
           else {
-            element = element - 12;
             sceneryItems[x].element = static_cast<SceneryElement>(element);
             sceneryItems[x].element2 = static_cast<SceneryElement>(random(static_cast<int8_t>(SceneryElement::IslandStart), static_cast<int8_t>(SceneryElement::IslandEnd)));
             sceneryItems[x].y = random( 
@@ -1499,20 +1547,13 @@ void renderScenery(const uint8_t frame) {
       
 
       // Shuffle the scenery across ..
-// Serial.print(sceneryLower);
-// Serial.print(" [");
+
       sceneryOffset = 0;
       for (uint8_t x = 0; x < NUMBER_OF_SCENERY_TILES - 1; x++) {
         upperSceneryInfo[x] = upperSceneryInfo[x + 1];
         lowerSceneryInfo[x] = lowerSceneryInfo[x + 1];
-// Serial.print(lowerSceneryInfo[x].offset);
-// Serial.print(",");
-// Serial.print(lowerSceneryInfo[x].tile);
-// Serial.print(" ");
       }
 
-// Serial.print("] ");
-      
 
       // Choose a new lower tile ..
 
@@ -1554,75 +1595,10 @@ void renderScenery(const uint8_t frame) {
             break;
 
         }
-// Serial.print(" min: ");
-// Serial.print(minimum);
-// Serial.print(",max: ");
-// Serial.print(maximum);
-// Serial.print(", rand ");     
 
         uint8_t newTile = random(minimum, maximum);
         lowerSceneryInfo[updateTile].tile = newTile;
         lowerSceneryInfo[updateTile].offset = offset + lower_offsets[getOffsetsIndex(newTile, lowerSceneryInfo[updateTile - 1].tile)];
-
-// Serial.print(newTile);
-// Serial.print(" ");
-
-/*
-        switch (newTile) {
-
-          case SCENERY_TILE_INCR:
-            switch (lowerSceneryInfo[updateTile - 1].tile) {
-              case SCENERY_TILE_INCR:
-Serial.print(".a0.");
-//                  upperSceneryInfo[updateTile].offset = upperSceneryInfo[updateTile].offset + 4;
-                break;
-              case SCENERY_TILE_DECR:
-Serial.print(".b0.");
-//                  upperSceneryInfo[updateTile].offset = upperSceneryInfo[updateTile].offset + 0;
-                break;
-              default:
-Serial.print(".c0.");
-//                  upperSceneryInfo[updateTile].offset = upperSceneryInfo[updateTile].offset + 4;
-                break;
-            }
-            break;
-
-          case SCENERY_TILE_DECR:
-            switch (upperSceneryInfo[updateTile - 1].tile) {
-              case SCENERY_TILE_INCR:
-Serial.print(".a1.");
-//                upperSceneryInfo[updateTile].offset = upperSceneryInfo[updateTile].offset + 0;
-                break;
-              case SCENERY_TILE_DECR:
-Serial.print(".b1.");
-//                upperSceneryInfo[updateTile].offset = upperSceneryInfo[updateTile].offset - 4;
-                break;
-              default:
-Serial.print(".c1.");
-//                upperSceneryInfo[updateTile].offset = upperSceneryInfo[updateTile].offset - 0;
-                break;
-            }
-            break;
-
-          default:
-            switch (upperSceneryInfo[updateTile - 1].tile) {
-              case SCENERY_TILE_INCR:
-Serial.print(".a2.");
-//               upperSceneryInfo[updateTile].offset = upperSceneryInfo[updateTile].offset + 0;
-                break;
-              case SCENERY_TILE_DECR:
-Serial.print(".b2.");
-//                 upperSceneryInfo[updateTile].offset = upperSceneryInfo[updateTile].offset -4;
-                break;
-              default:
-Serial.print(".c2.");
-//                 upperSceneryInfo[updateTile].offset = upperSceneryInfo[updateTile].offset + 0;
-                break;
-            }
-            break;
-        }
-Serial.println(upperSceneryInfo[updateTile].offset);
-*/
 
       }
       
@@ -1665,79 +1641,13 @@ Serial.println(upperSceneryInfo[updateTile].offset);
             break;
 
         }
-// Serial.print(" min: ");
-// Serial.print(minimum);
-// Serial.print(",max: ");
-// Serial.print(maximum);
-// Serial.print(", rand ");
+
         uint8_t newTile = random(minimum, maximum);
-// Serial.print(newTile);
-// Serial.print(" ");
-
-
 
         upperSceneryInfo[updateTile].tile = newTile;
         upperSceneryInfo[updateTile].offset = offset + upper_offsets[getOffsetsIndex(newTile, upperSceneryInfo[updateTile - 1].tile)];
-      
-/*
-        switch (newTile) {
-
-          case SCENERY_TILE_INCR:
-            switch (upperSceneryInfo[updateTile - 1].tile) {
-              case SCENERY_TILE_INCR:
-Serial.print(".a0.");
-//                  upperSceneryInfo[updateTile].offset = upperSceneryInfo[updateTile].offset + 4;
-                break;
-              case SCENERY_TILE_DECR:
-Serial.print(".b0.");
-//                  upperSceneryInfo[updateTile].offset = upperSceneryInfo[updateTile].offset + 4;
-                break;
-              default:
-Serial.print(".c0.");
-//                  upperSceneryInfo[updateTile].offset = upperSceneryInfo[updateTile].offset + 4;
-                break;
-            }
-            break;
-
-          case SCENERY_TILE_DECR:
-            switch (upperSceneryInfo[updateTile - 1].tile) {
-              case SCENERY_TILE_INCR:
-Serial.print(".a1.");
-//                upperSceneryInfo[updateTile].offset = upperSceneryInfo[updateTile].offset + 0;
-                break;
-              case SCENERY_TILE_DECR:
-Serial.print(".b1.");
-//                upperSceneryInfo[updateTile].offset = upperSceneryInfo[updateTile].offset - 4;
-                break;
-              default:
-Serial.print(".c1.");
-//                upperSceneryInfo[updateTile].offset = upperSceneryInfo[updateTile].offset - 0;
-                break;
-            }
-            break;
-
-          default:
-            switch (upperSceneryInfo[updateTile - 1].tile) {
-              case SCENERY_TILE_INCR:
-Serial.print(".a2.");
-//               upperSceneryInfo[updateTile].offset = upperSceneryInfo[updateTile].offset + 0;
-                break;
-              case SCENERY_TILE_DECR:
-Serial.print(".b2.");
-//                 upperSceneryInfo[updateTile].offset = upperSceneryInfo[updateTile].offset -4;
-                break;
-              default:
-Serial.print(".c2.");
-//                 upperSceneryInfo[updateTile].offset = upperSceneryInfo[updateTile].offset + 0;
-                break;
-            }
-            break;
-        }
-*/
+ 
       }
-
-
-// Serial.println(upperSceneryInfo[updateTile].offset);
 
     }
 
@@ -1745,6 +1655,51 @@ Serial.print(".c2.");
 
 }
 
+#ifdef MICROCARD
+void renderScenery_BelowPlanes() {
+
+
+  // Draw scenery elements ..
+  
+  for (uint8_t x = 0; x < NUMBER_OF_SCENERY_ITEMS; x++) {
+
+    switch (sceneryItems[x].element) {
+
+      case SceneryElement::Cloud_BelowPlanes:
+        Sprites::drawExternalMask(sceneryItems[x].x, sceneryItems[x].y, cloud, cloud_Mask, 0, 0);
+        break;
+
+      default: break;
+
+    }
+
+  }
+
+}
+#endif
+
+#ifdef MICROCARD
+void renderScenery_AbovePlanes() {
+
+
+  // Draw scenery elements ..
+  
+  for (uint8_t x = 0; x < NUMBER_OF_SCENERY_ITEMS; x++) {
+
+    switch (sceneryItems[x].element) {
+
+      case SceneryElement::Cloud_AbovePlanes:
+        Sprites::drawExternalMask(sceneryItems[x].x, sceneryItems[x].y, cloud, cloud_Mask, 0, 0);
+        break;
+
+      default: break;
+
+    }
+
+  }
+
+}
+#endif
 
 uint8_t getOffsetsIndex(const uint8_t newTile, const uint8_t oldTile) {
 
@@ -1784,7 +1739,6 @@ uint8_t getOffsetsIndex(const uint8_t newTile, const uint8_t oldTile) {
   return index;
 
 }
-#endif
 
 
 /* ----------------------------------------------------------------------------

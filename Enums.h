@@ -4,13 +4,10 @@
 #include "FixedPointsCommon.h"
 #include "Arduboy2Ext.h"
 
-#define PLANES_HAVE_BORDERS
-#define HAS_SCENERY
 #define _SAVE_MEMORY
 #define _HAS_CREDITS 
-#define _SHOW_SOUND
-#define RENDER_BULLETS_ON_BLACK
-#define MICROCARD
+#define SHOW_SOUND
+#define _MICROCARD
 
 // Game States ..
 
@@ -85,17 +82,10 @@
 #define PLAYER_HIT_BULLET_DECREMENT     0.25 
 #define PLAYER_HIT_PLANE_DECREMENT      0.05 
 
-#ifndef PLANES_HAVE_BORDERS
-#define PLAYER_WIDTH                    16
-#define PLAYER_WIDTH_HALF               8
-#define PLAYER_HEIGHT                   17
-#define PLAYER_HEIGHT_HALF              8
-#else
 #define PLAYER_WIDTH                    18
 #define PLAYER_WIDTH_HALF               9
 #define PLAYER_HEIGHT                   19
 #define PLAYER_HEIGHT_HALF              9
-#endif
 
 #define ENEMY_BULLETS_MAX               10
 #define ENEMY_NO_BULLETS_FIRED_MAX      3
@@ -157,37 +147,55 @@
 #define ROTATE_Q2_MIN                   (SQ15x16)2.413976
 #define ROTATE_Q2_MAX                   (SQ15x16)999
 
-#ifdef HAS_SCENERY
+#define NUMBER_OF_SCENERY_TILES         5
+#define NUMBER_OF_SCENERY_ITEMS         4
+#define SCENERY_TILE_WIDTH              32
 
-  struct SceneryInfo {
-    int8_t offset;
-    uint8_t tile;
-  };
 
-  enum class SceneryElement : uint8_t {
-    Boat,
-    Wave1,
-    Wave2,
-    #ifdef MICROCARD
-    Boat2,
-    Island1,
-    Island2,
-    Island3,
-    IslandEnd,
-    IslandStart = Island1
-    #endif
-  };
+#define SCENERY_TILE_DECR               1
+#define SCENERY_TILE_FLAT_BEGIN         2
+#define SCENERY_TILE_FLAT_END           6
+#define SCENERY_TILE_INCR               7
 
-  struct SceneryItem {
-    int16_t x;
-    uint8_t y;
-    SceneryElement element;
-    #ifdef MICROCARD
-    SceneryElement element2;
-    #endif
-  };
+#define SCENERY_LOWER_OFFSET_MIN -20    
+#define SCENERY_LOWER_OFFSET_MIN_PLUS_INC SCENERY_LOWER_OFFSET_MIN + 4       
+#define SCENERY_LOWER_OFFSET_MAX_MINUS_INC 20       
+#define SCENERY_LOWER_OFFSET_MAX SCENERY_LOWER_OFFSET_MAX_MINUS_INC + 4
 
-#endif
+#define SCENERY_UPPER_OFFSET_MIN -24    
+#define SCENERY_UPPER_OFFSET_MIN_PLUS_INC SCENERY_UPPEROFFSET_MIN + 4       
+#define SCENERY_UPPER_OFFSET_MAX_MINUS_INC 20       
+#define SCENERY_UPPER_OFFSET_MAX SCENERY_UPPER_OFFSET_MAX_MINUS_INC + 4
+
+struct SceneryInfo {
+  int8_t offset;
+  uint8_t tile;
+};
+
+enum class SceneryElement : uint8_t {
+  Boat,
+  Wave1,
+  Wave2,
+  #ifdef MICROCARD
+  Boat2,
+  Cloud_AbovePlanes,
+  Cloud_BelowPlanes,
+  Island1,
+  IslandStart = Island1,
+  Island2,
+  Island3,
+  IslandEnd,
+  #endif
+};
+
+struct SceneryItem {
+  int16_t x;
+  uint8_t y;
+  SceneryElement element;
+  #ifdef MICROCARD
+  SceneryElement element2;
+  #endif
+};
 
 enum class EnemyType : uint8_t {
   Zero,

@@ -12,8 +12,6 @@
  * -----------------------------------------------------------------------------------------------------------------------------
  */
 
-#ifdef HAS_SCENERY
-
 #define SCENERY_MASK_NONE  0b00001111
 #define SCENERY_MASK_LOWER 0b00110000
 #define SCENERY_MASK_UPPER 0b11000000
@@ -28,19 +26,6 @@
 #define SCENERY_UPPER_DECR 0b10000000
 #define SCENERY_UPPER_RAND 0b11000000
 
-#else
-
-#define SCENERY_LOWER_NONE 0b00000000
-#define SCENERY_LOWER_INCR 0b00000000
-#define SCENERY_LOWER_DECR 0b00000000
-#define SCENERY_LOWER_RAND 0b00000000
-
-#define SCENERY_UPPER_NONE 0b00000000
-#define SCENERY_UPPER_INCR 0b00000000
-#define SCENERY_UPPER_DECR 0b00000000
-#define SCENERY_UPPER_RAND 0b00000000
-
-#endif
 
 const uint8_t PROGMEM mission_00[] = { 
   14, 

@@ -185,43 +185,16 @@ void Player::renderImage() {
         _rollState = 0;
       }
 
- #ifdef PLANES_HAVE_BORDERS
       if (_health > -3) {
         Sprites::drawExternalMask(rollX, y, pgm_read_word_near(&_bitmaps[static_cast<uint8_t>(roll) ]), pgm_read_word_near(&_bitmaps[IMAGES_MASK_OFFSET + (static_cast<uint8_t>(roll) )]), 0, 0);
       }
-#else
-      Sprites::drawExternalMask(rollX, y, pgm_read_word_near(&_bitmaps[static_cast<uint8_t>(roll) ]), pgm_read_word_near(&_bitmaps[IMAGES_MASK_OFFSET + (static_cast<uint8_t>(roll) )]), 0, 0);
-#endif
+
     }
  
     if (_health <= 0) {
  
       _health = _health - static_cast<SQ7x8>(0.05);
       const auto bitmap = (abs(_health.getInteger()) - 1);
-
- #ifndef PLANES_HAVE_BORDERS
-
-      switch (_health.getInteger()) {
-  
-        case -2 ... -1:
-          Sprites::drawExternalMask(x, y, pgm_read_word_near(&_bitmaps[IMAGES_EXPLOSION_OFFSET + static_cast<uint8_t>(bitmap)]), pgm_read_word_near(&_bitmaps[IMAGES_EXPLOSION_MASK_OFFSET + static_cast<uint8_t>(bitmap)]), 0, 0);
-          break;
-          
-        case -4 ... -3:
-          Sprites::drawOverwrite(x, y, pgm_read_word_near(&_bitmaps[IMAGES_EXPLOSION_OFFSET + static_cast<uint8_t>(bitmap)]), 0);
-          break;
-
-        case -6 ... -5:
-          Sprites::drawOverwrite(x, y, pgm_read_word_near(&_bitmaps[IMAGES_EXPLOSION_OFFSET + 3]), 0);
-          break;
-          
-        case -10:
-          _enabled = false;
-          break;
-        
-      }
-
-#else
 
       switch (_health.getInteger()) {
   
@@ -238,8 +211,6 @@ void Player::renderImage() {
           break;
         
       }
-
-#endif
 
     }
 

@@ -23,14 +23,7 @@ Enemy::Enemy(const EnemyType type,
 }
 
 const Rect Enemy::getRect() {
-
-  #ifndef PLANES_HAVE_BORDERS
-  return { static_cast<int16_t>(_x.getInteger()), static_cast<int16_t>(_y.getInteger()), static_cast<uint8_t>(pgm_read_byte(pgm_read_word_near(_bitmaps))), static_cast<uint8_t>(pgm_read_byte(pgm_read_word_near(_bitmaps) + 1)) };
-  #else
   return { static_cast<int16_t>(_x.getInteger() + 1), static_cast<int16_t>(_y.getInteger() + 1), static_cast<uint8_t>(pgm_read_byte(pgm_read_word_near(_bitmaps)) - 2), static_cast<uint8_t>(pgm_read_byte(pgm_read_word_near(_bitmaps) + 1) - 2) };
-
-  #endif
-
 }
 
 uint8_t Enemy::getWidth() {
@@ -209,19 +202,11 @@ void Enemy::renderImage() {
           break;
           
         case -3 ... -2:
-#ifndef PLANES_HAVE_BORDERS       
-          Sprites::drawOverwrite(x, y, pgm_read_word_near(&_bitmaps[IMAGES_EXPLOSION_OFFSET + static_cast<uint8_t>(absHealthInt)]), 0);
-#else
           Sprites::drawExternalMask(x, y, pgm_read_word_near(&_bitmaps[IMAGES_EXPLOSION_OFFSET + static_cast<uint8_t>(absHealthInt)]), pgm_read_word_near(&_bitmaps[IMAGES_EXPLOSION_MASK_OFFSET + static_cast<uint8_t>(absHealthInt)]), 0, 0);
-#endif
           break;
 
         case -4:
-#ifndef PLANES_HAVE_BORDERS       
-          Sprites::drawOverwrite(x, y, pgm_read_word_near(&_bitmaps[IMAGES_EXPLOSION_OFFSET + 3]), 0);
-#else
           Sprites::drawExternalMask(x, y, pgm_read_word_near(&_bitmaps[IMAGES_EXPLOSION_OFFSET + 3]), pgm_read_word_near(&_bitmaps[IMAGES_EXPLOSION_MASK_OFFSET + 3]), 0, 0);
-#endif
           _enabled = false;
           break;
         

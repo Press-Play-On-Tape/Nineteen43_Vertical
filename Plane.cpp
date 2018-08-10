@@ -12,14 +12,7 @@ Plane::Plane(const uint8_t * const * images) : Base(0, 0) {
 }
 
 const Rect Plane::getRect() const {
-
-  #ifndef PLANES_HAVE_BORDERS
-  return { static_cast<int16_t>(_x.getInteger()), static_cast<int16_t>(_y.getInteger()), static_cast<uint8_t>(pgm_read_byte(pgm_read_word_near(_bitmaps))), static_cast<uint8_t>(pgm_read_byte(pgm_read_word_near(_bitmaps) + 1)) };
-  #else
   return { static_cast<int16_t>(_x.getInteger() + 1), static_cast<int16_t>(_y.getInteger() + 1), static_cast<uint8_t>(pgm_read_byte(pgm_read_word_near(_bitmaps)) - 2), static_cast<uint8_t>(pgm_read_byte(pgm_read_word_near(_bitmaps) + 1) - 2) };
-
-  #endif
-
 }
 
 const SQ7x8 Plane::getHealth() const {
