@@ -8,6 +8,12 @@
         "system_error": "cpp",
         "xfunctional": "cpp",
         "xlocmon": "cpp",
-        "xtr1common": "cpp"
+        "xtr1common": "cpp",
+        "__bit_reference": "cpp",
+        "__string": "cpp",
+        "deque": "cpp",
+        "ios": "cpp",
+        "memory": "cpp",
+        "type_traits": "cpp"
     }
 }

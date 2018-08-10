@@ -65,7 +65,7 @@ uint16_t obstacleLaunchCountdown = OBSTACLE_LAUNCH_DELAY_MIN;
 uint8_t enemyShotCountdown = 5;
 uint8_t level = 0;
 
-#ifdef SHOW_SOUND
+#ifndef MICROCARD
 bool showLevel = false;
 #endif
 
@@ -102,9 +102,9 @@ void initSceneryItems() {
     sceneryItems[3] = { 272, 35, SceneryElement::Wave1};
   #else
     sceneryItems[0] = { 128, 20, SceneryElement::Boat2, SceneryElement::Boat};
-    sceneryItems[1] = { 182, 25, SceneryElement::Wave1, SceneryElement::Boat};
-    sceneryItems[2] = { 236, 30, SceneryElement::Wave2, SceneryElement::Boat};
-    sceneryItems[3] = { 290, 35, SceneryElement::Wave1, SceneryElement::Boat};
+    sceneryItems[1] = { 182, 25, SceneryElement::Wave1, SceneryElement::Cloud_AbovePlanes};
+    sceneryItems[2] = { 236, 30, SceneryElement::Wave2, SceneryElement::Wave2};
+    sceneryItems[3] = { 290, 35, SceneryElement::Wave1, SceneryElement::Cloud_BelowPlanes};
   #endif
 }
 
@@ -169,7 +169,6 @@ void loop() {
       endOfSequence(level);
       break;
 
-    #ifdef HAS_CREDITS
     case STATE_CREDITS_INIT:
       creditsInit();
       break;
@@ -177,7 +176,6 @@ void loop() {
     case STATE_CREDITS_LOOP:
       credits_loop();
       break;
-    #endif
 
   }
 
@@ -213,20 +211,17 @@ void introInit() {
  *  Credits loop initialisation ..
  * -----------------------------------------------------------------------------------------------------------------------------
  */
-#ifdef HAS_CREDITS
 void creditsInit() {
   
   gameState = STATE_CREDITS_LOOP;
 
 }
-#endif
 
 
 /* -----------------------------------------------------------------------------------------------------------------------------
  *  Credits loop ..
  * -----------------------------------------------------------------------------------------------------------------------------
  */
-#ifdef HAS_CREDITS
 void credits_loop() {
 
   for (int16_t i = -20; i < 100; i++) {
@@ -259,7 +254,6 @@ void credits_loop() {
   gameState = STATE_INTRO_INIT;
   
 }
-#endif
 
 
 /* -----------------------------------------------------------------------------------------------------------------------------
@@ -278,7 +272,7 @@ void introLoop() {
   Sprites::drawOverwrite(41, 52 - intro, zero_S, 0);
   Sprites::drawOverwrite(50, 30 - intro, zero_S, 0);
 
-  #ifdef SHOW_SOUND
+  #ifndef MICROCARD
 
     if (!showLevel) {
       
@@ -322,19 +316,17 @@ void introLoop() {
 
     if (level > 0) level--;
     EEPROM.update(EEPROM_LEVEL, level);
-    #ifdef SHOW_SOUND
+    #ifndef MICROCARD
       showLevel = true;
     #endif
 
   }
 
-  #ifdef HAS_CREDITS
   if (arduboy.justPressed(UP_BUTTON) || arduboy.justPressed(DOWN_BUTTON)) {
 
     gameState = STATE_CREDITS_INIT;   
 
   }
-  #endif
 
   if (arduboy.justPressed(A_BUTTON)) { 
     
@@ -343,7 +335,7 @@ void introLoop() {
     
   }  
 
-  #ifdef SHOW_SOUND
+  #ifndef MICROCARD
   if (arduboy.justPressed(B_BUTTON)) {
 
     showLevel = false;
@@ -433,7 +425,7 @@ void gameLoop() {
       break;
 
     case 1:
-      launchMission_FirstFormation(missions[mission % NUMBER_OF_MISSIONS]);
+      launchMission(true, missions[mission % NUMBER_OF_MISSIONS]);
       intro--;
       break;
 
@@ -558,7 +550,7 @@ void gameLoop() {
 
       if (mission_formations_left > 0) {
 
-        launchMission_NextFormation(missions[mission % NUMBER_OF_MISSIONS]);
+        launchMission(false, missions[mission % NUMBER_OF_MISSIONS]);
   
       }
       else {
@@ -685,15 +677,17 @@ void launchObstacle() {
  *  Launch a new mission.
  * -----------------------------------------------------------------------------------------------------------------------------
  */
-void launchMission_FirstFormation(const uint8_t *mission) {
+void launchMission(bool firstFormation, const uint8_t *missionRef) {
 
-  missionIdx = 0;
+  if (firstFormation) {
 
-  mission_formations_left = pgm_read_byte(&mission[missionIdx++]);
-  mission_formations = mission_formations_left;
+    missionIdx = 0;
+    mission_formations_left = pgm_read_byte(&missionRef[missionIdx++]);
+    mission_formations = mission_formations_left;
+  }
 
   {
-    uint8_t formationPlusScenery = pgm_read_byte(&mission[missionIdx++]);
+    uint8_t formationPlusScenery = pgm_read_byte(&missionRef[missionIdx++]);
     formation = formationPlusScenery & SCENERY_MASK_NONE;
     sceneryUpper = formationPlusScenery & SCENERY_MASK_UPPER;
     sceneryLower = formationPlusScenery & SCENERY_MASK_LOWER;
@@ -702,32 +696,19 @@ void launchMission_FirstFormation(const uint8_t *mission) {
   launchFormation(formations[formation]);
   --mission_formations_left;
 
-  frameRate = frameRate + frameRateInc[level];
-  obstacleLaunchDelayMin = obstacleLaunchDelayMin + obstacleLaunchDelayInc[level];
-  obstacleLaunchDelayMax = obstacleLaunchDelayMax + obstacleLaunchDelayInc[level];
+  if (firstFormation) {
 
-  if (obstacleBulletsValue > BULLETS_MIN)  obstacleBulletsValue = obstacleBulletsValue - obstacleBulletsValueDec[level];
-  if (obstacleHealthValue > HEALTH_MIN)    obstacleHealthValue = obstacleHealthValue - obstacleHealthValueDec[level];
-  if (obstacleFuelValue > FUEL_MIN)        obstacleFuelValue = obstacleFuelValue - obstacleFuelValueDec[level];
+    frameRate = frameRate + frameRateInc[level];
+    obstacleLaunchDelayMin = obstacleLaunchDelayMin + obstacleLaunchDelayInc[level];
+    obstacleLaunchDelayMax = obstacleLaunchDelayMax + obstacleLaunchDelayInc[level];
 
-  arduboy.setFrameRate(frameRate);
+    if (obstacleBulletsValue > BULLETS_MIN)  obstacleBulletsValue = obstacleBulletsValue - obstacleBulletsValueDec[level];
+    if (obstacleHealthValue > HEALTH_MIN)    obstacleHealthValue = obstacleHealthValue - obstacleHealthValueDec[level];
+    if (obstacleFuelValue > FUEL_MIN)        obstacleFuelValue = obstacleFuelValue - obstacleFuelValueDec[level];
 
-}
+    arduboy.setFrameRate(frameRate);
 
-
-/* -----------------------------------------------------------------------------------------------------------------------------
- *  Launch the next formation in a mission.
- * -----------------------------------------------------------------------------------------------------------------------------
- */
-void launchMission_NextFormation(const uint8_t *mission) {
-
-  uint8_t formationPlusScenery = pgm_read_byte(&mission[missionIdx++]);
-  formation = formationPlusScenery & SCENERY_MASK_NONE;
-  sceneryUpper = formationPlusScenery & SCENERY_MASK_UPPER;
-  sceneryLower = formationPlusScenery & SCENERY_MASK_LOWER;
-
-  launchFormation(formations[formation]);
-  --mission_formations_left;
+  }
 
 }
 
@@ -1513,14 +1494,14 @@ void renderScenery(const uint8_t frame) {
             sceneryItems[x].element = static_cast<SceneryElement>(element);
             sceneryItems[x].y = random( 
                                         clamp(static_cast<int8_t>(4 + upperSceneryInfo[NUMBER_OF_SCENERY_ITEMS - 1].offset), static_cast<int8_t>(2), static_cast<int8_t>(32)), 
-                                        clamp(static_cast<int8_t>(64 + lowerSceneryInfo[NUMBER_OF_SCENERY_ITEMS - 1].offset), static_cast<int8_t>(32), static_cast<int8_t>(46)) 
+                                        clamp(static_cast<int8_t>(60 + lowerSceneryInfo[NUMBER_OF_SCENERY_ITEMS - 1].offset), static_cast<int8_t>(32), static_cast<int8_t>(46)) 
                                       );
           }
           else if (element >= static_cast<uint8_t>(SceneryElement::Cloud_AbovePlanes) && element <= static_cast<uint8_t>(SceneryElement::Cloud_BelowPlanes)) {
             sceneryItems[x].element = static_cast<SceneryElement>(element);
             sceneryItems[x].y = random( 
                                         clamp(static_cast<int8_t>(4 + upperSceneryInfo[NUMBER_OF_SCENERY_ITEMS - 1].offset), static_cast<int8_t>(2), static_cast<int8_t>(32)), 
-                                        clamp(static_cast<int8_t>(64 + lowerSceneryInfo[NUMBER_OF_SCENERY_ITEMS - 1].offset), static_cast<int8_t>(32), static_cast<int8_t>(46)) 
+                                        clamp(static_cast<int8_t>(60 + lowerSceneryInfo[NUMBER_OF_SCENERY_ITEMS - 1].offset), static_cast<int8_t>(32), static_cast<int8_t>(46)) 
                                       );
           }
           else {
@@ -1528,7 +1509,7 @@ void renderScenery(const uint8_t frame) {
             sceneryItems[x].element2 = static_cast<SceneryElement>(random(static_cast<int8_t>(SceneryElement::IslandStart), static_cast<int8_t>(SceneryElement::IslandEnd)));
             sceneryItems[x].y = random( 
                                         clamp(static_cast<int8_t>(4 + upperSceneryInfo[NUMBER_OF_SCENERY_ITEMS - 1].offset), static_cast<int8_t>(0), static_cast<int8_t>(20)), 
-                                        clamp(static_cast<int8_t>(64 + lowerSceneryInfo[NUMBER_OF_SCENERY_ITEMS - 1].offset), static_cast<int8_t>(21), static_cast<int8_t>(28)) 
+                                        clamp(static_cast<int8_t>(60 + lowerSceneryInfo[NUMBER_OF_SCENERY_ITEMS - 1].offset), static_cast<int8_t>(21), static_cast<int8_t>(28)) 
                                       );
           }
 

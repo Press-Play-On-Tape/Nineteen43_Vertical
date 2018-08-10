@@ -23,7 +23,7 @@ Enemy::Enemy(const EnemyType type,
 }
 
 const Rect Enemy::getRect() {
-  return { static_cast<int16_t>(_x.getInteger() + 1), static_cast<int16_t>(_y.getInteger() + 1), static_cast<uint8_t>(pgm_read_byte(pgm_read_word_near(_bitmaps)) - 2), static_cast<uint8_t>(pgm_read_byte(pgm_read_word_near(_bitmaps) + 1) - 2) };
+  return { static_cast<int16_t>(_x.getInteger() + 1), static_cast<int16_t>(_y.getInteger() + 1), getWidth(), getHeight() };
 }
 
 uint8_t Enemy::getWidth() {
@@ -177,7 +177,7 @@ void Enemy::renderImage() {
 
   int16_t x = _x.getInteger();
   int16_t y = _y.getInteger();
-  
+
   if (_enabled && _delayStart == 0 && x + this->getWidth() >= 0 && x < WIDTH) {
 
     Sprites::drawExternalMask(x, y, pgm_read_word_near(&_bitmaps[static_cast<uint8_t>(_direction)]), pgm_read_word_near(&_bitmaps[IMAGES_MASK_OFFSET + static_cast<uint8_t>(_direction)]), 0, 0);
@@ -288,7 +288,7 @@ void Enemy::move() {
             _x = _x + _repeatSeqXInc;
             _y = _y + _repeatSeqYInc;
             --_repeatSeqStep;
-        
+    
           }
 
           _currentPos = _currentPos + 3;
@@ -306,7 +306,7 @@ void Enemy::move() {
         _x = _x + _repeatSeqXInc;
         _y = _y + _repeatSeqYInc;
         --_repeatSeqStep;
-      
+
       }
 
     }

@@ -4,10 +4,12 @@
 #include "FixedPointsCommon.h"
 #include "Arduboy2Ext.h"
 
-#define _SAVE_MEMORY
-#define _HAS_CREDITS 
-#define SHOW_SOUND
 #define _MICROCARD
+
+
+// Remove comment // to free up some PROGMEM for DUEB
+// #define DEBUG
+
 
 // Game States ..
 
