@@ -523,8 +523,8 @@ void gameLoop() {
   moveAndRenderEnemies(true);
   moveAndRenderObstacle();
   renderScenery_BelowPlanes();
-  player.renderImage();
   moveAndRenderEnemies(false);
+  player.renderImage();
   renderScenery_AbovePlanes();
   #endif
 
@@ -1396,10 +1396,6 @@ void renderScenery(const uint8_t frame) {
           Sprites::drawSelfMasked(sceneryItems[x].x + 24, sceneryItems[x].y, island_R, static_cast<uint8_t>(sceneryItems[x].element2) - static_cast<uint8_t>(SceneryElement::IslandStart));
           break;
 
-        case SceneryElement::Cloud_BelowPlanes:
-          Sprites::drawExternalMask(sceneryItems[x].x, sceneryItems[x].y, cloud, cloud_Mask, 0, 0);
-          break;
-
       #endif
 
       default: break;
@@ -1670,7 +1666,7 @@ void renderScenery_AbovePlanes() {
     switch (sceneryItems[x].element) {
 
       case SceneryElement::Cloud_AbovePlanes:
-        Sprites::drawExternalMask(sceneryItems[x].x, sceneryItems[x].y, cloud, cloud_Mask, 0, 0);
+        Sprites::drawExternalMask(sceneryItems[x].x, sceneryItems[x].y, cloud_2, cloud_2_Mask, 0, 0);
         break;
 
       default: break;

@@ -4,7 +4,7 @@
 #include "FixedPointsCommon.h"
 #include "Arduboy2Ext.h"
 
-#define _MICROCARD
+#define MICROCARD
 
 
 // Remove comment // to free up some PROGMEM for DUEB
