@@ -1,7 +1,7 @@
-#include "Arduboy2Ext.h"
+#include "../Utils/Arduboy2Ext.h"
 #include <Sprites.h>
 #include "Player.h"
-#include "Enums.h"
+#include "../Utils/Enums.h"
 
 #define ROLL_DELAY  8
 

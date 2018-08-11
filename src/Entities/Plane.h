@@ -2,7 +2,7 @@
 
 #include "Sprites.h"
 #include "Base.h"
-#include "Enums.h"
+#include "../Utils/Enums.h"
 #include "FixedPoints.h"
 #include "FixedPointsCommon.h"
 

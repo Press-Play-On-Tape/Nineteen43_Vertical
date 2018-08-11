@@ -1,5 +1,5 @@
 #include "EnemyBullet.h"
-#include "Enums.h"
+#include "../Utils/Enums.h"
 
 EnemyBullet::EnemyBullet() { }
 

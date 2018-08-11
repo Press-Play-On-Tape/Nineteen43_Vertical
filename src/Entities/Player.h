@@ -1,9 +1,9 @@
 #pragma once
  
-#include "Arduboy2Ext.h"
+#include "../Utils/Arduboy2Ext.h"
 #include "Sprites.h"
 #include "Arduino.h"
-#include "Enums.h"
+#include "../Utils/Enums.h"
 #include "Plane.h"
 
 class Player : public Plane {

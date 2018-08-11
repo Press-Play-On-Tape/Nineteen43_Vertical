@@ -1,6 +1,6 @@
 #include "Bullet.h"
-#include "Arduboy2Ext.h"
-#include "Enums.h"
+#include "../Utils/Arduboy2Ext.h"
+#include "../Utils/Enums.h"
 
 Bullet::Bullet() { }
 

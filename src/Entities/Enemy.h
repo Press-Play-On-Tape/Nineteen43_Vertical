@@ -1,7 +1,7 @@
 #pragma once
  
 #include "Sprites.h"
-#include "Enums.h"
+#include "../Utils/Enums.h"
 #include "Plane.h"
 
 class Enemy : public Plane {

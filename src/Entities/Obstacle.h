@@ -3,7 +3,7 @@
 #include "Arduboy2.h"
 #include "Sprites.h"
 #include "Arduino.h"
-#include "Enums.h"
+#include "../Utils/Enums.h"
 #include "Base.h"
 #include "FixedPoints.h"
 #include "FixedPointsCommon.h"

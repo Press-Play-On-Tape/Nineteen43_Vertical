@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Enums.h"
+#include "../Utils/Enums.h"
 
 class Bullet {
 
