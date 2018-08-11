@@ -6,7 +6,7 @@
 
 #define MICROCARD
 #define SAVE_MEMORY
-#define ORIG_SCENERY
+#define _ORIG_SCENERY
 
 
 // Remove comment // to free up some PROGMEM for DUEB

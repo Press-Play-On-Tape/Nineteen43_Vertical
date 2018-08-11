@@ -41,6 +41,7 @@ void endOfSequence(const uint8_t level) {
   while (true) {
 
     endOfSequence_Render();
+    arduboy.pollButtons();
     Sprites::drawOverwrite(68, 15, usaf, 0);
 
 
