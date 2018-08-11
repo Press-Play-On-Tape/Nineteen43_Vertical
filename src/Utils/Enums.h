@@ -23,6 +23,9 @@
 #define STATE_GAME_END_OF_GAME           5
 #define STATE_CREDITS_INIT               6
 #define STATE_CREDITS_LOOP               7
+#define STATE_GAME_SAVE_SCORE            8
+#define STATE_GAME_HIGH_SCORE            9
+
 
 
 // Image array offsets ..

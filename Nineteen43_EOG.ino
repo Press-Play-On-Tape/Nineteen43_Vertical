@@ -22,9 +22,12 @@ void endOfSequence_Render() {
 
 void endOfSequence(const uint8_t level) {
 
-  uint16_t high = EEPROMReadInt(EEPROM_SCORE + (level * 2));
-  
-  if (player.getGrandScore() > high) EEPROMWriteInt(EEPROM_SCORE + (level * 2), player.getGrandScore());
+  #ifdef SAVE_MEMORY
+    uint16_t high = EEPROMReadInt(EEPROM_SCORE + (level * 2));
+    if (player.getGrandScore() > high) EEPROMWriteInt(EEPROM_SCORE + (level * 2), player.getGrandScore());
+  #else
+    uint16_t high = EEPROM_Utils::getHighScore();
+  #endif
   
   for (int8_t i = -20; i < 100; i++) {
 
@@ -77,7 +80,9 @@ void endOfSequence(const uint8_t level) {
       if (arduboy.justPressed(A_BUTTON)) { gameState = STATE_GAME_INIT; break; }
     }
     else {
+      #ifdef SAVE_MEMORY
       if (arduboy.justPressed(UP_BUTTON) && arduboy.justPressed(DOWN_BUTTON)) { initEEPROM(true); player.setGrandScore(0); }
+      #endif
       if (arduboy.justPressed(A_BUTTON)) { gameState = STATE_INTRO_INIT; break; }
 
     }

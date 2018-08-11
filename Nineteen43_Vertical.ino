@@ -24,8 +24,13 @@
 #include "src/Images/Images_Arrays.h"
 #include "src/Images/Images_Scenery.h"
 
+#ifndef SAVE_MEMORY
+#include "src/Utils/EEPROM_Utils.h"
+#endif
+
 Arduboy2Ext arduboy;
 ArduboyTones sound(arduboy.audio.enabled);
+HighScore highScore;
 
 const uint8_t* const missions[] =        { mission_00, mission_01, mission_02, mission_03, mission_04 };
 const int8_t* const formations[] =       { formation_00, formation_01, formation_02, formation_03, formation_04, formation_06, formation_05, 
@@ -115,7 +120,12 @@ void initSceneryItems() {
  */
 void setup() {
 
+  #ifdef SAVE_MEMORY
   initEEPROM(false);
+  #else
+  EEPROM_Utils::initEEPROM(false);
+  #endif
+
   arduboy.boot();
   arduboy.flashlight(); 
   arduboy.audio.begin();
@@ -167,6 +177,16 @@ void loop() {
     case STATE_GAME_END_OF_MISSION:
     case STATE_GAME_END_OF_GAME:
       endOfSequence(level);
+      break;
+
+    case STATE_GAME_SAVE_SCORE:
+      highScore.reset();
+      highScore.setSlotNumber(EEPROM_Utils::saveScore(player.getScore()));
+      gameState = STATE_GAME_HIGH_SCORE;
+      // break; Fall-through intentional.
+
+    case STATE_GAME_HIGH_SCORE:
+      renderHighScore(highScore);
       break;
 
     #ifdef SHOW_CREDITS
@@ -1355,6 +1375,7 @@ void renderScoreboadGauge(const uint8_t imageX, const uint8_t imageY, const uint
  *   it resets the settings ..
  * ----------------------------------------------------------------------------
  */
+#ifdef SAVE_MEMORY
 void initEEPROM(const bool forceOverwrite) {
 
   uint8_t c1 = EEPROM.read(EEPROM_START_C1);
@@ -1373,7 +1394,7 @@ void initEEPROM(const bool forceOverwrite) {
   }
 
 }
-
+#endif
 
 
 const int8_t lower_offsets[] = { -4, -4, 0,   0, 0, 4,    0, 0, 4 };
