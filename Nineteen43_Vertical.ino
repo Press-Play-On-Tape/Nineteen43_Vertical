@@ -169,6 +169,7 @@ void loop() {
       endOfSequence(level);
       break;
 
+    #ifdef SHOW_CREDITS
     case STATE_CREDITS_INIT:
       creditsInit();
       break;
@@ -176,6 +177,7 @@ void loop() {
     case STATE_CREDITS_LOOP:
       credits_loop();
       break;
+    #endif
 
   }
 
@@ -211,17 +213,20 @@ void introInit() {
  *  Credits loop initialisation ..
  * -----------------------------------------------------------------------------------------------------------------------------
  */
+#ifdef SHOW_CREDITS
 void creditsInit() {
   
   gameState = STATE_CREDITS_LOOP;
 
 }
+#endif
 
 
 /* -----------------------------------------------------------------------------------------------------------------------------
  *  Credits loop ..
  * -----------------------------------------------------------------------------------------------------------------------------
  */
+#ifdef SHOW_CREDITS
 void credits_loop() {
 
   for (int16_t i = -20; i < 100; i++) {
@@ -254,6 +259,7 @@ void credits_loop() {
   gameState = STATE_INTRO_INIT;
   
 }
+#endif
 
 
 /* -----------------------------------------------------------------------------------------------------------------------------
@@ -322,11 +328,13 @@ void introLoop() {
 
   }
 
+  #ifdef SHOW_CREDITS
   if (arduboy.justPressed(UP_BUTTON) || arduboy.justPressed(DOWN_BUTTON)) {
 
     gameState = STATE_CREDITS_INIT;   
 
   }
+  #endif
 
   if (arduboy.justPressed(A_BUTTON)) { 
     
@@ -518,13 +526,21 @@ void gameLoop() {
   #ifndef MICROCARD
   moveAndRenderEnemies();
   moveAndRenderObstacle();
+  #ifdef SAVE_MEMORY
   player.renderImage();
+  #else
+  player.renderImage(arduboy.getFrameCount(6) < 3);
+  #endif
   #else
   moveAndRenderEnemies(true);
   moveAndRenderObstacle();
   renderScenery_BelowPlanes();
   moveAndRenderEnemies(false);
+  #ifdef SAVE_MEMORY
   player.renderImage();
+  #else
+  player.renderImage(arduboy.getFrameCount(6) < 3);
+  #endif
   renderScenery_AbovePlanes();
   #endif
 
@@ -1392,8 +1408,13 @@ void renderScenery(const uint8_t frame) {
           break;
 
         case SceneryElement::Island1 ... SceneryElement::Island3:
-          Sprites::drawSelfMasked(sceneryItems[x].x, sceneryItems[x].y, island_L, static_cast<uint8_t>(sceneryItems[x].element) - static_cast<uint8_t>(SceneryElement::IslandStart));
-          Sprites::drawSelfMasked(sceneryItems[x].x + 24, sceneryItems[x].y, island_R, static_cast<uint8_t>(sceneryItems[x].element2) - static_cast<uint8_t>(SceneryElement::IslandStart));
+          #ifdef ORIG_SCENERY
+            Sprites::drawSelfMasked(sceneryItems[x].x, sceneryItems[x].y, island_L, static_cast<uint8_t>(sceneryItems[x].element) - static_cast<uint8_t>(SceneryElement::IslandStart));
+            Sprites::drawSelfMasked(sceneryItems[x].x + 24, sceneryItems[x].y, island_R, static_cast<uint8_t>(sceneryItems[x].element2) - static_cast<uint8_t>(SceneryElement::IslandStart));
+          #else
+            Sprites::drawSelfMasked(sceneryItems[x].x, sceneryItems[x].y, island_L, static_cast<uint8_t>(sceneryItems[x].element) - static_cast<uint8_t>(SceneryElement::IslandStart));
+            Sprites::drawSelfMasked(sceneryItems[x].x + 17, sceneryItems[x].y, island_R, static_cast<uint8_t>(sceneryItems[x].element2) - static_cast<uint8_t>(SceneryElement::IslandStart));
+          #endif
           break;
 
       #endif
@@ -1496,17 +1517,27 @@ void renderScenery(const uint8_t frame) {
           else if (element >= static_cast<uint8_t>(SceneryElement::Cloud_AbovePlanes) && element <= static_cast<uint8_t>(SceneryElement::Cloud_BelowPlanes)) {
             sceneryItems[x].element = static_cast<SceneryElement>(element);
             sceneryItems[x].y = random( 
-                                        clamp(static_cast<int8_t>(4 + upperSceneryInfo[NUMBER_OF_SCENERY_ITEMS - 1].offset), static_cast<int8_t>(2), static_cast<int8_t>(32)), 
-                                        clamp(static_cast<int8_t>(60 + lowerSceneryInfo[NUMBER_OF_SCENERY_ITEMS - 1].offset), static_cast<int8_t>(32), static_cast<int8_t>(46)) 
+                                        clamp(static_cast<int8_t>(-16 + upperSceneryInfo[NUMBER_OF_SCENERY_ITEMS - 1].offset), static_cast<int8_t>(2), static_cast<int8_t>(32)), 
+                                        clamp(static_cast<int8_t>(76 + lowerSceneryInfo[NUMBER_OF_SCENERY_ITEMS - 1].offset), static_cast<int8_t>(32), static_cast<int8_t>(46)) 
                                       );
           }
           else {
-            sceneryItems[x].element = static_cast<SceneryElement>(element);
-            sceneryItems[x].element2 = static_cast<SceneryElement>(random(static_cast<int8_t>(SceneryElement::IslandStart), static_cast<int8_t>(SceneryElement::IslandEnd)));
-            sceneryItems[x].y = random( 
-                                        clamp(static_cast<int8_t>(4 + upperSceneryInfo[NUMBER_OF_SCENERY_ITEMS - 1].offset), static_cast<int8_t>(0), static_cast<int8_t>(20)), 
-                                        clamp(static_cast<int8_t>(60 + lowerSceneryInfo[NUMBER_OF_SCENERY_ITEMS - 1].offset), static_cast<int8_t>(21), static_cast<int8_t>(28)) 
-                                      );
+
+            #ifdef SAVE_MEMORY
+              sceneryItems[x].element = static_cast<SceneryElement>(SceneryElement::IslandStart);
+              sceneryItems[x].element2 = static_cast<SceneryElement>(SceneryElement::IslandStart);
+              sceneryItems[x].y = random( 
+                                          clamp(static_cast<int8_t>(4 + upperSceneryInfo[NUMBER_OF_SCENERY_ITEMS - 1].offset), static_cast<int8_t>(0), static_cast<int8_t>(20)), 
+                                          clamp(static_cast<int8_t>(60 + lowerSceneryInfo[NUMBER_OF_SCENERY_ITEMS - 1].offset), static_cast<int8_t>(21), static_cast<int8_t>(28)) 
+                                        );
+            #else
+              sceneryItems[x].element = static_cast<SceneryElement>(element);
+              sceneryItems[x].element2 = static_cast<SceneryElement>(random(static_cast<int8_t>(SceneryElement::IslandStart), static_cast<int8_t>(SceneryElement::IslandEnd)));
+              sceneryItems[x].y = random( 
+                                          clamp(static_cast<int8_t>(4 + upperSceneryInfo[NUMBER_OF_SCENERY_ITEMS - 1].offset), static_cast<int8_t>(0), static_cast<int8_t>(20)), 
+                                          clamp(static_cast<int8_t>(60 + lowerSceneryInfo[NUMBER_OF_SCENERY_ITEMS - 1].offset), static_cast<int8_t>(21), static_cast<int8_t>(28)) 
+                                        );
+            #endif
           }
 
         }
@@ -1666,7 +1697,7 @@ void renderScenery_AbovePlanes() {
     switch (sceneryItems[x].element) {
 
       case SceneryElement::Cloud_AbovePlanes:
-        Sprites::drawExternalMask(sceneryItems[x].x, sceneryItems[x].y, cloud_2, cloud_2_Mask, 0, 0);
+        Sprites::drawExternalMask(sceneryItems[x].x, sceneryItems[x].y, cloud, cloud_Mask, 0, 0);
         break;
 
       default: break;

@@ -12,7 +12,11 @@ class Player : public Plane {
    
     Player(const uint8_t * const * images);
 
-    void renderImage();
+    #ifdef SAVE_MEMORY
+    void Player::renderImage();
+    #else
+    void Player::renderImage(uint8_t frame);
+    #endif
     void initGame();
     void initMission();
 

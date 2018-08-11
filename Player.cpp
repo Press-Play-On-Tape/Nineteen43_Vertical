@@ -132,7 +132,11 @@ bool Player::getPowerUp() {
 
 }
 
+#ifdef SAVE_MEMORY
 void Player::renderImage() {
+#else
+void Player::renderImage(uint8_t frame) {
+#endif
 
   int16_t x = _x.getInteger();
   int16_t y = _y.getInteger();
@@ -186,7 +190,12 @@ void Player::renderImage() {
       }
 
       if (_health > -3) {
+
+        #ifndef SAVE_MEMORY 
+        Sprites::drawExternalMask(rollX, y, pgm_read_word_near(&_bitmaps[static_cast<uint8_t>(roll) ]), pgm_read_word_near(&_bitmaps[IMAGES_MASK_OFFSET + (static_cast<uint8_t>(roll) )]), (roll == 0 ? frame : 0), 0);
+        #else
         Sprites::drawExternalMask(rollX, y, pgm_read_word_near(&_bitmaps[static_cast<uint8_t>(roll) ]), pgm_read_word_near(&_bitmaps[IMAGES_MASK_OFFSET + (static_cast<uint8_t>(roll) )]), 0, 0);
+        #endif
       }
 
     }

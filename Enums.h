@@ -5,10 +5,12 @@
 #include "Arduboy2Ext.h"
 
 #define MICROCARD
+#define SAVE_MEMORY
+#define ORIG_SCENERY
 
 
 // Remove comment // to free up some PROGMEM for DUEB
-// #define DEBUG
+//#define DEBUG
 
 
 // Game States ..
