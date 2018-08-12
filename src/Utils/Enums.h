@@ -6,11 +6,15 @@
 
 #define MICROCARD
 #define SAVE_MEMORY
-#define _ORIG_SCENERY
 
+#define SHOW_CREDITS
+#define _OLD_SCENERY
+#define _NEW_SCENERY
+#define NEW_SCENERY_GROUND
+#define _DO_NOT_ANIMATE_PROPS
 
 // Remove comment // to free up some PROGMEM for DUEB
-//#define DEBUG
+#define _DEBUG
 
 
 // Game States ..
@@ -21,8 +25,10 @@
 #define STATE_GAME_LOOP                  3
 #define STATE_GAME_END_OF_MISSION        4
 #define STATE_GAME_END_OF_GAME           5
-#define STATE_CREDITS_INIT               6
-#define STATE_CREDITS_LOOP               7
+#define STATE_CREDITS_LOOP               6
+#define STATE_GAME_SAVE_SCORE            7
+#define STATE_GAME_HIGH_SCORE            8
+
 
 
 // Image array offsets ..
@@ -36,10 +42,13 @@
 
 // EEPROM settings for high score ..
 
-#define EEPROM_START_C1                 200
-#define EEPROM_START_C2                 EEPROM_START_C1 + 1
-#define EEPROM_SCORE                    EEPROM_START_C1 + 2
-#define EEPROM_LEVEL                    EEPROM_START_C1 + 8
+#define EEPROM_START                  200
+#define EEPROM_START_C1               EEPROM_START
+#define EEPROM_START_C2               EEPROM_START + 1
+#define EEPROM_SCORE                  EEPROM_START_C1 + 2
+#define EEPROM_LEVEL                  EEPROM_START_C1 + 8
+#define EEPROM_TOP_START              EEPROM_LEVEL + 1
+#define EEPROM_ENTRY_SIZE             6
 
 #define NUMBER_OF_ENEMIES               6
 #define NUMBER_OF_MISSIONS              5
@@ -73,9 +82,9 @@
 #define OBSTACLE_LAUNCH_DELAY_INC_L2    10
 #define OBSTACLE_WIDTH                  8
 
-#define FRAME_RATE_INC_L0               1
-#define FRAME_RATE_INC_L1               2
-#define FRAME_RATE_INC_L2               3
+#define FRAME_RATE_INC_L0               2
+#define FRAME_RATE_INC_L1               3
+#define FRAME_RATE_INC_L2               4
 #define INIT_FRAME_RATE                 50
 
 #define PLAYER_MOVEMENT_INC_UP          0.80
@@ -171,6 +180,10 @@
 #define SCENERY_UPPER_OFFSET_MAX_MINUS_INC 20       
 #define SCENERY_UPPER_OFFSET_MAX SCENERY_UPPER_OFFSET_MAX_MINUS_INC + 4
 
+
+constexpr uint8_t DO_NOT_EDIT_SLOT             = 255;
+constexpr uint8_t MAX_NUMBER_OF_SCORES         = 5;
+
 struct SceneryInfo {
   int8_t offset;
   uint8_t tile;
@@ -233,6 +246,14 @@ enum class Direction : uint8_t {
   Count,
   None,
 };
+
+#ifdef NEW_SCENERY_GROUND
+struct SceneryGround {
+  int16_t x;
+  int8_t y;
+  bool enabled;
+};
+#endif
 
 
 const Direction inverseX[] =     { Direction::North, Direction::NorthWest, Direction::West, Direction::SouthWest,

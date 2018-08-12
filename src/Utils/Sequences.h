@@ -176,7 +176,7 @@ const int8_t PROGMEM formation_05[] = { /* three in row 1, followed by boat */
   (uint8_t)EnemyType::Zero, 0, 0, -16, 18, false, false, 1,
   (uint8_t)EnemyType::Zero, 0, 0, -7, 0, false, false, 1,
   (uint8_t)EnemyType::Zero, 0, 0, 2, 18, false, false, 1,
-  (uint8_t)EnemyType::Boat, 0, 0, 14, 48, false, false, 10,
+  (uint8_t)EnemyType::Boat, 0, 0, 0, 48, false, false, 10,
 };
 
 const int8_t PROGMEM formation_06[] = { /* 2, 2, 1 */
@@ -219,8 +219,8 @@ const int8_t PROGMEM formation_09[] = {
 
 const int8_t PROGMEM formation_10[] = {
   5, 
-  (uint8_t)EnemyType::Boat, 0, 0, 14, 4, false, false, 5,
-  (uint8_t)EnemyType::Boat, 0, 0, -32, 62, false, false, 5,
+  (uint8_t)EnemyType::Boat, 0, 0, 0, 4, false, false, 5,
+  (uint8_t)EnemyType::Boat, 0, 0, -12, 62, false, false, 5,
   (uint8_t)EnemyType::Zero, 2, -16, -48, 0, false, false, 1,
   (uint8_t)EnemyType::Zero, 2, -16, -48, 35, false, false, 1,
   (uint8_t)EnemyType::Zero, 2, -16, -48, 70, false, false, 1,
