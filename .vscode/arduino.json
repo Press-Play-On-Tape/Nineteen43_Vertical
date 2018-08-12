@@ -1,7 +1,6 @@
 {
     "sketch": "Nineteen43_Vertical.ino",
     "port": "/dev/cu.usbmodem1461",
-    "board": "arduino:avr:nano",
-    "output": "../build",
-    "configuration": "cpu=atmega328"
+    "board": "arduino:avr:leonardo",
+    "output": "../build"
 }

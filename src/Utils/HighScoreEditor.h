@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../Utils/Arduboy2Ext.h"
-#include "../Utils/Constants.h"
+#include "../Utils/Enums.h"
 #include "../Utils/WrappedValue.h"
 #include "../Utils/ClampedValue.h"
 

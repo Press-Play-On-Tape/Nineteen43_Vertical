@@ -24,13 +24,16 @@
 #include "src/Images/Images_Arrays.h"
 #include "src/Images/Images_Scenery.h"
 
-#ifndef SAVE_MEMORY
-#include "src/Utils/EEPROM_Utils.h"
-#endif
-
 Arduboy2Ext arduboy;
 ArduboyTones sound(arduboy.audio.enabled);
+
+#ifndef SAVE_MEMORY
+#include "src/Fonts/Font4x6.h"
+#include "src/Utils/EEPROM_Utils.h"
+#include "src/Utils/HighScoreEditor.h"
 HighScore highScore;
+uint8_t alternate = 0;
+#endif
 
 const uint8_t* const missions[] =        { mission_00, mission_01, mission_02, mission_03, mission_04 };
 const int8_t* const formations[] =       { formation_00, formation_01, formation_02, formation_03, formation_04, formation_06, formation_05, 
@@ -178,24 +181,23 @@ void loop() {
     case STATE_GAME_END_OF_GAME:
       endOfSequence(level);
       break;
+    
+    #ifdef SHOW_CREDITS
+    case STATE_CREDITS_LOOP:
+      credits_loop();
+      break;
+    #endif
 
+    #ifndef SAVE_MEMORY
     case STATE_GAME_SAVE_SCORE:
       highScore.reset();
-      highScore.setSlotNumber(EEPROM_Utils::saveScore(player.getScore()));
+      highScore.setSlotNumber(EEPROM_Utils::saveScore(player.getScore(), mission + 1));
+      Serial.println("SaveScoure");
       gameState = STATE_GAME_HIGH_SCORE;
       // break; Fall-through intentional.
 
     case STATE_GAME_HIGH_SCORE:
       renderHighScore(highScore);
-      break;
-
-    #ifdef SHOW_CREDITS
-    case STATE_CREDITS_INIT:
-      creditsInit();
-      break;
-
-    case STATE_CREDITS_LOOP:
-      credits_loop();
       break;
     #endif
 
@@ -228,18 +230,6 @@ void introInit() {
 
 }
 
-
-/* -----------------------------------------------------------------------------------------------------------------------------
- *  Credits loop initialisation ..
- * -----------------------------------------------------------------------------------------------------------------------------
- */
-#ifdef SHOW_CREDITS
-void creditsInit() {
-  
-  gameState = STATE_CREDITS_LOOP;
-
-}
-#endif
 
 
 /* -----------------------------------------------------------------------------------------------------------------------------
@@ -276,7 +266,12 @@ void credits_loop() {
     delay(100);
   }
  
+  #ifdef SAVE_MEMORY
   gameState = STATE_INTRO_INIT;
+  #else
+  arduboy.clearButtonState();
+  gameState = STATE_GAME_HIGH_SCORE;
+  #endif
   
 }
 #endif
@@ -349,9 +344,9 @@ void introLoop() {
   }
 
   #ifdef SHOW_CREDITS
-  if (arduboy.justPressed(UP_BUTTON) || arduboy.justPressed(DOWN_BUTTON)) {
+  if (arduboy.justPressed(B_BUTTON)) {
 
-    gameState = STATE_CREDITS_INIT;   
+    gameState = STATE_CREDITS_LOOP;   
 
   }
   #endif
@@ -1429,10 +1424,11 @@ void renderScenery(const uint8_t frame) {
           break;
 
         case SceneryElement::Island1 ... SceneryElement::Island3:
-          #ifdef ORIG_SCENERY
+          #ifdef OLD_SCENERY
             Sprites::drawSelfMasked(sceneryItems[x].x, sceneryItems[x].y, island_L, static_cast<uint8_t>(sceneryItems[x].element) - static_cast<uint8_t>(SceneryElement::IslandStart));
             Sprites::drawSelfMasked(sceneryItems[x].x + 24, sceneryItems[x].y, island_R, static_cast<uint8_t>(sceneryItems[x].element2) - static_cast<uint8_t>(SceneryElement::IslandStart));
-          #else
+          #endif
+          #ifdef NEW_SCENERY
             Sprites::drawSelfMasked(sceneryItems[x].x, sceneryItems[x].y, island_L, static_cast<uint8_t>(sceneryItems[x].element) - static_cast<uint8_t>(SceneryElement::IslandStart));
             Sprites::drawSelfMasked(sceneryItems[x].x + 17, sceneryItems[x].y, island_R, static_cast<uint8_t>(sceneryItems[x].element2) - static_cast<uint8_t>(SceneryElement::IslandStart));
           #endif
@@ -1454,15 +1450,21 @@ void renderScenery(const uint8_t frame) {
   for (uint8_t x = 0; x < NUMBER_OF_SCENERY_TILES; x++) {
 
     if (upperSceneryInfo[x].tile > 0) {
-
+      #ifdef OLD_SCENERY
       Sprites::drawSelfMasked(-sceneryOffset + (SCENERY_TILE_WIDTH * x), upperSceneryInfo[x].offset - 28, pgm_read_word_near(&upper_scenery_images[upperSceneryInfo[x].tile]), 0);
-
+      #endif
+      #ifdef NEW_SCENERY
+      Sprites::drawSelfMasked(-sceneryOffset + (SCENERY_TILE_WIDTH * x), upperSceneryInfo[x].offset - 28, pgm_read_word_near(&upper_scenery_images[upperSceneryInfo[x].tile]), 0);
+      #endif
     }
 
     if (lowerSceneryInfo[x].tile > 0) {
-
+      #ifdef OLD_SCENERY
       Sprites::drawSelfMasked(-sceneryOffset + (SCENERY_TILE_WIDTH * x), HEIGHT + lowerSceneryInfo[x].offset, pgm_read_word_near(&lower_scenery_images[lowerSceneryInfo[x].tile]), 0);
-
+      #endif
+      #ifdef NEW_SCENERY
+      Sprites::drawSelfMasked(-sceneryOffset + (SCENERY_TILE_WIDTH * x), HEIGHT + lowerSceneryInfo[x].offset, pgm_read_word_near(&lower_scenery_images[lowerSceneryInfo[x].tile]), 0);
+      #endif
     }
 
   }
@@ -1695,7 +1697,12 @@ void renderScenery_BelowPlanes() {
     switch (sceneryItems[x].element) {
 
       case SceneryElement::Cloud_BelowPlanes:
+        #ifdef OLD_SCENERY
         Sprites::drawExternalMask(sceneryItems[x].x, sceneryItems[x].y, cloud, cloud_Mask, 0, 0);
+        #endif
+        #ifdef NEW_SCENERY
+        Sprites::drawExternalMask(sceneryItems[x].x, sceneryItems[x].y, cloud, cloud_Mask, 0, 0);
+        #endif
         break;
 
       default: break;
@@ -1718,7 +1725,12 @@ void renderScenery_AbovePlanes() {
     switch (sceneryItems[x].element) {
 
       case SceneryElement::Cloud_AbovePlanes:
+        #ifdef OLD_SCENERY
         Sprites::drawExternalMask(sceneryItems[x].x, sceneryItems[x].y, cloud, cloud_Mask, 0, 0);
+        #endif
+        #ifdef NEW_SCENERY
+        Sprites::drawExternalMask(sceneryItems[x].x, sceneryItems[x].y, cloud, cloud_Mask, 0, 0);
+        #endif
         break;
 
       default: break;
@@ -1774,6 +1786,7 @@ uint8_t getOffsetsIndex(const uint8_t newTile, const uint8_t oldTile) {
  * Write a 2 byte integer to the EEPROM at the specified address ..
  * ----------------------------------------------------------------------------
  */
+#ifdef SAVE_MEMORY
 void EEPROMWriteInt(int address, int value) {
   
   uint8_t lowByte = ((value >> 0) & 0xFF);
@@ -1783,12 +1796,14 @@ void EEPROMWriteInt(int address, int value) {
   EEPROM.write(address + 1, highByte);
 
 }
+#endif
 
 
 /* ----------------------------------------------------------------------------
  * Read a 2 byte integer from the EEPROM at the specified address ..
  * ----------------------------------------------------------------------------
  */
+#ifdef SAVE_MEMORY
 uint16_t EEPROMReadInt(int address) {
   
   uint8_t lowByte = EEPROM.read(address);
@@ -1797,3 +1812,4 @@ uint16_t EEPROMReadInt(int address) {
   return ((lowByte << 0) & 0xFF) + ((highByte << 8) & 0xFF00);
 
 }
+#endif

@@ -4,14 +4,6 @@
 #include "../Entities/Slot.h"
 #include "HighScoreEditor.h"
 
-#define EEPROM_START                  200
-#define EEPROM_START_C1               EEPROM_START
-#define EEPROM_START_C2               EEPROM_START + 1
-#define EEPROM_SCORE                  EEPROM_START_C1 + 2
-#define EEPROM_LEVEL                  EEPROM_START_C1 + 8
-#define EEPROM_TOP_START              EEPROM_LEVEL + 1
-#define EEPROM_ENTRY_SIZE             6
-
 class EEPROM_Utils {
 
   public: 
@@ -20,7 +12,7 @@ class EEPROM_Utils {
         
     static void initEEPROM(bool forceClear);
     static Slot getSlot(uint8_t x);
-    static uint8_t saveScore(uint16_t score);
+    static uint8_t saveScore(uint16_t score, uint8_t mission);
     static void writeChars(uint8_t slotIndex, HighScore &highScore);
 
 };
@@ -68,17 +60,17 @@ void EEPROM_Utils::initEEPROM(bool forceClear) {
 }
 
 
-/* -----------------------------------------------------------------------------
- *   Get slot details. 
- */
-Slot EEPROM_Utils::getHighScore() {
+// /* -----------------------------------------------------------------------------
+//  *   Get slot details. 
+//  */
+// uint16_t EEPROM_Utils::getHighScore() {
 
-  uint16_t score = 0;
-  EEPROM.get(EEPROM_TOP_START + 4, score);
+//   uint16_t score = 0;
+//   EEPROM.get(EEPROM_TOP_START + 4, score);
 
-  return score;
+//   return score;
 
-}
+// }
 
 
 /* -----------------------------------------------------------------------------
@@ -93,8 +85,9 @@ Slot EEPROM_Utils::getSlot(uint8_t x) {
   slot.setChar1(EEPROM.read(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * x) + 1));
   slot.setChar2(EEPROM.read(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * x) + 2));
 
-  uint16_t mission = 0;
+  uint8_t mission = 0;
   EEPROM.get(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * x) + 3, mission);
+  slot.setMission(mission);
 
   uint16_t score = 0;
   EEPROM.get(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * x) + 4, score);

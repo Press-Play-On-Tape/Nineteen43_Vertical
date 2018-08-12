@@ -13,9 +13,9 @@ class Player : public Plane {
     Player(const uint8_t * const * images);
 
     #ifdef SAVE_MEMORY
-    void Player::renderImage();
+    void renderImage();
     #else
-    void Player::renderImage(uint8_t frame);
+    void renderImage(uint8_t frame);
     #endif
     void initGame();
     void initMission();

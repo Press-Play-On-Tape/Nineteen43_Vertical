@@ -1,5 +1,4 @@
-#ifndef IMAGES_SCOREBOARD_H
-#define IMAGES_SCOREBOARD_H
+#pragma once
 
 const uint8_t PROGMEM digit_0[] = {
   5, 4,
@@ -80,5 +79,18 @@ const uint8_t PROGMEM kills_gauge[] = {
 const uint8_t PROGMEM power_up_gauge[] = {
   5, 5,
   0x6E, 0x11, 0x71, 0x11, 0x6E,
+};
+
+#ifndef SAVE_MEMORY
+const uint8_t PROGMEM arrow[] = {
+8, 1,
+0x01,
+0x01,
+0x01,
+0x01,
+0x01,
+0x01,
+0x01,
+0x01,
 };
 #endif
