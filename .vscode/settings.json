@@ -17,6 +17,8 @@
         "type_traits": "cpp",
         "string": "cpp",
         "istream": "cpp",
-        "*.tcc": "cpp"
+        "*.tcc": "cpp",
+        "bitset": "cpp",
+        "random": "cpp"
     }
 }

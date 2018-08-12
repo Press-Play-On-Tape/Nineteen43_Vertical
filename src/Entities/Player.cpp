@@ -22,9 +22,9 @@ void Player::initMission() {
             
   _powerUp = false;
   _fuel = FUEL_MAX;
-  _health = 1;/*HEALTH_MAX; SJH */
+  _health = HEALTH_MAX; 
   _bullets = BULLETS_MAX;
-  _score = 8;/*0; SJH */
+  _score = 0; 
   _rollState = 0;
   _enabled = true;
   _x = 1;
@@ -132,7 +132,7 @@ bool Player::getPowerUp() {
 
 }
 
-#ifdef SAVE_MEMORY
+#ifdef DO_NOT_ANIMATE_PROPS
 void Player::renderImage() {
 #else
 void Player::renderImage(uint8_t frame) {
@@ -191,10 +191,10 @@ void Player::renderImage(uint8_t frame) {
 
       if (_health > -3) {
 
-        #ifndef SAVE_MEMORY 
-        Sprites::drawExternalMask(rollX, y, pgm_read_word_near(&_bitmaps[static_cast<uint8_t>(roll) ]), pgm_read_word_near(&_bitmaps[IMAGES_MASK_OFFSET + (static_cast<uint8_t>(roll) )]), (roll == 0 ? frame : 0), 0);
-        #else
+        #ifdef DO_NOT_ANIMATE_PROPS 
         Sprites::drawExternalMask(rollX, y, pgm_read_word_near(&_bitmaps[static_cast<uint8_t>(roll) ]), pgm_read_word_near(&_bitmaps[IMAGES_MASK_OFFSET + (static_cast<uint8_t>(roll) )]), 0, 0);
+        #else
+        Sprites::drawExternalMask(rollX, y, pgm_read_word_near(&_bitmaps[static_cast<uint8_t>(roll) ]), pgm_read_word_near(&_bitmaps[IMAGES_MASK_OFFSET + (static_cast<uint8_t>(roll) )]), (roll == 0 ? frame : 0), 0);
         #endif
       }
 

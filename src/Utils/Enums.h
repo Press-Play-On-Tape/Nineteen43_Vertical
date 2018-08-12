@@ -5,14 +5,16 @@
 #include "Arduboy2Ext.h"
 
 #define MICROCARD
-#define _SAVE_MEMORY
+#define SAVE_MEMORY
 #define SHOW_CREDITS
 #define _OLD_SCENERY
 #define _NEW_SCENERY
+#define NEW_SCENERY_GROUND
+#define _DO_NOT_ANIMATE_PROPS
 
 
 // Remove comment // to free up some PROGMEM for DUEB
-#define DEBUG
+#define _DEBUG
 
 
 // Game States ..
@@ -80,9 +82,9 @@
 #define OBSTACLE_LAUNCH_DELAY_INC_L2    10
 #define OBSTACLE_WIDTH                  8
 
-#define FRAME_RATE_INC_L0               1
-#define FRAME_RATE_INC_L1               2
-#define FRAME_RATE_INC_L2               3
+#define FRAME_RATE_INC_L0               2
+#define FRAME_RATE_INC_L1               3
+#define FRAME_RATE_INC_L2               4
 #define INIT_FRAME_RATE                 50
 
 #define PLAYER_MOVEMENT_INC_UP          0.80
@@ -244,6 +246,14 @@ enum class Direction : uint8_t {
   Count,
   None,
 };
+
+#ifdef NEW_SCENERY_GROUND
+struct SceneryGround {
+  int16_t x;
+  int8_t y;
+  bool enabled;
+};
+#endif
 
 
 const Direction inverseX[] =     { Direction::North, Direction::NorthWest, Direction::West, Direction::SouthWest,

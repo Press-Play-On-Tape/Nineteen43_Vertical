@@ -44,7 +44,6 @@ void renderHighScore(HighScore &highScore) {
 
   }
 
-
   if (highScore.getSlotNumber() != DO_NOT_EDIT_SLOT) {
 
     xOffset = 76;
@@ -144,10 +143,8 @@ void renderHighScore(HighScore &highScore) {
     }
 
     if (arduboy.justPressed(A_BUTTON) || arduboy.justPressed(B_BUTTON)) { 
-    
       arduboy.setRGBled(0, 0, 0);
       gameState = STATE_INTRO_INIT; 
-      
     }
     
   }

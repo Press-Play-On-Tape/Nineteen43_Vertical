@@ -23,7 +23,7 @@ void endOfSequence_Render() {
 void endOfSequence(const uint8_t level) {
 
   #ifdef SAVE_MEMORY
-    uint16_t high = eeprom_read_byte((uint8_t *)(EEPROM_SCORE + (level * 2));
+    uint16_t high = eeprom_read_byte((uint8_t *)(EEPROM_SCORE + (level * 2)));
     if (player.getGrandScore() > high) eeprom_update_byte((uint8_t *)(EEPROM_SCORE + (level * 2)), player.getGrandScore());
   #else
     uint16_t high = EEPROM_Utils::getHighScore();
