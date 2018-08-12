@@ -14,6 +14,7 @@ class EEPROM_Utils {
     static Slot getSlot(uint8_t x);
     static uint8_t saveScore(uint16_t score, uint8_t mission);
     static void writeChars(uint8_t slotIndex, HighScore &highScore);
+    static uint16_t getHighScore();
 
 };
 
@@ -31,26 +32,26 @@ const uint8_t letter2 = '9';
 
 void EEPROM_Utils::initEEPROM(bool forceClear) {
 
-  byte c1 = EEPROM.read(EEPROM_START_C1);
-  byte c2 = EEPROM.read(EEPROM_START_C2);
+  byte c1 = eeprom_read_byte((uint8_t *)EEPROM_START_C1);
+  byte c2 = eeprom_read_byte((uint8_t *)EEPROM_START_C2);
 
   if (forceClear || c1 != letter1 || c2 != letter2) { 
 
     uint8_t mission = 1;
     uint16_t score = 10;
 
-    EEPROM.update(EEPROM_START_C1, letter1);
-    EEPROM.update(EEPROM_START_C2, letter2);
-    EEPROM.update(EEPROM_LEVEL, 0);
+    eeprom_update_byte((uint8_t *)EEPROM_START_C1, letter1);
+    eeprom_update_byte((uint8_t *)EEPROM_START_C2, letter2);
+    eeprom_update_byte((uint8_t *)EEPROM_LEVEL, 0);
 
     for (uint8_t x = 0; x < MAX_NUMBER_OF_SCORES; x++) {
 
-      EEPROM.update(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * x), 0);
-      EEPROM.update(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * x) + 1, 0);
-      EEPROM.update(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * x) + 2, 0);
+      eeprom_update_byte((uint8_t *)(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * x)), 0);
+      eeprom_update_byte((uint8_t *)(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * x) + 1), 0);
+      eeprom_update_byte((uint8_t *)(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * x) + 2), 0);
 
-      EEPROM.put(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * x) + 3, mission);
-      EEPROM.put(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * x) + 4, score);
+      eeprom_update_byte((uint8_t *)(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * x) + 3), mission);
+      eeprom_update_word((uint16_t *)(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * x) + 4), score);
       score = score - 2;
 
     }
@@ -60,17 +61,16 @@ void EEPROM_Utils::initEEPROM(bool forceClear) {
 }
 
 
-// /* -----------------------------------------------------------------------------
-//  *   Get slot details. 
-//  */
-// uint16_t EEPROM_Utils::getHighScore() {
+/* -----------------------------------------------------------------------------
+ *   Get High Score details. 
+ */
+uint16_t EEPROM_Utils::getHighScore() {
 
-//   uint16_t score = 0;
-//   EEPROM.get(EEPROM_TOP_START + 4, score);
+  uint16_t score = eeprom_read_word((uint16_t *)(EEPROM_TOP_START + 4));
 
-//   return score;
+  return score;
 
-// }
+}
 
 
 /* -----------------------------------------------------------------------------
@@ -81,16 +81,16 @@ Slot EEPROM_Utils::getSlot(uint8_t x) {
   Slot slot;
 
 
-  slot.setChar0(EEPROM.read(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * x)));
-  slot.setChar1(EEPROM.read(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * x) + 1));
-  slot.setChar2(EEPROM.read(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * x) + 2));
+  slot.setChar0(eeprom_read_byte((uint8_t *)(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * x))));
+  slot.setChar1(eeprom_read_byte((uint8_t *)(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * x) + 1)));
+  slot.setChar2(eeprom_read_byte((uint8_t *)(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * x) + 2)));
 
   uint8_t mission = 0;
-  EEPROM.get(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * x) + 3, mission);
+  mission = eeprom_read_byte((uint8_t *)(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * x) + 3));
   slot.setMission(mission);
 
   uint16_t score = 0;
-  EEPROM.get(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * x) + 4, score);
+  score = eeprom_read_word((uint16_t *)(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * x) + 4));
   slot.setScore(score);
 
 
@@ -125,19 +125,19 @@ uint8_t EEPROM_Utils::saveScore(uint16_t score, uint8_t mission) {
 
       Slot slot = getSlot(x - 1);
 
-      EEPROM.update(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * x), slot.getChar0());
-      EEPROM.update(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * x) + 1, slot.getChar1());
-      EEPROM.update(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * x) + 2, slot.getChar2());
-      EEPROM.put(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * x) + 3, slot.getMission());
-      EEPROM.put(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * x) + 4, slot.getScore());
+      eeprom_update_byte((uint8_t *)(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * x)), slot.getChar0());
+      eeprom_update_byte((uint8_t *)(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * x) + 1), slot.getChar1());
+      eeprom_update_byte((uint8_t *)(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * x) + 2), slot.getChar2());
+      eeprom_update_byte((uint8_t *)(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * x) + 3), slot.getMission());
+      eeprom_update_word((uint16_t *)(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * x) + 4), slot.getScore());
 
     }
 
-    EEPROM.update(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * idx), 0);
-    EEPROM.update(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * idx) + 1, 0);
-    EEPROM.update(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * idx) + 2, 0);
-    EEPROM.put(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * idx) + 3, mission);
-    EEPROM.put(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * idx) + 4, score);
+    eeprom_update_byte((uint8_t *)(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * idx)), 0);
+    eeprom_update_byte((uint8_t *)(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * idx) + 1), 0);
+    eeprom_update_byte((uint8_t *)(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * idx) + 2), 0);
+    eeprom_update_byte((uint8_t *)(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * idx) + 3), mission);
+    eeprom_update_word((uint16_t *)(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * idx) + 4), score);
 
   }
 
@@ -151,8 +151,8 @@ uint8_t EEPROM_Utils::saveScore(uint16_t score, uint8_t mission) {
  */
 void EEPROM_Utils::writeChars(uint8_t slotIndex, HighScore &highScore) {
 
-    EEPROM.update(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * slotIndex), highScore.getChar(0));
-    EEPROM.update(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * slotIndex) + 1, highScore.getChar(1));
-    EEPROM.update(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * slotIndex) + 2, highScore.getChar(2));
+    eeprom_update_byte((uint8_t *)(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * slotIndex)), highScore.getChar(0));
+    eeprom_update_byte((uint8_t *)(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * slotIndex) + 1), highScore.getChar(1));
+    eeprom_update_byte((uint8_t *)(EEPROM_TOP_START + (EEPROM_ENTRY_SIZE * slotIndex) + 2), highScore.getChar(2));
 
 }

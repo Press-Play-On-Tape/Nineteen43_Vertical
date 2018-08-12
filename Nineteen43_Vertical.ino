@@ -1,6 +1,7 @@
 #include "src/Utils/Arduboy2Ext.h"
 #include <ArduboyTones.h>
-#include <EEPROM.h>
+//#include <EEPROM.h>
+#include <avr/eeprom.h> 
 
 #include "src/Entities/Enemy.h"
 #include "src/Entities/Player.h"
@@ -28,7 +29,7 @@ Arduboy2Ext arduboy;
 ArduboyTones sound(arduboy.audio.enabled);
 
 #ifndef SAVE_MEMORY
-#include "src/Fonts/Font4x6.h"
+#include "src/Fonts/Fonts.h"
 #include "src/Utils/EEPROM_Utils.h"
 #include "src/Utils/HighScoreEditor.h"
 HighScore highScore;
@@ -140,7 +141,7 @@ void setup() {
   obstacleFuelValue = FUEL_MAX;
 
   frameRate = INIT_FRAME_RATE;
-  level = EEPROM.read(EEPROM_LEVEL);
+  level = eeprom_read_byte((uint8_t *)EEPROM_LEVEL);
   
   arduboy.setFrameRate(frameRate);
   arduboy.initRandomSeed();
@@ -192,7 +193,6 @@ void loop() {
     case STATE_GAME_SAVE_SCORE:
       highScore.reset();
       highScore.setSlotNumber(EEPROM_Utils::saveScore(player.getScore(), mission + 1));
-      Serial.println("SaveScoure");
       gameState = STATE_GAME_HIGH_SCORE;
       // break; Fall-through intentional.
 
@@ -244,8 +244,8 @@ void credits_loop() {
     while (!(arduboy.nextFrame())) {}
 
     Sprites::drawOverwrite(116, 12, credits_img, 0);
-    arduboy.drawVerticalDottedLine(0, HEIGHT, 110, WHITE);
-    arduboy.drawVerticalDottedLine(0, HEIGHT, 127, WHITE);
+    arduboy.drawVerticalDottedLine(0, HEIGHT, 110, 2);
+    arduboy.drawVerticalDottedLine(0, HEIGHT, 127, 2);
 
     arduboy.fillRect(110, i - 18, 127, 200, BLACK);
     Sprites::drawOverwrite(104, i - 18, zero_S, 0);
@@ -326,7 +326,7 @@ void introLoop() {
   if (arduboy.justPressed(RIGHT_BUTTON)) {
 
     if (level < 2) level++;
-    EEPROM.update(EEPROM_LEVEL, level);
+    eeprom_update_byte((uint8_t *)EEPROM_LEVEL, level);
     #ifdef SHOW_SOUND
       showLevel = true;
     #endif
@@ -336,7 +336,7 @@ void introLoop() {
   if (arduboy.justPressed(LEFT_BUTTON)) {
 
     if (level > 0) level--;
-    EEPROM.update(EEPROM_LEVEL, level);
+    eeprom_update_byte((uint8_t *)EEPROM_LEVEL, level);
     #ifndef MICROCARD
       showLevel = true;
     #endif
@@ -442,8 +442,8 @@ void gameLoop() {
       if (mission >= 99) Sprites::drawOverwrite(60, offsetNumber, numbers_vert, (mission + 1) / 100);
       if (mission >= 9)  Sprites::drawOverwrite(60, offsetNumber + 6, numbers_vert, ((mission + 1) / 10) % 10);
       Sprites::drawOverwrite(60, offsetNumber + 12, numbers_vert, (mission + 1) % 10);
-      arduboy.drawVerticalDottedLine(offsetY, HEIGHT - offsetY, 57, WHITE);
-      arduboy.drawVerticalDottedLine(offsetY, HEIGHT - offsetY, 69, WHITE);
+      arduboy.drawVerticalDottedLine(offsetY, HEIGHT - offsetY, 57, 2);
+      arduboy.drawVerticalDottedLine(offsetY, HEIGHT - offsetY, 69, 2);
       intro--;
       break;
 
@@ -1373,18 +1373,18 @@ void renderScoreboadGauge(const uint8_t imageX, const uint8_t imageY, const uint
 #ifdef SAVE_MEMORY
 void initEEPROM(const bool forceOverwrite) {
 
-  uint8_t c1 = EEPROM.read(EEPROM_START_C1);
-  uint8_t c2 = EEPROM.read(EEPROM_START_C2);
+  uint8_t c1 = eeprom_read_byte((uint8_t *)EEPROM_START_C1);
+  uint8_t c2 = eeprom_read_byte((uint8_t *)EEPROM_START_C2);
 
   if (c1 != 52 || c2 != 51 || forceOverwrite) { 
   
     uint16_t score = 0;
-    EEPROMWriteInt(EEPROM_START_C1, 52);
-    EEPROMWriteInt(EEPROM_START_C2, 51);
-    EEPROMWriteInt(EEPROM_SCORE, 0);
-    EEPROMWriteInt(EEPROM_SCORE + 2, score);
-    EEPROMWriteInt(EEPROM_SCORE + 4, score);
-    EEPROMWriteInt(EEPROM_SCORE + 6, score);
+    eeprom_update_byte((uint8_t *)EEPROM_START_C1, 52);
+    eeprom_update_byte((uint8_t *)EEPROM_START_C2, 51);
+    eeprom_update_byte((uint8_t *)EEPROM_SCORE, 0);
+    eeprom_update_word((uint8_t *)(EEPROM_SCORE + 2), score);
+    eeprom_update_word((uint8_t *)(EEPROM_SCORE + 4), score);
+    eeprom_update_word((uint8_t *)(EEPROM_SCORE + 6), score);
     
   }
 
@@ -1780,36 +1780,3 @@ uint8_t getOffsetsIndex(const uint8_t newTile, const uint8_t oldTile) {
   return index;
 
 }
-
-
-/* ----------------------------------------------------------------------------
- * Write a 2 byte integer to the EEPROM at the specified address ..
- * ----------------------------------------------------------------------------
- */
-#ifdef SAVE_MEMORY
-void EEPROMWriteInt(int address, int value) {
-  
-  uint8_t lowByte = ((value >> 0) & 0xFF);
-  uint8_t highByte = ((value >> 8) & 0xFF);
-  
-  EEPROM.write(address, lowByte);
-  EEPROM.write(address + 1, highByte);
-
-}
-#endif
-
-
-/* ----------------------------------------------------------------------------
- * Read a 2 byte integer from the EEPROM at the specified address ..
- * ----------------------------------------------------------------------------
- */
-#ifdef SAVE_MEMORY
-uint16_t EEPROMReadInt(int address) {
-  
-  uint8_t lowByte = EEPROM.read(address);
-  uint8_t highByte = EEPROM.read(address + 1);
-  
-  return ((lowByte << 0) & 0xFF) + ((highByte << 8) & 0xFF00);
-
-}
-#endif

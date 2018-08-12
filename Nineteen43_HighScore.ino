@@ -10,8 +10,14 @@ uint8_t clearScores = 0;
 #define HIGH_SCORE_DIST_BETWEEN_ROWS 12
 void renderHighScore(HighScore &highScore) {
 
-  uint8_t xOffset = 90;
+  uint8_t xOffset = 76;
   uint8_t yOffset = 3;
+
+
+  arduboy.drawVerticalDottedLine(0, HEIGHT, 127, 2);
+  Sprites::drawOverwrite(102, 0, flying_aces, 0);
+  arduboy.drawVerticalDottedLine(0, HEIGHT, 95, 2);
+
   
   for (uint8_t x =0; x < MAX_NUMBER_OF_SCORES; x++) {
 
@@ -41,7 +47,7 @@ void renderHighScore(HighScore &highScore) {
 
   if (highScore.getSlotNumber() != DO_NOT_EDIT_SLOT) {
 
-    xOffset = 90;
+    xOffset = 76;
     yOffset = 4;
     alternate++;
   
@@ -86,10 +92,10 @@ void renderHighScore(HighScore &highScore) {
 
     uint8_t charIndex = highScore.getCharIndex();
 
-    if (arduboy.justPressed(UP_BUTTON))       { highScore.incChar(charIndex); }
-    if (arduboy.justPressed(DOWN_BUTTON))     { highScore.decChar(charIndex); }
-    if (arduboy.justPressed(LEFT_BUTTON))     { highScore.decCharIndex(); } 
-    if (arduboy.justPressed(RIGHT_BUTTON))    { highScore.incCharIndex(); } 
+    if (arduboy.justPressed(LEFT_BUTTON))       { highScore.incChar(charIndex); }
+    if (arduboy.justPressed(RIGHT_BUTTON))      { highScore.decChar(charIndex); }
+    if (arduboy.justPressed(UP_BUTTON))         { highScore.decCharIndex(); } 
+    if (arduboy.justPressed(DOWN_BUTTON))       { highScore.incCharIndex(); } 
 
     if (arduboy.justPressed(A_BUTTON)) { 
       
@@ -100,6 +106,8 @@ void renderHighScore(HighScore &highScore) {
 
   }
   else {
+
+    Sprites::drawOverwrite(2, 3, aButton_continue, 0);
 
 
     // Clear scores ..

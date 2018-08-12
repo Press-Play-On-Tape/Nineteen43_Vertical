@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Font4x6.h"
-
 const uint8_t PROGMEM font4x6_Full[] = {
 6, 4, 
 0x09, 0x09, 0x0F, 0x09, 0x09, 0x06, 
