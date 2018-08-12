@@ -6,12 +6,12 @@
 
 #define MICROCARD
 #define SAVE_MEMORY
+
 #define SHOW_CREDITS
 #define _OLD_SCENERY
 #define _NEW_SCENERY
 #define NEW_SCENERY_GROUND
 #define _DO_NOT_ANIMATE_PROPS
-
 
 // Remove comment // to free up some PROGMEM for DUEB
 #define _DEBUG
