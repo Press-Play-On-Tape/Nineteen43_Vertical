@@ -1463,17 +1463,7 @@ void renderScenery(const uint8_t frame) {
           break;
 
         case SceneryElement::Island1 ... SceneryElement::Island3:
-          #ifdef OLD_SCENERY
-            Sprites::drawSelfMasked(sceneryItems[x].x, sceneryItems[x].y, island_L, static_cast<uint8_t>(sceneryItems[x].element) - static_cast<uint8_t>(SceneryElement::IslandStart));
-            Sprites::drawSelfMasked(sceneryItems[x].x + 24, sceneryItems[x].y, island_R, static_cast<uint8_t>(sceneryItems[x].element2) - static_cast<uint8_t>(SceneryElement::IslandStart));
-          #endif
-          #ifdef NEW_SCENERY
-            Sprites::drawSelfMasked(sceneryItems[x].x, sceneryItems[x].y, island_L, static_cast<uint8_t>(sceneryItems[x].element) - static_cast<uint8_t>(SceneryElement::IslandStart));
-            Sprites::drawSelfMasked(sceneryItems[x].x + 17, sceneryItems[x].y, island_R, static_cast<uint8_t>(sceneryItems[x].element2) - static_cast<uint8_t>(SceneryElement::IslandStart));
-          #endif
-          #ifdef NEW_SCENERY_GROUND
-            Sprites::drawSelfMasked(sceneryItems[x].x, sceneryItems[x].y, island, 0);
-          #endif
+          Sprites::drawSelfMasked(sceneryItems[x].x, sceneryItems[x].y, island, 0);
           break;
 
       #endif
@@ -1489,32 +1479,8 @@ void renderScenery(const uint8_t frame) {
 
   // Draw ground ..
 
-  #ifndef NEW_SCENERY_GROUND
-    for (uint8_t x = 0; x < NUMBER_OF_SCENERY_TILES; x++) {
-
-      if (upperSceneryInfo[x].tile > 0) {
-        #ifdef OLD_SCENERY
-        Sprites::drawSelfMasked(-sceneryOffset + (SCENERY_TILE_WIDTH * x), upperSceneryInfo[x].offset - 28, pgm_read_word_near(&upper_scenery_images[upperSceneryInfo[x].tile]), 0);
-        #endif
-        #ifdef NEW_SCENERY
-        Sprites::drawSelfMasked(-sceneryOffset + (SCENERY_TILE_WIDTH * x), upperSceneryInfo[x].offset - 28, pgm_read_word_near(&upper_scenery_images[upperSceneryInfo[x].tile]), 0);
-        #endif
-      }
-
-      if (lowerSceneryInfo[x].tile > 0) {
-        #ifdef OLD_SCENERY
-        Sprites::drawSelfMasked(-sceneryOffset + (SCENERY_TILE_WIDTH * x), HEIGHT + lowerSceneryInfo[x].offset, pgm_read_word_near(&lower_scenery_images[lowerSceneryInfo[x].tile]), 0);
-        #endif
-        #ifdef NEW_SCENERY
-        Sprites::drawSelfMasked(-sceneryOffset + (SCENERY_TILE_WIDTH * x), HEIGHT + lowerSceneryInfo[x].offset, pgm_read_word_near(&lower_scenery_images[lowerSceneryInfo[x].tile]), 0);
-        #endif
-      }
-
-    }
-  #else
-    if (upperSceneryPosition.enabled) { Sprites::drawOverwrite(upperSceneryPosition.x, upperSceneryPosition.y, ground_upper, 0); }
-    if (lowerSceneryPosition.enabled) { Sprites::drawOverwrite(lowerSceneryPosition.x, lowerSceneryPosition.y, ground_lower, 0); }
-  #endif
+  if (upperSceneryPosition.enabled) { Sprites::drawOverwrite(upperSceneryPosition.x, upperSceneryPosition.y, ground_upper, 0); }
+  if (lowerSceneryPosition.enabled) { Sprites::drawOverwrite(lowerSceneryPosition.x, lowerSceneryPosition.y, ground_lower, 0); }
 
   if (frame == 0) {
 
@@ -1541,21 +1507,18 @@ void renderScenery(const uint8_t frame) {
       #else
 
         #define FREQ_OF_COMMON_ELEMENTS 2
-        #define NUMBER_OF_COMMON_ELEMENTS (static_cast<uint8_t>(SceneryElement::Island1) + 1)
+        #define NUMBER_OF_COMMON_ELEMENTS (static_cast<uint8_t>(SceneryElement::Cloud_BelowPlanes) + 1)
 
         if (sceneryItems[x].x < -54 && gameState != STATE_GAME_END_OF_MISSION) {
 
           sceneryItems[x].x = 162;
           SceneryElement previousElement = (x > 0 ? sceneryItems[x - 1].element : sceneryItems[NUMBER_OF_SCENERY_ITEMS - 1].element);
           uint8_t element = 0;
-  
+
           switch (previousElement) {
 
             case SceneryElement::Boat ... SceneryElement::Cloud_BelowPlanes:
-Serial.print(sceneryRestrictions);
-Serial.print(" ");
               element = random(0, (FREQ_OF_COMMON_ELEMENTS * NUMBER_OF_COMMON_ELEMENTS) + (sceneryRestrictions == 0 ? 1 : 0) + 1);
-Serial.println(element);
               break;
 
             default:
@@ -1617,7 +1580,7 @@ Serial.println(element);
             }
             else if (element >= static_cast<uint8_t>(SceneryElement::Cloud_AbovePlanes) && element <= static_cast<uint8_t>(SceneryElement::Cloud_BelowPlanes)) {
               sceneryItems[x].element = static_cast<SceneryElement>(element);
-              sceneryItems[x].y = random(-18, HEIGHT - 18);
+              sceneryItems[x].y = random(-8, HEIGHT - 24);
             }
             else {
 
@@ -1807,15 +1770,7 @@ void renderScenery_BelowPlanes() {
     switch (sceneryItems[x].element) {
 
       case SceneryElement::Cloud_BelowPlanes:
-        #ifdef OLD_SCENERY
         Sprites::drawExternalMask(sceneryItems[x].x, sceneryItems[x].y, cloud, cloud_Mask, 0, 0);
-        #endif
-        #ifdef NEW_SCENERY
-        Sprites::drawExternalMask(sceneryItems[x].x, sceneryItems[x].y, cloud, cloud_Mask, 0, 0);
-        #endif
-        #ifdef NEW_SCENERY_GROUND
-        Sprites::drawExternalMask(sceneryItems[x].x, sceneryItems[x].y, cloud, cloud_Mask, 0, 0);
-        #endif
         break;
 
       default: break;
@@ -1838,12 +1793,7 @@ void renderScenery_AbovePlanes() {
     switch (sceneryItems[x].element) {
 
       case SceneryElement::Cloud_AbovePlanes:
-        #ifdef OLD_SCENERY
         Sprites::drawExternalMask(sceneryItems[x].x, sceneryItems[x].y, cloud, cloud_Mask, 0, 0);
-        #endif
-        #ifdef NEW_SCENERY
-        Sprites::drawExternalMask(sceneryItems[x].x, sceneryItems[x].y, cloud, cloud_Mask, 0, 0);
-        #endif
         break;
 
       default: break;
