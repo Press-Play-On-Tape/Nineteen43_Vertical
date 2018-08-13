@@ -237,7 +237,8 @@ void gameLoop() {
 
     
     // Handle player movement ..
-  
+
+    
     if (arduboy.pressed(UP_BUTTON) && player.getY() > PLAYER_MOVEMENT_INC_UP)                                     { player.setY(player.getY() - PLAYER_MOVEMENT_INC_UP); }
     if (arduboy.pressed(DOWN_BUTTON) && player.getY() < HEIGHT - PLAYER_HEIGHT)                                   { player.setY(player.getY() + PLAYER_MOVEMENT_INC_DOWN); }
     if (arduboy.pressed(LEFT_BUTTON) && player.getX() > PLAYER_MOVEMENT_INC_LEFT)                                 { player.setX(player.getX() - PLAYER_MOVEMENT_INC_LEFT); }
@@ -874,8 +875,6 @@ void checkCanEnemyShoot() {
                                 && enemyRect.y + enemyRect.height >= 0 && enemyRect.y < HEIGHT ) {
   
       if (isAimingAtPlayer(i)) {
-
-//        int16_t enemyX = enemies[i].getX().getInteger();
 
         enemies[i].decNumberOfBulletsFired();
   
