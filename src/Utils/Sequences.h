@@ -12,6 +12,8 @@
  * -----------------------------------------------------------------------------------------------------------------------------
  */
 
+#if defined (OLD_SCENERY) || defined (NEW_SCENERY)  
+
 #define SCENERY_MASK_NONE  0b00001111
 #define SCENERY_MASK_LOWER 0b00110000
 #define SCENERY_MASK_UPPER 0b11000000
@@ -28,7 +30,7 @@
 
 
 const uint8_t PROGMEM mission_00[] = { 
-  14, 
+  14,
   SCENERY_UPPER_NONE | SCENERY_LOWER_DECR | 0, 
   SCENERY_UPPER_NONE | SCENERY_LOWER_DECR | 1, 
   SCENERY_UPPER_INCR | SCENERY_LOWER_RAND | 2, 
@@ -113,7 +115,102 @@ const uint8_t PROGMEM mission_04[] = {
   SCENERY_UPPER_NONE | SCENERY_LOWER_INCR | 5, 
   SCENERY_UPPER_NONE | SCENERY_LOWER_NONE | 6,};
 
+#endif
 
+#ifdef NEW_SCENERY_GROUND
+
+#define SCENERY_MASK_NONE           0b00001111
+#define SCENERY_MASK_RESTRICTIONS   0b11110000
+#define SCENERY_NONE                0b00000000
+#define SCENERY_BOAT                0b00010000
+
+const uint8_t PROGMEM mission_00[] = { 
+  1, // SJH 14
+  SCENERY_NONE | 0,/* 
+  SCENERY_NONE | 1, 
+  SCENERY_NONE | 2, 
+  SCENERY_NONE | 3, 
+  SCENERY_BOAT | 4, 
+  SCENERY_BOAT | 5,    // Boat
+  SCENERY_NONE | 6, 
+  SCENERY_NONE | 7, 
+  SCENERY_NONE | 8, 
+  SCENERY_BOAT | 9, 
+  SCENERY_BOAT | 10,   // Boat
+  SCENERY_NONE | 11, 
+  SCENERY_NONE | 12, 
+  SCENERY_NONE | 13 */ };
+
+const uint8_t PROGMEM mission_01[] = { 
+  14,
+  SCENERY_NONE | 14, 
+  SCENERY_NONE | 7, 
+  SCENERY_NONE | 8, 
+  SCENERY_NONE | 9, 
+  SCENERY_NONE | 13, 
+  SCENERY_NONE | 0, 
+  SCENERY_NONE | 1, 
+  SCENERY_NONE | 2, 
+  SCENERY_BOAT | 3, 
+  SCENERY_BOAT | 10,   // Boat 
+  SCENERY_NONE | 11, 
+  SCENERY_NONE | 12, 
+  SCENERY_BOAT | 4, 
+  SCENERY_BOAT | 5,    // Boat
+  SCENERY_NONE | 6 };
+
+const uint8_t PROGMEM mission_02[] = { 
+  14, 
+  SCENERY_NONE | 0, 
+  SCENERY_NONE | 2, 
+  SCENERY_NONE | 4, 
+  SCENERY_NONE | 6, 
+  SCENERY_BOAT | 8, 
+  SCENERY_BOAT | 10,   // Boat 
+  SCENERY_BOAT | 5,    // Boat
+  SCENERY_NONE | 12, 
+  SCENERY_NONE | 1, 
+  SCENERY_NONE | 3, 
+  SCENERY_NONE | 7, 
+  SCENERY_NONE | 9, 
+  SCENERY_NONE | 11, 
+  SCENERY_NONE | 13 };
+
+const uint8_t PROGMEM mission_03[] = { 
+  14, 
+  SCENERY_NONE | 2, 
+  SCENERY_NONE | 1, 
+  SCENERY_BOAT | 7, 
+  SCENERY_BOAT | 10,   // Boat 
+  SCENERY_NONE | 4, 
+  SCENERY_BOAT | 12, 
+  SCENERY_BOAT | 5,    // Boat
+  SCENERY_NONE | 0, 
+  SCENERY_NONE | 8, 
+  SCENERY_NONE | 9, 
+  SCENERY_NONE | 13, 
+  SCENERY_NONE | 3, 
+  SCENERY_NONE | 11, 
+  SCENERY_NONE | 6,};
+
+const uint8_t PROGMEM mission_04[] = { 
+  14, 
+  SCENERY_NONE | 2, 
+  SCENERY_BOAT | 1, 
+  SCENERY_BOAT | 10, 
+  SCENERY_NONE | 7, 
+  SCENERY_NONE | 4, 
+  SCENERY_NONE | 12, 
+  SCENERY_NONE | 0, 
+  SCENERY_NONE | 8, 
+  SCENERY_NONE | 9, 
+  SCENERY_NONE | 13, 
+  SCENERY_NONE | 3, 
+  SCENERY_BOAT | 11, 
+  SCENERY_BOAT | 5, 
+  SCENERY_NONE | 6,};
+
+#endif
 
 /* -----------------------------------------------------------------------------------------------------------------------------
  *  Formations

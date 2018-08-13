@@ -94,14 +94,14 @@ SQ7x8 obstacleBulletsValue = BULLETS_MAX;
 SQ7x8 obstacleHealthValue = HEALTH_MAX;
 SQ7x8 obstacleFuelValue = FUEL_MAX;
 
+#ifndef NEW_SCENERY_GROUND
 uint8_t sceneryUpper = SCENERY_UPPER_NONE;                  // Defines the current 'trend' for the scenery - NONE, FULL, INCR, DECR
 uint8_t sceneryLower = SCENERY_LOWER_NONE;
-
-#ifndef NEW_SCENERY_GROUND
 SceneryInfo upperSceneryInfo[NUMBER_OF_SCENERY_TILES];      // Scenery tiles are rendered across the screen with offset.
 SceneryInfo lowerSceneryInfo[NUMBER_OF_SCENERY_TILES];
 uint8_t sceneryOffset;
 #else
+uint8_t sceneryRestrictions = SCENERY_NONE; 
 SceneryGround upperSceneryPosition;
 SceneryGround lowerSceneryPosition;
 #endif
@@ -550,24 +550,24 @@ void gameLoop() {
   moveAndRenderEnemyBullets();
 
   #ifndef MICROCARD
-  moveAndRenderEnemies();
-  moveAndRenderObstacle();
-  #ifdef DO_NOT_ANIMATE_PROPS
-  player.renderImage();
+    moveAndRenderEnemies();
+    moveAndRenderObstacle();
+    #ifdef DO_NOT_ANIMATE_PROPS
+      player.renderImage();
+    #else
+      player.renderImage(arduboy.getFrameCount(6) < 3);
+    #endif
   #else
-  player.renderImage(arduboy.getFrameCount(6) < 3);
-  #endif
-  #else
-  moveAndRenderEnemies(true);
-  moveAndRenderObstacle();
-  renderScenery_BelowPlanes();
-  moveAndRenderEnemies(false);
-  #ifdef DO_NOT_ANIMATE_PROPS
-  player.renderImage();
-  #else
-  player.renderImage(arduboy.getFrameCount(6) < 3);
-  #endif
-  renderScenery_AbovePlanes();
+    moveAndRenderEnemies(true);
+    moveAndRenderObstacle();
+    renderScenery_BelowPlanes();
+    moveAndRenderEnemies(false);
+    #ifdef DO_NOT_ANIMATE_PROPS
+      player.renderImage();
+    #else
+      player.renderImage(arduboy.getFrameCount(6) < 3);
+    #endif
+    renderScenery_AbovePlanes();
   #endif
 
   renderScoreboard();
@@ -731,8 +731,13 @@ void launchMission(bool firstFormation, const uint8_t *missionRef) {
   {
     uint8_t formationPlusScenery = pgm_read_byte(&missionRef[missionIdx++]);
     formation = formationPlusScenery & SCENERY_MASK_NONE;
-    sceneryUpper = formationPlusScenery & SCENERY_MASK_UPPER;
-    sceneryLower = formationPlusScenery & SCENERY_MASK_LOWER;
+
+    #ifndef NEW_SCENERY_GROUND
+      sceneryUpper = formationPlusScenery & SCENERY_MASK_UPPER;
+      sceneryLower = formationPlusScenery & SCENERY_MASK_LOWER;
+    #else
+      sceneryRestrictions = formationPlusScenery & SCENERY_MASK_RESTRICTIONS;
+    #endif
   }
 
   launchFormation(formations[formation]);
@@ -1282,6 +1287,7 @@ void moveAndRenderEnemies(bool renderBoats) {
 }
 #endif
 
+
 /* -----------------------------------------------------------------------------------------------------------------------------
  *  Move player off the screen ..
  * -----------------------------------------------------------------------------------------------------------------------------
@@ -1290,8 +1296,26 @@ void renderEndOfMission() {
 
   for (uint8_t i = 0; i < 128; ++i) {
 
-    renderScenery(i % 2);
-    Sprites::drawExternalMask(player.getX().getInteger() + i, player.getY().getInteger(), p38_0, p38_mask_0, 0, 0);
+    #ifndef MICROCARD
+      moveAndRenderObstacle();
+      renderScenery(i % 2);
+      #ifdef DO_NOT_ANIMATE_PROPS
+        Sprites::drawExternalMask(player.getX().getInteger() + i, player.getY().getInteger(), p38_0, p38_mask_0, 0, 0);
+      #else
+        Sprites::drawExternalMask(player.getX().getInteger() + i, player.getY().getInteger(), p38_0, p38_mask_0, (i % 6 < 3), 0);
+      #endif
+    #else
+      moveAndRenderObstacle();
+      renderScenery_BelowPlanes();
+      moveAndRenderEnemies(false);
+      renderScenery(i % 2);
+      #ifdef DO_NOT_ANIMATE_PROPS
+        Sprites::drawExternalMask(player.getX().getInteger() + i, player.getY().getInteger(), p38_0, p38_mask_0, 0, 0);
+      #else
+        Sprites::drawExternalMask(player.getX().getInteger() + i, player.getY().getInteger(), p38_0, p38_mask_0, (i % 6 < 3), 0);
+      #endif
+      renderScenery_AbovePlanes();
+    #endif
 
     renderScoreboard();
     arduboy.display(true);
@@ -1516,8 +1540,8 @@ void renderScenery(const uint8_t frame) {
           
       #else
 
-        #define FREQ_OF_COMMON_ELEMENTS 3
-        #define NUMBER_OF_COMMON_ELEMENTS (static_cast<uint8_t>(SceneryElement::Cloud_AbovePlanes) + 1)
+        #define FREQ_OF_COMMON_ELEMENTS 2
+        #define NUMBER_OF_COMMON_ELEMENTS (static_cast<uint8_t>(SceneryElement::Island1) + 1)
 
         if (sceneryItems[x].x < -54 && gameState != STATE_GAME_END_OF_MISSION) {
 
@@ -1528,8 +1552,10 @@ void renderScenery(const uint8_t frame) {
           switch (previousElement) {
 
             case SceneryElement::Boat ... SceneryElement::Cloud_BelowPlanes:
-
-              element = random(0, (FREQ_OF_COMMON_ELEMENTS * NUMBER_OF_COMMON_ELEMENTS) + 3 + 1);
+Serial.print(sceneryRestrictions);
+Serial.print(" ");
+              element = random(0, (FREQ_OF_COMMON_ELEMENTS * NUMBER_OF_COMMON_ELEMENTS) + (sceneryRestrictions == 0 ? 1 : 0) + 1);
+Serial.println(element);
               break;
 
             default:
@@ -1598,11 +1624,11 @@ void renderScenery(const uint8_t frame) {
               #ifdef SAVE_MEMORY
                 sceneryItems[x].element = static_cast<SceneryElement>(SceneryElement::IslandStart);
                 sceneryItems[x].element2 = static_cast<SceneryElement>(SceneryElement::IslandStart);
-                sceneryItems[x].y = random((upperSceneryPosition.enabled ? upperSceneryPosition.y + 32 : 0), (lowerSceneryPosition.enabled ? lowerSceneryPosition.y - 26 : HEIGHT - 16));
+                sceneryItems[x].y = random((upperSceneryPosition.enabled ? upperSceneryPosition.y + 32 : 0), (lowerSceneryPosition.enabled ? lowerSceneryPosition.y - 30 : HEIGHT - 16));
               #else
                 sceneryItems[x].element = static_cast<SceneryElement>(element);
                 sceneryItems[x].element2 = static_cast<SceneryElement>(random(static_cast<int8_t>(SceneryElement::IslandStart), static_cast<int8_t>(SceneryElement::IslandEnd)));
-                sceneryItems[x].y = random((upperSceneryPosition.enabled ? upperSceneryPosition.y + 32 : 0), (lowerSceneryPosition.enabled ? lowerSceneryPosition.y - 26 : HEIGHT - 16));
+                sceneryItems[x].y = random((upperSceneryPosition.enabled ? upperSceneryPosition.y + 32 : 0), (lowerSceneryPosition.enabled ? lowerSceneryPosition.y - 30 : HEIGHT - 16));
               #endif
             }
             #endif
@@ -1728,6 +1754,8 @@ void renderScenery(const uint8_t frame) {
       }
     #else
 
+      // New ground scenery ..
+
       if (upperSceneryPosition.enabled) {
         upperSceneryPosition.x--;
         if (upperSceneryPosition.x < -90) { 
@@ -1739,7 +1767,7 @@ void renderScenery(const uint8_t frame) {
         if (random(0, 40) == 0) {
           upperSceneryPosition.enabled = true;
           upperSceneryPosition.x = 162;
-          upperSceneryPosition.y = random(-10, 1);
+          upperSceneryPosition.y = random(-10, -1);
           
         }
                 
