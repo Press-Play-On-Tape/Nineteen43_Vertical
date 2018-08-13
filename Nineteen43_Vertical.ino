@@ -1846,6 +1846,9 @@ void renderScenery_AbovePlanes() {
         #ifdef NEW_SCENERY
         Sprites::drawExternalMask(sceneryItems[x].x, sceneryItems[x].y, cloud, cloud_Mask, 0, 0);
         #endif
+        #ifdef NEW_SCENERY_GROUND
+        Sprites::drawExternalMask(sceneryItems[x].x, sceneryItems[x].y, cloud, cloud_Mask, 0, 0);
+        #endif
         break;
 
       default: break;
