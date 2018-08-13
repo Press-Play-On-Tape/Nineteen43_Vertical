@@ -214,8 +214,16 @@ void renderScenery(const uint8_t frame) {
         Sprites::drawSelfMasked(sceneryItems[x].x, sceneryItems[x].y, sail_boat_02, 0);
         break;
 
-      case SceneryElement::Island1 ... SceneryElement::Island3:
-        Sprites::drawSelfMasked(sceneryItems[x].x, sceneryItems[x].y, island, 0);
+      case SceneryElement::Island1:
+        Sprites::drawSelfMasked(sceneryItems[x].x, sceneryItems[x].y, island_01, 0);
+        break;
+
+      case SceneryElement::Island2:
+        Sprites::drawSelfMasked(sceneryItems[x].x, sceneryItems[x].y, island_02, 0);
+        break;
+
+      case SceneryElement::Island3:
+        Sprites::drawSelfMasked(sceneryItems[x].x, sceneryItems[x].y, island_03, 0);
         break;
 
       default: break;
@@ -253,7 +261,7 @@ void renderScenery(const uint8_t frame) {
         switch (previousElement) {
 
           case SceneryElement::Boat ... SceneryElement::Cloud_BelowPlanes:
-            element = random(0, (FREQ_OF_COMMON_ELEMENTS * NUMBER_OF_COMMON_ELEMENTS) + (sceneryRestrictions == 0 ? 1 : 0) + 1);
+            element = random(0, (FREQ_OF_COMMON_ELEMENTS * NUMBER_OF_COMMON_ELEMENTS) + (sceneryRestrictions == 0 ? 3 : 0) + 1);
             break;
 
           default:
@@ -285,15 +293,13 @@ void renderScenery(const uint8_t frame) {
         }
         else {
 
-          #ifdef SAVE_MEMORY
-            sceneryItems[x].element = static_cast<SceneryElement>(SceneryElement::IslandStart);
-//            sceneryItems[x].element2 = static_cast<SceneryElement>(SceneryElement::IslandStart);
-            sceneryItems[x].y = random((upperSceneryPosition.enabled ? upperSceneryPosition.y + 32 : 0), (lowerSceneryPosition.enabled ? lowerSceneryPosition.y - 30 : HEIGHT - 16));
-          #else
+//          #ifdef SAVE_MEMORY
             sceneryItems[x].element = static_cast<SceneryElement>(element);
-//            sceneryItems[x].element2 = static_cast<SceneryElement>(random(static_cast<int8_t>(SceneryElement::IslandStart), static_cast<int8_t>(SceneryElement::IslandEnd)));
             sceneryItems[x].y = random((upperSceneryPosition.enabled ? upperSceneryPosition.y + 32 : 0), (lowerSceneryPosition.enabled ? lowerSceneryPosition.y - 30 : HEIGHT - 16));
-          #endif
+//           #else
+//             sceneryItems[x].element = static_cast<SceneryElement>(element);
+//             sceneryItems[x].y = random((upperSceneryPosition.enabled ? upperSceneryPosition.y + 32 : 0), (lowerSceneryPosition.enabled ? lowerSceneryPosition.y - 30 : HEIGHT - 16));
+//           #endif
         }
 
       }
