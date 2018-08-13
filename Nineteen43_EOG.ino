@@ -4,15 +4,22 @@
  *  End of mission / game loop ..
  * -----------------------------------------------------------------------------------------------------------------------------
  */
-void endOfSequence_Render() {
+void endOfSequence_Render(bool endOfLevel) {
 
   while (!(arduboy.nextFrame())) {}
 
   if (gameState == STATE_GAME_END_OF_MISSION) {
-    Sprites::drawOverwrite(106, 2, mission_successful, 0);
+    Sprites::drawOverwrite(117, 14, mission_successful_1, 0);
+    Sprites::drawOverwrite(106, 0, mission_successful_2, 0);
   }
   else {
-    Sprites::drawOverwrite(112, 7, game_over, 0);
+    if (endOfLevel) {
+      Sprites::drawOverwrite(117, 17, level_complete_1, 0);
+      Sprites::drawOverwrite(106, 10, level_complete_2, 0);
+    }
+    else {
+      Sprites::drawOverwrite(112, 7, game_over, 0);
+    }
   }
 
   arduboy.drawVerticalDottedLine(0, HEIGHT, 102, 2);
@@ -21,6 +28,11 @@ void endOfSequence_Render() {
 }
 
 void endOfSequence(const uint8_t level) {
+
+  bool endOfLevel = false;
+
+  if (level == 0 && mission == 30) { gameState = STATE_GAME_END_OF_GAME; endOfLevel = true; } // SJH
+  if (level == 1 && mission == 60) { gameState = STATE_GAME_END_OF_GAME; endOfLevel = true; }
 
   #ifdef SAVE_MEMORY
     uint16_t high = eeprom_read_byte((uint8_t *)(EEPROM_SCORE + (level * 2)));
@@ -32,7 +44,7 @@ void endOfSequence(const uint8_t level) {
   for (int8_t i = -20; i < 100; i++) {
 
     arduboy.pollButtons();
-    endOfSequence_Render(); 
+    endOfSequence_Render(endOfLevel); 
 
     arduboy.fillRect(102, i - 18, 127, 200, BLACK);
     Sprites::drawOverwrite(102, i - 18, zero_S, 0);
@@ -45,7 +57,7 @@ void endOfSequence(const uint8_t level) {
 
   while (true) {
 
-    endOfSequence_Render();
+    endOfSequence_Render(endOfLevel);
     arduboy.pollButtons();
     Sprites::drawOverwrite(68, 15, usaf, 0);
 
@@ -99,8 +111,5 @@ void endOfSequence(const uint8_t level) {
     }
 
   }
-
-  if (level == 0 && mission == 30) { gameState = STATE_GAME_END_OF_GAME; }
-  if (level == 1 && mission == 60) { gameState = STATE_GAME_END_OF_GAME; }
 
 }
