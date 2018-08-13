@@ -31,7 +31,7 @@ void endOfSequence(const uint8_t level) {
 
   bool endOfLevel = false;
 
-  if (level == 0 && mission == 30) { gameState = STATE_GAME_END_OF_GAME; endOfLevel = true; } // SJH
+  if (level == 0 && mission == 30) { gameState = STATE_GAME_END_OF_GAME; endOfLevel = true; } 
   if (level == 1 && mission == 60) { gameState = STATE_GAME_END_OF_GAME; endOfLevel = true; }
 
   #ifdef SAVE_MEMORY
