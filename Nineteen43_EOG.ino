@@ -8,7 +8,7 @@ void endOfSequence_Render(bool endOfLevel) {
 
   while (!(arduboy.nextFrame())) {}
 
-  if (gameState == STATE_GAME_END_OF_MISSION) {
+  if (gameState == GameState::End_Of_Mission) {
     Sprites::drawOverwrite(117, 14, mission_successful_1, 0);
     Sprites::drawOverwrite(106, 0, mission_successful_2, 0);
   }
@@ -31,8 +31,8 @@ void endOfSequence(const uint8_t level) {
 
   bool endOfLevel = false;
 
-  if (level == 0 && mission == 30) { gameState = STATE_GAME_END_OF_GAME; endOfLevel = true; } 
-  if (level == 1 && mission == 60) { gameState = STATE_GAME_END_OF_GAME; endOfLevel = true; }
+  if (level == 0 && mission == 30) { gameState = GameState::End_Of_Game; endOfLevel = true; } 
+  if (level == 1 && mission == 60) { gameState = GameState::End_Of_Game; endOfLevel = true; }
 
   #ifdef SAVE_MEMORY
     uint16_t high = eeprom_read_byte((uint8_t *)(EEPROM_SCORE + (level * 2)));
@@ -77,7 +77,7 @@ void endOfSequence(const uint8_t level) {
     // Total ..
     {
       uint8_t digits[4] = {};
-      if (gameState == STATE_GAME_END_OF_MISSION) {
+      if (gameState == GameState::End_Of_Mission) {
         Sprites::drawOverwrite(34, 4, total_img, 0);
         extractDigits(digits, player.getGrandScore());
       }
@@ -97,15 +97,15 @@ void endOfSequence(const uint8_t level) {
     arduboy.display(true);
 
 
-    if (gameState == STATE_GAME_END_OF_MISSION) {
-      if (arduboy.justPressed(A_BUTTON)) { gameState = STATE_GAME_INIT; break; }
+    if (gameState == GameState::End_Of_Mission) {
+      if (arduboy.justPressed(A_BUTTON)) { gameState = GameState::Game_Init; break; }
     }
     else {
       #ifdef SAVE_MEMORY
       if (arduboy.justPressed(UP_BUTTON) && arduboy.justPressed(DOWN_BUTTON)) { initEEPROM(true); player.setGrandScore(0); }
-      if (arduboy.justPressed(A_BUTTON)) { gameState = STATE_INTRO_INIT; break; }
+      if (arduboy.justPressed(A_BUTTON)) { gameState = GameState::Intro_Init; break; }
       #else
-      if (arduboy.justPressed(A_BUTTON)) { gameState = STATE_GAME_SAVE_SCORE; break; }
+      if (arduboy.justPressed(A_BUTTON)) { gameState = GameState::Save_Score; break; }
       #endif
 
     }

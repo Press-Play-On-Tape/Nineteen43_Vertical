@@ -12,11 +12,7 @@ class Player : public Plane {
    
     Player(const uint8_t * const * images);
 
-    #ifdef DO_NOT_ANIMATE_PROPS
-    void renderImage();
-    #else
     void renderImage(uint8_t frame);
-    #endif
     void initGame();
     void initMission();
 

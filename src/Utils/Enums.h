@@ -4,31 +4,31 @@
 #include "FixedPointsCommon.h"
 #include "Arduboy2Ext.h"
 
-#define MICROCARD
 #define SAVE_MEMORY
-
 #define SHOW_CREDITS
-#define _OLD_SCENERY
-#define _NEW_SCENERY
-#define NEW_SCENERY_GROUND
-#define _DO_NOT_ANIMATE_PROPS
+
 
 // Remove comment // to free up some PROGMEM for DUEB
-#define _DEBUG
+//#define DEBUG
 
 
 // Game States ..
 
-#define STATE_INTRO_INIT                 0
-#define STATE_INTRO_LOOP                 1
-#define STATE_GAME_INIT                  2
-#define STATE_GAME_LOOP                  3
-#define STATE_GAME_END_OF_MISSION        4
-#define STATE_GAME_END_OF_GAME           5
-#define STATE_CREDITS_LOOP               6
-#define STATE_GAME_SAVE_SCORE            7
-#define STATE_GAME_HIGH_SCORE            8
-
+enum class GameState : uint8_t {
+  Intro_Init,
+  Intro_Loop,
+  Game_Init,
+  Game_Loop,
+  End_Of_Mission,
+  End_Of_Game,
+  #ifdef SHOW_CREDITS
+  Credits_Loop,
+  #endif
+  #ifndef SAVE_MEMORY
+  Save_Score,
+  High_Score,
+  #endif
+};
 
 
 // Image array offsets ..
@@ -42,13 +42,13 @@
 
 // EEPROM settings for high score ..
 
-#define EEPROM_START                  200
-#define EEPROM_START_C1               EEPROM_START
-#define EEPROM_START_C2               EEPROM_START + 1
-#define EEPROM_SCORE                  EEPROM_START_C1 + 2
-#define EEPROM_LEVEL                  EEPROM_START_C1 + 8
-#define EEPROM_TOP_START              EEPROM_LEVEL + 1
-#define EEPROM_ENTRY_SIZE             6
+#define EEPROM_START                    200
+#define EEPROM_START_C1                 EEPROM_START
+#define EEPROM_START_C2                 EEPROM_START + 1
+#define EEPROM_SCORE                    EEPROM_START_C1 + 2
+#define EEPROM_LEVEL                    EEPROM_START_C1 + 8
+#define EEPROM_TOP_START                EEPROM_LEVEL + 1
+#define EEPROM_ENTRY_SIZE               6
 
 #define NUMBER_OF_ENEMIES               6
 #define NUMBER_OF_MISSIONS              5
@@ -193,7 +193,6 @@ enum class SceneryElement : uint8_t {
   Boat,
   Wave1,
   Wave2,
-  #ifdef MICROCARD
   Boat2,
   Cloud_AbovePlanes,
   Cloud_BelowPlanes,
@@ -202,16 +201,12 @@ enum class SceneryElement : uint8_t {
   Island2,
   Island3,
   IslandEnd,
-  #endif
 };
 
 struct SceneryItem {
   int16_t x;
   uint8_t y;
   SceneryElement element;
-  #ifdef MICROCARD
-  SceneryElement element2;
-  #endif
 };
 
 enum class EnemyType : uint8_t {
@@ -247,13 +242,11 @@ enum class Direction : uint8_t {
   None,
 };
 
-#ifdef NEW_SCENERY_GROUND
 struct SceneryGround {
   int16_t x;
   int8_t y;
   bool enabled;
 };
-#endif
 
 
 const Direction inverseX[] =     { Direction::North, Direction::NorthWest, Direction::West, Direction::SouthWest,
