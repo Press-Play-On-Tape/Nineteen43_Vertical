@@ -90,7 +90,7 @@ const uint8_t PROGMEM mission_04[] = {
   14, 
   SCENERY_NONE | 2, 
   SCENERY_BOAT | 1, 
-  SCENERY_BOAT | 10, 
+  SCENERY_BOAT | 10,   // Boat
   SCENERY_NONE | 7, 
   SCENERY_NONE | 4, 
   SCENERY_NONE | 12, 
@@ -100,7 +100,7 @@ const uint8_t PROGMEM mission_04[] = {
   SCENERY_NONE | 13, 
   SCENERY_NONE | 3, 
   SCENERY_BOAT | 11, 
-  SCENERY_BOAT | 5, 
+  SCENERY_BOAT | 5,    // Boat
   SCENERY_NONE | 6,};
 
 
