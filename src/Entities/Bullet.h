@@ -24,8 +24,7 @@ class Bullet {
   
     uint8_t _x;               
     uint8_t _y; 
-    Direction _direction;   
-    bool _enabled;           
+    uint8_t _details;
 
 };
 

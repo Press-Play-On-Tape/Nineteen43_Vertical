@@ -31,11 +31,11 @@ class Obstacle : public Base {
   private:
              
     SQ7x8 _speed;               
-
     SQ7x8 _value;
     ObstacleType _obstacleType;
     const uint8_t *_bitmap;
     const uint8_t *_mask;
+    
 };
 
 

@@ -48,7 +48,7 @@ enum class GameState : uint8_t {
 #define EEPROM_SCORE                    EEPROM_START_C1 + 2
 #define EEPROM_LEVEL                    EEPROM_START_C1 + 8
 #define EEPROM_TOP_START                EEPROM_LEVEL + 1
-#define EEPROM_ENTRY_SIZE               6
+#define EEPROM_ENTRY_SIZE               5
 
 #define NUMBER_OF_ENEMIES               6
 #define NUMBER_OF_MISSIONS              5

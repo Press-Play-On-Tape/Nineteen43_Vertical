@@ -144,7 +144,7 @@ void renderHighScore(HighScore &highScore) {
 
     if (arduboy.justPressed(A_BUTTON) || arduboy.justPressed(B_BUTTON)) { 
       arduboy.setRGBled(0, 0, 0);
-      gameState = STATE_INTRO_INIT; 
+      gameState = GameState::Intro_Init; 
     }
     
   }

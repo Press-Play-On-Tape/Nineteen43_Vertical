@@ -177,7 +177,7 @@ void loop() {
     #ifndef SAVE_MEMORY
     case GameState::Save_Score:
       highScore.reset();
-      highScore.setSlotNumber(EEPROM_Utils::saveScore(player.getScore(), mission + 1));
+      highScore.setSlotNumber(EEPROM_Utils::saveScore(player.getScore()));
       gameState = GameState::High_Score;
       // break; Fall-through intentional.
 
