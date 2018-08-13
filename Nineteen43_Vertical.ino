@@ -1541,21 +1541,22 @@ void renderScenery(const uint8_t frame) {
       #else
 
         #define FREQ_OF_COMMON_ELEMENTS 2
-        #define NUMBER_OF_COMMON_ELEMENTS (static_cast<uint8_t>(SceneryElement::Island1) + 1)
+        #define NUMBER_OF_COMMON_ELEMENTS (static_cast<uint8_t>(SceneryElement::Cloud_BelowPlanes) + 1)
 
         if (sceneryItems[x].x < -54 && gameState != STATE_GAME_END_OF_MISSION) {
 
           sceneryItems[x].x = 162;
           SceneryElement previousElement = (x > 0 ? sceneryItems[x - 1].element : sceneryItems[NUMBER_OF_SCENERY_ITEMS - 1].element);
           uint8_t element = 0;
-  
+Serial.print((uint8_t)previousElement);
+Serial.print(" ");  
           switch (previousElement) {
 
             case SceneryElement::Boat ... SceneryElement::Cloud_BelowPlanes:
 Serial.print(sceneryRestrictions);
 Serial.print(" ");
               element = random(0, (FREQ_OF_COMMON_ELEMENTS * NUMBER_OF_COMMON_ELEMENTS) + (sceneryRestrictions == 0 ? 1 : 0) + 1);
-Serial.println(element);
+Serial.print(element);
               break;
 
             default:
@@ -1564,6 +1565,7 @@ Serial.println(element);
               break;
 
           }
+Serial.println(" ");
 
           switch (element / FREQ_OF_COMMON_ELEMENTS) {
 
@@ -1617,7 +1619,7 @@ Serial.println(element);
             }
             else if (element >= static_cast<uint8_t>(SceneryElement::Cloud_AbovePlanes) && element <= static_cast<uint8_t>(SceneryElement::Cloud_BelowPlanes)) {
               sceneryItems[x].element = static_cast<SceneryElement>(element);
-              sceneryItems[x].y = random(-18, HEIGHT - 18);
+              sceneryItems[x].y = random(-8, HEIGHT - 24);
             }
             else {
 
