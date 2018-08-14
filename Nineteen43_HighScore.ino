@@ -15,7 +15,7 @@ void renderHighScore(HighScore &highScore) {
 
 
   arduboy.drawVerticalDottedLine(0, HEIGHT, 127, 2);
-  Sprites::drawOverwrite(99, 0, flying_aces, 0);
+  SpritesB::drawOverwrite(99, 0, flying_aces, 0);
   arduboy.drawVerticalDottedLine(0, HEIGHT, 93, 2);
 
   
@@ -24,9 +24,9 @@ void renderHighScore(HighScore &highScore) {
     yOffset = 4;
     Slot slot = EEPROM_Utils::getSlot(x);
 
-    Sprites::drawOverwrite(xOffset, yOffset, font4x6_Full, slot.getChar0());
-    Sprites::drawOverwrite(xOffset, yOffset + 6, font4x6_Full, slot.getChar1());
-    Sprites::drawOverwrite(xOffset, yOffset + 12, font4x6_Full, slot.getChar2());
+    SpritesB::drawOverwrite(xOffset, yOffset, font4x6_Full, slot.getChar0());
+    SpritesB::drawOverwrite(xOffset, yOffset + 6, font4x6_Full, slot.getChar1());
+    SpritesB::drawOverwrite(xOffset, yOffset + 12, font4x6_Full, slot.getChar2());
 
 
     // Score ..
@@ -35,7 +35,7 @@ void renderHighScore(HighScore &highScore) {
       extractDigits(digits, slot.getScore());
     
       for (uint8_t i = 0, y2 = yOffset + 52; i < 6; ++i, y2 -= 5) {
-        Sprites::drawSelfMasked(xOffset, y2, font4x6_Full, (digits[i] + 26));
+        SpritesB::drawSelfMasked(xOffset, y2, font4x6_Full, (digits[i] + 26));
       }
       
     }
@@ -52,8 +52,8 @@ void renderHighScore(HighScore &highScore) {
   
     if (alternate < 15) {
 
-      Sprites::drawOverwrite(xOffset - (highScore.getSlotNumber() * HIGH_SCORE_DIST_BETWEEN_ROWS) - 1, yOffset - 4, arrow, 0);
-      Sprites::drawOverwrite(xOffset - (highScore.getSlotNumber() * HIGH_SCORE_DIST_BETWEEN_ROWS) - 1, yOffset + 59, arrow, 0);
+      SpritesB::drawOverwrite(xOffset - (highScore.getSlotNumber() * HIGH_SCORE_DIST_BETWEEN_ROWS) - 1, yOffset - 4, arrow, 0);
+      SpritesB::drawOverwrite(xOffset - (highScore.getSlotNumber() * HIGH_SCORE_DIST_BETWEEN_ROWS) - 1, yOffset + 59, arrow, 0);
     
     }
     else if (alternate > 30) {
@@ -64,26 +64,26 @@ void renderHighScore(HighScore &highScore) {
 
     if (highScore.getCharIndex() == 0) {
       arduboy.fillRect(xOffset - (highScore.getSlotNumber() * HIGH_SCORE_DIST_BETWEEN_ROWS) - 1, yOffset - 1, 8, 6, WHITE);
-      Sprites::drawErase(xOffset - (highScore.getSlotNumber() * HIGH_SCORE_DIST_BETWEEN_ROWS), yOffset, font4x6_Full, highScore.getChar(0));
+      SpritesB::drawErase(xOffset - (highScore.getSlotNumber() * HIGH_SCORE_DIST_BETWEEN_ROWS), yOffset, font4x6_Full, highScore.getChar(0));
     }
     else {
-      Sprites::drawOverwrite(xOffset - (highScore.getSlotNumber() * HIGH_SCORE_DIST_BETWEEN_ROWS), yOffset, font4x6_Full, highScore.getChar(0));
+      SpritesB::drawOverwrite(xOffset - (highScore.getSlotNumber() * HIGH_SCORE_DIST_BETWEEN_ROWS), yOffset, font4x6_Full, highScore.getChar(0));
     }
 
     if (highScore.getCharIndex() == 1) {
       arduboy.fillRect(xOffset - (highScore.getSlotNumber() * HIGH_SCORE_DIST_BETWEEN_ROWS) - 1, yOffset + 5, 8, 6, WHITE);
-      Sprites::drawErase(xOffset - (highScore.getSlotNumber() * HIGH_SCORE_DIST_BETWEEN_ROWS), yOffset + 6, font4x6_Full, highScore.getChar(1));
+      SpritesB::drawErase(xOffset - (highScore.getSlotNumber() * HIGH_SCORE_DIST_BETWEEN_ROWS), yOffset + 6, font4x6_Full, highScore.getChar(1));
     }
     else {
-      Sprites::drawOverwrite(xOffset - (highScore.getSlotNumber() * HIGH_SCORE_DIST_BETWEEN_ROWS), yOffset + 6, font4x6_Full, highScore.getChar(1));
+      SpritesB::drawOverwrite(xOffset - (highScore.getSlotNumber() * HIGH_SCORE_DIST_BETWEEN_ROWS), yOffset + 6, font4x6_Full, highScore.getChar(1));
     }
 
     if (highScore.getCharIndex() == 2) {
       arduboy.fillRect(xOffset - (highScore.getSlotNumber() * HIGH_SCORE_DIST_BETWEEN_ROWS) - 1, yOffset + 11, 8, 6, WHITE);
-      Sprites::drawErase(xOffset - (highScore.getSlotNumber() * HIGH_SCORE_DIST_BETWEEN_ROWS), yOffset + 12, font4x6_Full, highScore.getChar(2));
+      SpritesB::drawErase(xOffset - (highScore.getSlotNumber() * HIGH_SCORE_DIST_BETWEEN_ROWS), yOffset + 12, font4x6_Full, highScore.getChar(2));
     }
     else {
-      Sprites::drawOverwrite(xOffset - (highScore.getSlotNumber() * HIGH_SCORE_DIST_BETWEEN_ROWS), yOffset + 12, font4x6_Full, highScore.getChar(2));
+      SpritesB::drawOverwrite(xOffset - (highScore.getSlotNumber() * HIGH_SCORE_DIST_BETWEEN_ROWS), yOffset + 12, font4x6_Full, highScore.getChar(2));
     }
 
 
@@ -106,8 +106,8 @@ void renderHighScore(HighScore &highScore) {
   }
   else {
 
-    Sprites::drawOverwrite(2, 3, aButton, 0);
-    Sprites::drawOverwrite(5, 12, aButton_continue, 0);
+    SpritesB::drawOverwrite(2, 3, aButton, 0);
+    SpritesB::drawOverwrite(5, 12, aButton_continue, 0);
 
 
     // Clear scores ..

@@ -193,7 +193,7 @@ void Player::renderImage(uint8_t frame) {
 
       if (_health > -3) {
 
-        Sprites::drawExternalMask(rollX, y, pgm_read_word_near(&_bitmaps[static_cast<uint8_t>(roll) ]), pgm_read_word_near(&_bitmaps[IMAGES_MASK_OFFSET + (static_cast<uint8_t>(roll) )]), (roll == 0 ? frame : 0), 0);
+        SpritesB::drawExternalMask(rollX, y, pgm_read_word_near(&_bitmaps[static_cast<uint8_t>(roll) ]), pgm_read_word_near(&_bitmaps[IMAGES_MASK_OFFSET + (static_cast<uint8_t>(roll) )]), (roll == 0 ? frame : 0), 0);
 
       }
 
@@ -207,11 +207,11 @@ void Player::renderImage(uint8_t frame) {
       switch (_health.getInteger()) {
   
         case -4 ... -1:
-          Sprites::drawExternalMask(x, y, pgm_read_word_near(&_bitmaps[IMAGES_EXPLOSION_OFFSET + static_cast<uint8_t>(bitmap)]), pgm_read_word_near(&_bitmaps[IMAGES_EXPLOSION_MASK_OFFSET + static_cast<uint8_t>(bitmap)]), 0, 0);
+          SpritesB::drawExternalMask(x, y, pgm_read_word_near(&_bitmaps[IMAGES_EXPLOSION_OFFSET + static_cast<uint8_t>(bitmap)]), pgm_read_word_near(&_bitmaps[IMAGES_EXPLOSION_MASK_OFFSET + static_cast<uint8_t>(bitmap)]), 0, 0);
           break;
 
         case -6 ... -5:
-          Sprites::drawSelfMasked(x, y, pgm_read_word_near(&_bitmaps[IMAGES_EXPLOSION_OFFSET + 3]), 0);
+          SpritesB::drawSelfMasked(x, y, pgm_read_word_near(&_bitmaps[IMAGES_EXPLOSION_OFFSET + 3]), 0);
           break;         
 
         case -10:
@@ -276,7 +276,7 @@ void Player::renderImage(uint8_t frame) {
       }    
 
       if (bitmap != 0) {
-        Sprites::drawExternalMask(fuelX, y, pgm_read_word_near(&_bitmaps[bitmap]), pgm_read_word_near(&_bitmaps[mask]), 0, 0);
+        SpritesB::drawExternalMask(fuelX, y, pgm_read_word_near(&_bitmaps[bitmap]), pgm_read_word_near(&_bitmaps[mask]), 0, 0);
       }
       
     }

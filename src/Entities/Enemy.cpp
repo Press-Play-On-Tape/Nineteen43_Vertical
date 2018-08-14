@@ -180,11 +180,11 @@ void Enemy::renderImage() {
 
   if (_enabled && _delayStart == 0 && x + this->getWidth() >= 0 && x < WIDTH) {
 
-    Sprites::drawExternalMask(x, y, pgm_read_word_near(&_bitmaps[static_cast<uint8_t>(_direction)]), pgm_read_word_near(&_bitmaps[IMAGES_MASK_OFFSET + static_cast<uint8_t>(_direction)]), 0, 0);
+    SpritesB::drawExternalMask(x, y, pgm_read_word_near(&_bitmaps[static_cast<uint8_t>(_direction)]), pgm_read_word_near(&_bitmaps[IMAGES_MASK_OFFSET + static_cast<uint8_t>(_direction)]), 0, 0);
     
     if (_type == EnemyType::Boat && _turretDirection != Direction::West) {
 
-      Sprites::drawExternalMask(x + ENEMY_BOAT_TURRENT_X, y + ENEMY_BOAT_TURRENT_Y, pgm_read_word_near(&_bitmaps[static_cast<uint8_t>(_turretDirection)]), pgm_read_word_near(&_bitmaps[IMAGES_MASK_OFFSET + static_cast<uint8_t>(_turretDirection)]), 0, 0);
+      SpritesB::drawExternalMask(x + ENEMY_BOAT_TURRENT_X, y + ENEMY_BOAT_TURRENT_Y, pgm_read_word_near(&_bitmaps[static_cast<uint8_t>(_turretDirection)]), pgm_read_word_near(&_bitmaps[IMAGES_MASK_OFFSET + static_cast<uint8_t>(_turretDirection)]), 0, 0);
       
     }
 
@@ -198,15 +198,15 @@ void Enemy::renderImage() {
       switch (healthInt) {
   
         case -1 ... 0:
-          Sprites::drawExternalMask(x, y, pgm_read_word_near(&_bitmaps[IMAGES_EXPLOSION_OFFSET + static_cast<uint8_t>(absHealthInt)]), pgm_read_word_near(&_bitmaps[IMAGES_EXPLOSION_MASK_OFFSET + static_cast<uint8_t>(absHealthInt)]), 0, 0);
+          SpritesB::drawExternalMask(x, y, pgm_read_word_near(&_bitmaps[IMAGES_EXPLOSION_OFFSET + static_cast<uint8_t>(absHealthInt)]), pgm_read_word_near(&_bitmaps[IMAGES_EXPLOSION_MASK_OFFSET + static_cast<uint8_t>(absHealthInt)]), 0, 0);
           break;
           
         case -3 ... -2:
-          Sprites::drawExternalMask(x, y, pgm_read_word_near(&_bitmaps[IMAGES_EXPLOSION_OFFSET + static_cast<uint8_t>(absHealthInt)]), pgm_read_word_near(&_bitmaps[IMAGES_EXPLOSION_MASK_OFFSET + static_cast<uint8_t>(absHealthInt)]), 0, 0);
+          SpritesB::drawExternalMask(x, y, pgm_read_word_near(&_bitmaps[IMAGES_EXPLOSION_OFFSET + static_cast<uint8_t>(absHealthInt)]), pgm_read_word_near(&_bitmaps[IMAGES_EXPLOSION_MASK_OFFSET + static_cast<uint8_t>(absHealthInt)]), 0, 0);
           break;
 
         case -4:
-          Sprites::drawExternalMask(x, y, pgm_read_word_near(&_bitmaps[IMAGES_EXPLOSION_OFFSET + 3]), pgm_read_word_near(&_bitmaps[IMAGES_EXPLOSION_MASK_OFFSET + 3]), 0, 0);
+          SpritesB::drawExternalMask(x, y, pgm_read_word_near(&_bitmaps[IMAGES_EXPLOSION_OFFSET + 3]), pgm_read_word_near(&_bitmaps[IMAGES_EXPLOSION_MASK_OFFSET + 3]), 0, 0);
           _enabled = false;
           break;
         
@@ -220,11 +220,11 @@ void Enemy::renderImage() {
 	
         case 1:
         case 3:
-          Sprites::drawExternalMask(x, y, pgm_read_word_near(&_bitmaps[IMAGES_EXPLOSION_OFFSET]), pgm_read_word_near(&_bitmaps[IMAGES_EXPLOSION_MASK_OFFSET]), 0, 0);
+          SpritesB::drawExternalMask(x, y, pgm_read_word_near(&_bitmaps[IMAGES_EXPLOSION_OFFSET]), pgm_read_word_near(&_bitmaps[IMAGES_EXPLOSION_MASK_OFFSET]), 0, 0);
           break;
 
         case 2:
-          Sprites::drawExternalMask(x, y, pgm_read_word_near(&_bitmaps[IMAGES_EXPLOSION_OFFSET + 1]), pgm_read_word_near(&_bitmaps[IMAGES_EXPLOSION_MASK_OFFSET + 1]), 0, 0);
+          SpritesB::drawExternalMask(x, y, pgm_read_word_near(&_bitmaps[IMAGES_EXPLOSION_OFFSET + 1]), pgm_read_word_near(&_bitmaps[IMAGES_EXPLOSION_MASK_OFFSET + 1]), 0, 0);
           break;
 
       }

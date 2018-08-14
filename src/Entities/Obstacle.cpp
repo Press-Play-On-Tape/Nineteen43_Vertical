@@ -81,7 +81,7 @@ void Obstacle::setMask(const uint8_t *value) {
 void Obstacle::renderImage() {
     
   if (_enabled && _x.getInteger() + OBSTACLE_WIDTH >= 0 && _x.getInteger() < WIDTH) {
-    Sprites::drawExternalMask(_x.getInteger(), _y.getInteger(), _bitmap, _mask, 0, 0);
+    SpritesB::drawExternalMask(_x.getInteger(), _y.getInteger(), _bitmap, _mask, 0, 0);
   }
   else if (_x.getInteger() + OBSTACLE_WIDTH < 0) {
     _enabled = false;

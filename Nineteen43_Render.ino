@@ -11,7 +11,7 @@ void moveAndRenderPlayerBullets() {
     playerBullets[i].move();
     
     if (playerBullets[i].getEnabled()) {
-      Sprites::drawPlusMask(playerBullets[i].getX() - 1, playerBullets[i].getY() - 1, bullet_img, 0);
+      SpritesB::drawPlusMask(playerBullets[i].getX() - 1, playerBullets[i].getY() - 1, bullet_img, 0);
     }
     
   }
@@ -30,7 +30,7 @@ void moveAndRenderEnemyBullets() {
     enemyBullets[i].move();
     
     if (enemyBullets[i].getEnabled()) {
-      Sprites::drawPlusMask(enemyBullets[i].getX() - 1, enemyBullets[i].getY() - 1, bullet_img, 0);
+      SpritesB::drawPlusMask(enemyBullets[i].getX() - 1, enemyBullets[i].getY() - 1, bullet_img, 0);
     }
     
   }
@@ -99,7 +99,7 @@ void renderEndOfMission() {
     renderScenery_BelowPlanes();
     moveAndRenderEnemies(false);
     renderScenery(i % 2);
-    Sprites::drawExternalMask(player.getX().getInteger() + i, player.getY().getInteger(), p38_0, p38_mask_0, (i % 6 < 3), 0);
+    SpritesB::drawExternalMask(player.getX().getInteger() + i, player.getY().getInteger(), p38_0, p38_mask_0, (i % 6 < 3), 0);
     renderScenery_AbovePlanes();
 
     renderScoreboard();
@@ -120,7 +120,7 @@ uint16_t scoreFlash;
 
 void renderScoreboadGauge(const uint8_t imageX, const uint8_t imageY, const uint8_t *image, const uint8_t scoreboardY, const uint8_t value) {
 
-  Sprites::drawOverwrite(imageX, imageY, image, 0);
+  SpritesB::drawOverwrite(imageX, imageY, image, 0);
   if ((value <= 4 && scoreFlash >= (SCOREBOARD_FLASH_MAX / 2)) || value > 4) {
     for (uint8_t i = 0; i < (value); i += 2) {
       arduboy.drawLine(imageX, scoreboardY + i, WIDTH, scoreboardY + i);
@@ -153,11 +153,11 @@ void renderScoreboard() {
     
   // Render kills ..
   
-  Sprites::drawOverwrite(SCOREBOARD_KILLS_X, SCOREBOARD_KILLS_ICON_Y, kills_gauge, 0);
-  Sprites::drawOverwrite(SCOREBOARD_KILLS_X, SCOREBOARD_KILLS_DIGIT_0_Y, digits[player_score / 100], 0);
+  SpritesB::drawOverwrite(SCOREBOARD_KILLS_X, SCOREBOARD_KILLS_ICON_Y, kills_gauge, 0);
+  SpritesB::drawOverwrite(SCOREBOARD_KILLS_X, SCOREBOARD_KILLS_DIGIT_0_Y, digits[player_score / 100], 0);
   player_score = player_score - (player_score / 100) * 100;
-  Sprites::drawOverwrite(SCOREBOARD_KILLS_X, SCOREBOARD_KILLS_DIGIT_1_Y, digits[player_score / 10], 0);
-  Sprites::drawOverwrite(SCOREBOARD_KILLS_X, SCOREBOARD_KILLS_DIGIT_2_Y, digits[player_score % 10], 0);
+  SpritesB::drawOverwrite(SCOREBOARD_KILLS_X, SCOREBOARD_KILLS_DIGIT_1_Y, digits[player_score / 10], 0);
+  SpritesB::drawOverwrite(SCOREBOARD_KILLS_X, SCOREBOARD_KILLS_DIGIT_2_Y, digits[player_score % 10], 0);
 
   switch (scoreFrameCnt / SCOREBOARD_FRAME_COUNT_MAX) {
 
@@ -170,7 +170,7 @@ void renderScoreboard() {
     case 1:
 
       if (player.getPowerUp() && scoreFlash >= (SCOREBOARD_FLASH_MAX / 2)) {
-        Sprites::drawOverwrite(SCOREBOARD_BULLET_PU_X, SCOREBOARD_BULLET_PU_Y, power_up_gauge, 0);
+        SpritesB::drawOverwrite(SCOREBOARD_BULLET_PU_X, SCOREBOARD_BULLET_PU_Y, power_up_gauge, 0);
       }
 
       renderScoreboadGauge(SCOREBOARD_BULLET_BAR_X, SCOREBOARD_BULLET_BAR_Y, bullets_gauge, SCOREBOARD_BULLET_BAR_TOP, (player.getBullets() / 3));
@@ -194,34 +194,34 @@ void renderScenery(const uint8_t frame) {
 
       case SceneryElement::Wave1:
         if (arduboy.getFrameCount(5 + x) != 0) {
-          Sprites::drawSelfMasked(sceneryItems[x].x, sceneryItems[x].y, wave_01, 0);
+          SpritesB::drawSelfMasked(sceneryItems[x].x, sceneryItems[x].y, wave_01, 0);
         }
         break;
 
       case SceneryElement::Wave2:
         if (arduboy.getFrameCount(5 + x) != 0) {
-          Sprites::drawSelfMasked(sceneryItems[x].x, sceneryItems[x].y, wave_02, 0);
+          SpritesB::drawSelfMasked(sceneryItems[x].x, sceneryItems[x].y, wave_02, 0);
         }
         break;
 
       case SceneryElement::Boat:
-        Sprites::drawSelfMasked(sceneryItems[x].x, sceneryItems[x].y, sail_boat_01, 0);
+        SpritesB::drawSelfMasked(sceneryItems[x].x, sceneryItems[x].y, sail_boat_01, 0);
         break;
 
       case SceneryElement::Boat2:
-        Sprites::drawSelfMasked(sceneryItems[x].x, sceneryItems[x].y, sail_boat_02, 0);
+        SpritesB::drawSelfMasked(sceneryItems[x].x, sceneryItems[x].y, sail_boat_02, 0);
         break;
 
       case SceneryElement::Island1:
-        Sprites::drawSelfMasked(sceneryItems[x].x, sceneryItems[x].y, island_01, 0);
+        SpritesB::drawSelfMasked(sceneryItems[x].x, sceneryItems[x].y, island_01, 0);
         break;
 
       case SceneryElement::Island2:
-        Sprites::drawSelfMasked(sceneryItems[x].x, sceneryItems[x].y, island_02, 0);
+        SpritesB::drawSelfMasked(sceneryItems[x].x, sceneryItems[x].y, island_02, 0);
         break;
 
       case SceneryElement::Island3:
-        Sprites::drawSelfMasked(sceneryItems[x].x, sceneryItems[x].y, island_03, 0);
+        SpritesB::drawSelfMasked(sceneryItems[x].x, sceneryItems[x].y, island_03, 0);
         break;
 
       default: break;
@@ -235,8 +235,8 @@ void renderScenery(const uint8_t frame) {
 
   // Draw ground ..
 
-  if (upperSceneryPosition.enabled) { Sprites::drawOverwrite(upperSceneryPosition.x, upperSceneryPosition.y, (upperSceneryPosition.image == 0 ? ground_upper_01 : ground_upper_02), 0); }
-  if (lowerSceneryPosition.enabled) { Sprites::drawOverwrite(lowerSceneryPosition.x, lowerSceneryPosition.y, (lowerSceneryPosition.image == 0 ? ground_lower_01 : ground_lower_02), 0); }
+  if (upperSceneryPosition.enabled) { SpritesB::drawOverwrite(upperSceneryPosition.x, upperSceneryPosition.y, (upperSceneryPosition.image == 0 ? ground_upper_01 : ground_upper_02), 0); }
+  if (lowerSceneryPosition.enabled) { SpritesB::drawOverwrite(lowerSceneryPosition.x, lowerSceneryPosition.y, (lowerSceneryPosition.image == 0 ? ground_lower_01 : ground_lower_02), 0); }
 
   if (frame == 0) {
 
@@ -356,7 +356,7 @@ void renderScenery_BelowPlanes() {
     switch (sceneryItems[x].element) {
 
       case SceneryElement::Cloud_BelowPlanes:
-        Sprites::drawExternalMask(sceneryItems[x].x, sceneryItems[x].y, cloud, cloud_Mask, 0, 0);
+        SpritesB::drawExternalMask(sceneryItems[x].x, sceneryItems[x].y, cloud, cloud_Mask, 0, 0);
         break;
 
       default: break;
@@ -378,7 +378,7 @@ void renderScenery_AbovePlanes() {
     switch (sceneryItems[x].element) {
 
       case SceneryElement::Cloud_AbovePlanes:
-        Sprites::drawExternalMask(sceneryItems[x].x, sceneryItems[x].y, cloud, cloud_Mask, 0, 0);
+        SpritesB::drawExternalMask(sceneryItems[x].x, sceneryItems[x].y, cloud, cloud_Mask, 0, 0);
         break;
 
       default: break;

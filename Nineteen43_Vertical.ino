@@ -140,7 +140,7 @@ void setup() {
  */
 void loop() {
 
-  if (!(arduboy.nextFrame())) return;
+  if (!(arduboy.nextFrameDEV())) return;
 
   arduboy.clear();
   arduboy.pollButtons();
@@ -211,10 +211,10 @@ void gameLoop() {
 
     case 2 ... 79:
 
-      Sprites::drawOverwrite(60, 2 + offsetY, mission_number, 0);
-      if (mission >= 99) Sprites::drawOverwrite(60, offsetNumber, numbers_vert, (mission + 1) / 100);
-      if (mission >= 9)  Sprites::drawOverwrite(60, offsetNumber + 6, numbers_vert, ((mission + 1) / 10) % 10);
-      Sprites::drawOverwrite(60, offsetNumber + 12, numbers_vert, (mission + 1) % 10);
+      SpritesB::drawOverwrite(60, 2 + offsetY, mission_number, 0);
+      if (mission >= 99) SpritesB::drawOverwrite(60, offsetNumber, numbers_vert, (mission + 1) / 100);
+      if (mission >= 9)  SpritesB::drawOverwrite(60, offsetNumber + 6, numbers_vert, ((mission + 1) / 10) % 10);
+      SpritesB::drawOverwrite(60, offsetNumber + 12, numbers_vert, (mission + 1) % 10);
       arduboy.drawVerticalDottedLine(offsetY, HEIGHT - offsetY, 57, 2);
       arduboy.drawVerticalDottedLine(offsetY, HEIGHT - offsetY, 69, 2);
       intro--;

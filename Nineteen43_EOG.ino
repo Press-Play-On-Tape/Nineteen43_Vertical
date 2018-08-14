@@ -9,17 +9,17 @@ void endOfSequence_Render(bool endOfLevel) {
 
   if (gameState == GameState::End_Of_Mission) {
 
-    Sprites::drawOverwrite(117, 14, mission_successful_1, 0);
-    Sprites::drawOverwrite(106, 0, mission_successful_2, 0);
+    SpritesB::drawOverwrite(117, 14, mission_successful_1, 0);
+    SpritesB::drawOverwrite(106, 0, mission_successful_2, 0);
 
   }
   else {
     if (endOfLevel) {
-      Sprites::drawOverwrite(117, 17, level_complete_1, 0);
-      Sprites::drawOverwrite(106, 10, level_complete_2, 0);
+      SpritesB::drawOverwrite(117, 17, level_complete_1, 0);
+      SpritesB::drawOverwrite(106, 10, level_complete_2, 0);
     }
     else {
-      Sprites::drawOverwrite(101, 0, game_over, 0);
+      SpritesB::drawOverwrite(101, 0, game_over, 0);
     }
   }
 
@@ -54,23 +54,23 @@ void endOfSequence(const uint8_t level) {
 
       arduboy.fillRect(97, i - 18, 127, 200, BLACK);
 
-      Sprites::drawOverwrite((gameState == GameState::End_Of_Mission || endOfLevel ? 102 : 97), i - 18, zero_S, 0);
-      Sprites::drawOverwrite(111, i, zero_S, 0);
+      SpritesB::drawOverwrite((gameState == GameState::End_Of_Mission || endOfLevel ? 102 : 97), i - 18, zero_S, 0);
+      SpritesB::drawOverwrite(111, i, zero_S, 0);
       i++;
     }
     else {
 
-      Sprites::drawOverwrite(66, 15, usaf, 0);
+      SpritesB::drawOverwrite(66, 15, usaf, 0);
 
 
       // Score ..
       {
-        Sprites::drawOverwrite(45, 4, score_img, 0);
+        SpritesB::drawOverwrite(45, 4, score_img, 0);
         uint8_t digits[4] = {};
         extractDigits(digits, player.getScore());
         
         for (uint8_t i = 0, y = 56; i < 4; ++i, y -= 6) {
-          Sprites::drawSelfMasked(45, y, numbers_vert, digits[i]);
+          SpritesB::drawSelfMasked(45, y, numbers_vert, digits[i]);
         }
         
       }
@@ -79,22 +79,22 @@ void endOfSequence(const uint8_t level) {
       {
         uint8_t digits[4] = {};
         if (gameState == GameState::End_Of_Mission) {
-          Sprites::drawOverwrite(32, 4, total_img, 0);
+          SpritesB::drawOverwrite(32, 4, total_img, 0);
           extractDigits(digits, player.getGrandScore());
         }
         else {
-          Sprites::drawOverwrite(30, 4, highScore_img, 0);
+          SpritesB::drawOverwrite(30, 4, highScore_img, 0);
           extractDigits(digits, high);
         }
         
         for (uint8_t i = 0, y = 56; i < 4; ++i, y -= 6) {
-          Sprites::drawSelfMasked(32, y, numbers_vert, digits[i]);
+          SpritesB::drawSelfMasked(32, y, numbers_vert, digits[i]);
         }
         
       }
 
-      Sprites::drawOverwrite(2, 3, aButton, 0);
-      Sprites::drawOverwrite(5, 12, aButton_continue, 0);
+      SpritesB::drawOverwrite(2, 3, aButton, 0);
+      SpritesB::drawOverwrite(5, 12, aButton_continue, 0);
 
     }
 

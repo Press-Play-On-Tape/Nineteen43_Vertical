@@ -37,24 +37,24 @@ void credits_loop() {
 
     while (!(arduboy.nextFrame())) {}
 
-    Sprites::drawOverwrite(116, 12, credits_img, 0);
+    SpritesB::drawOverwrite(116, 12, credits_img, 0);
     arduboy.drawVerticalDottedLine(0, HEIGHT, 110, 2);
     arduboy.drawVerticalDottedLine(0, HEIGHT, 127, 2);
 
     arduboy.fillRect(110, i - 18, 127, 200, BLACK);
-    Sprites::drawOverwrite(104, i - 18, zero_S, 0);
-    Sprites::drawOverwrite(113, i, zero_S, 0);
+    SpritesB::drawOverwrite(104, i - 18, zero_S, 0);
+    SpritesB::drawOverwrite(113, i, zero_S, 0);
   
     arduboy.display();
     gameState = GameState::Game_Init;
 
   }  
 
-  Sprites::drawOverwrite(75, 2, filmote, 0);
-  Sprites::drawOverwrite(57, 2, pharap, 0);
-  Sprites::drawOverwrite(41, 0, vampirics, 0);
-  Sprites::drawOverwrite(0, 3, aButton, 0);
-  Sprites::drawOverwrite(3, 12, aButton_continue, 0);
+  SpritesB::drawOverwrite(75, 2, filmote, 0);
+  SpritesB::drawOverwrite(57, 2, pharap, 0);
+  SpritesB::drawOverwrite(41, 0, vampirics, 0);
+  SpritesB::drawOverwrite(0, 3, aButton, 0);
+  SpritesB::drawOverwrite(3, 12, aButton_continue, 0);
   
   arduboy.display(true);
 
@@ -82,16 +82,16 @@ void introLoop() {
 
   // horizontal
 
-  Sprites::drawOverwrite(86, intro, title, 0);
-  Sprites::drawOverwrite(14, 3, aButton, 0);
-  Sprites::drawOverwrite(14, 12, aButton_startgame, 0);
+  SpritesB::drawOverwrite(86, intro, title, 0);
+  SpritesB::drawOverwrite(14, 3, aButton, 0);
+  SpritesB::drawOverwrite(14, 12, aButton_startgame, 0);
   
-  Sprites::drawOverwrite(55, 70 - intro, zero_S, 0);
-  Sprites::drawOverwrite(41, 52 - intro, zero_S, 0);
-  Sprites::drawOverwrite(50, 30 - intro, zero_S, 0);
+  SpritesB::drawOverwrite(55, 70 - intro, zero_S, 0);
+  SpritesB::drawOverwrite(41, 52 - intro, zero_S, 0);
+  SpritesB::drawOverwrite(50, 30 - intro, zero_S, 0);
 
-  Sprites::drawOverwrite(0, 3, level_select, 0);
-  Sprites::drawOverwrite(2, 37, numbers_vert, (level + 1));
+  SpritesB::drawOverwrite(0, 3, level_select, 0);
+  SpritesB::drawOverwrite(2, 37, numbers_vert, (level + 1));
 
   intro--;
   if (intro < - 130) {
