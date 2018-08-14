@@ -295,6 +295,10 @@ void renderScenery(const uint8_t frame) {
           default: //case SceneryElement::Island1 ... SceneryElement::Island3:
             sceneryItems[x].element = static_cast<SceneryElement>(element);
             sceneryItems[x].y = random((upperSceneryPosition.enabled ? upperSceneryPosition.y + 24 : -6), (lowerSceneryPosition.enabled ? lowerSceneryPosition.y - 38 : HEIGHT - 16));
+
+            if (!upperSceneryPosition.enabled)  { launchScenery(random(200, 250), -4, 0, &upperSceneryPosition); }
+            if (!lowerSceneryPosition.enabled)  { launchScenery(random(200, 250), 53, 57, &lowerSceneryPosition); }
+
             break;
 
         }
@@ -313,14 +317,7 @@ void renderScenery(const uint8_t frame) {
       }
     }
     else {
-
-      if (random(0, 40) == 0) {
-        upperSceneryPosition.enabled = true;
-        upperSceneryPosition.x = 162;
-        upperSceneryPosition.y = random(-4, 0);
-        upperSceneryPosition.image = random(0, 2);
-      }
-              
+      if (random(0, 40) == 0) { launchScenery(162, -4, 0, &upperSceneryPosition); }
     }
 
     if (lowerSceneryPosition.enabled) {
@@ -330,17 +327,19 @@ void renderScenery(const uint8_t frame) {
       }
     }
     else {
-
-      if (random(0, 40) == 0) {
-        lowerSceneryPosition.enabled = true;
-        lowerSceneryPosition.x = 162;
-        lowerSceneryPosition.y = random(53, 57);
-        lowerSceneryPosition.image = random(0, 2);
-      }
-              
+      if (random(0, 40) == 0) { launchScenery(162, 53, 57, &lowerSceneryPosition); }
     }
 
   }
+
+}
+
+void launchScenery(int16_t xOffset, int8_t lowerY, int8_t upperY, SceneryGround *sceneryItem) {
+
+      sceneryItem->enabled = true;
+      sceneryItem->x = xOffset;
+      sceneryItem->y = random(lowerY, upperY);
+      sceneryItem->image = random(0, 2);
 
 }
 
