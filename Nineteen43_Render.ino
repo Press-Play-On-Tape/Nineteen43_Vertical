@@ -247,8 +247,8 @@ void renderScenery(const uint8_t frame) {
 
       sceneryItems[x].x--;
 
-      // #define FREQ_OF_COMMON_ELEMENTS 2
-      // #define NUMBER_OF_COMMON_ELEMENTS (static_cast<uint8_t>(SceneryElement::Cloud_BelowPlanes) + 1)
+      #define FREQ_OF_COMMON_ELEMENTS 2
+      #define NUMBER_OF_COMMON_ELEMENTS (static_cast<uint8_t>(SceneryElement::Cloud_BelowPlanes) + 1)
 
       if (sceneryItems[x].x < -90 && gameState != GameState::End_Of_Mission) {
 
@@ -259,28 +259,26 @@ void renderScenery(const uint8_t frame) {
         switch (previousElement) {
 
           case SceneryElement::Boat ... SceneryElement::Cloud_BelowPlanes:
-            // element = random(0, (FREQ_OF_COMMON_ELEMENTS * NUMBER_OF_COMMON_ELEMENTS) + (sceneryRestrictions == 0 ? 3 : 0) + 1);
-            element = random(0, static_cast<uint8_t>(SceneryElement::Island3) + 1);
+            element = random(0, (FREQ_OF_COMMON_ELEMENTS * NUMBER_OF_COMMON_ELEMENTS) + (sceneryRestrictions == 0 ? 3 : 0) + 1);
             break;
 
           default:
-            // element = random(0, (FREQ_OF_COMMON_ELEMENTS * NUMBER_OF_COMMON_ELEMENTS) + 1);
-            element = random(0, static_cast<uint8_t>(SceneryElement::Cloud_BelowPlanes) + 1);
+            element = random(0, (FREQ_OF_COMMON_ELEMENTS * NUMBER_OF_COMMON_ELEMENTS) + 1);
             break;
 
         }
 
-        // switch (element / FREQ_OF_COMMON_ELEMENTS) {
+        switch (element / FREQ_OF_COMMON_ELEMENTS) {
 
-        //   case 0 ... (NUMBER_OF_COMMON_ELEMENTS - 1):
-        //     element = element / FREQ_OF_COMMON_ELEMENTS;
-        //     break;
+          case 0 ... (NUMBER_OF_COMMON_ELEMENTS - 1):
+            element = element / FREQ_OF_COMMON_ELEMENTS;
+            break;
 
-        //   default:
-        //     element = static_cast<uint8_t>(SceneryElement::Island1) + (element % NUMBER_OF_COMMON_ELEMENTS);
-        //     break;
+          default:
+            element = static_cast<uint8_t>(SceneryElement::Island1) + (element % NUMBER_OF_COMMON_ELEMENTS);
+            break;
 
-        // }
+        }
 
         switch (static_cast<SceneryElement>(element)) {
 
