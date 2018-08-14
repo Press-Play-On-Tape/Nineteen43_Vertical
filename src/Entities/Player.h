@@ -33,7 +33,8 @@ class Player : public Plane {
     void setPowerUp(boolean value);
     void decPowerUp();
     void startRoll();
-  
+    void updateGrandScore();
+    
   private:
     uint16_t _score;
     uint16_t _grandScore;

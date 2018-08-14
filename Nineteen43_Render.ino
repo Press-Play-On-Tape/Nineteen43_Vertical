@@ -11,8 +11,7 @@ void moveAndRenderPlayerBullets() {
     playerBullets[i].move();
     
     if (playerBullets[i].getEnabled()) {
-      arduboy.fillRect(playerBullets[i].getX() - 1, playerBullets[i].getY() - 1, 3, 3, BLACK);
-      arduboy.drawPixel(playerBullets[i].getX(), playerBullets[i].getY(), WHITE);
+      Sprites::drawPlusMask(playerBullets[i].getX() - 1, playerBullets[i].getY() - 1, bullet_img, 0);
     }
     
   }
@@ -31,8 +30,7 @@ void moveAndRenderEnemyBullets() {
     enemyBullets[i].move();
     
     if (enemyBullets[i].getEnabled()) {
-      arduboy.fillRect(enemyBullets[i].getX() - 1, enemyBullets[i].getY() - 1, 3, 3, BLACK);
-      arduboy.drawPixel(enemyBullets[i].getX(), enemyBullets[i].getY(), WHITE);
+      Sprites::drawPlusMask(enemyBullets[i].getX() - 1, enemyBullets[i].getY() - 1, bullet_img, 0);
     }
     
   }
@@ -237,8 +235,8 @@ void renderScenery(const uint8_t frame) {
 
   // Draw ground ..
 
-  if (upperSceneryPosition.enabled) { Sprites::drawOverwrite(upperSceneryPosition.x, upperSceneryPosition.y, ground_upper, 0); }
-  if (lowerSceneryPosition.enabled) { Sprites::drawOverwrite(lowerSceneryPosition.x, lowerSceneryPosition.y, ground_lower, 0); }
+  if (upperSceneryPosition.enabled) { Sprites::drawOverwrite(upperSceneryPosition.x, upperSceneryPosition.y, (upperSceneryPosition.image == 0 ? ground_upper_01 : ground_upper_02), 0); }
+  if (lowerSceneryPosition.enabled) { Sprites::drawOverwrite(lowerSceneryPosition.x, lowerSceneryPosition.y, (lowerSceneryPosition.image == 0 ? ground_lower_01 : ground_lower_02), 0); }
 
   if (frame == 0) {
 
@@ -249,10 +247,10 @@ void renderScenery(const uint8_t frame) {
 
       sceneryItems[x].x--;
 
-      #define FREQ_OF_COMMON_ELEMENTS 2
-      #define NUMBER_OF_COMMON_ELEMENTS (static_cast<uint8_t>(SceneryElement::Cloud_BelowPlanes) + 1)
+      // #define FREQ_OF_COMMON_ELEMENTS 2
+      // #define NUMBER_OF_COMMON_ELEMENTS (static_cast<uint8_t>(SceneryElement::Cloud_BelowPlanes) + 1)
 
-      if (sceneryItems[x].x < -54 && gameState != GameState::End_Of_Mission) {
+      if (sceneryItems[x].x < -90 && gameState != GameState::End_Of_Mission) {
 
         sceneryItems[x].x = 162;
         SceneryElement previousElement = (x > 0 ? sceneryItems[x - 1].element : sceneryItems[NUMBER_OF_SCENERY_ITEMS - 1].element);
@@ -261,45 +259,46 @@ void renderScenery(const uint8_t frame) {
         switch (previousElement) {
 
           case SceneryElement::Boat ... SceneryElement::Cloud_BelowPlanes:
-            element = random(0, (FREQ_OF_COMMON_ELEMENTS * NUMBER_OF_COMMON_ELEMENTS) + (sceneryRestrictions == 0 ? 3 : 0) + 1);
+            // element = random(0, (FREQ_OF_COMMON_ELEMENTS * NUMBER_OF_COMMON_ELEMENTS) + (sceneryRestrictions == 0 ? 3 : 0) + 1);
+            element = random(0, static_cast<uint8_t>(SceneryElement::Island3) + 1);
             break;
 
           default:
-
-            element = random(0, (FREQ_OF_COMMON_ELEMENTS * NUMBER_OF_COMMON_ELEMENTS) + 1);
+            // element = random(0, (FREQ_OF_COMMON_ELEMENTS * NUMBER_OF_COMMON_ELEMENTS) + 1);
+            element = random(0, static_cast<uint8_t>(SceneryElement::Cloud_BelowPlanes) + 1);
             break;
 
         }
 
-        switch (element / FREQ_OF_COMMON_ELEMENTS) {
+        // switch (element / FREQ_OF_COMMON_ELEMENTS) {
 
-          case 0 ... (NUMBER_OF_COMMON_ELEMENTS - 1):
-            element = element / FREQ_OF_COMMON_ELEMENTS;
-            break;
+        //   case 0 ... (NUMBER_OF_COMMON_ELEMENTS - 1):
+        //     element = element / FREQ_OF_COMMON_ELEMENTS;
+        //     break;
 
-          default:
-            element = static_cast<uint8_t>(SceneryElement::Cloud_AbovePlanes) + element % NUMBER_OF_COMMON_ELEMENTS;
-            break;
+        //   default:
+        //     element = static_cast<uint8_t>(SceneryElement::Island1) + (element % NUMBER_OF_COMMON_ELEMENTS);
+        //     break;
 
-        }
+        // }
 
-        if (element <= static_cast<uint8_t>(SceneryElement::Boat2)) {
-          sceneryItems[x].element = static_cast<SceneryElement>(element);
-          sceneryItems[x].y = random((upperSceneryPosition.enabled ? upperSceneryPosition.y + 24 : 4), (lowerSceneryPosition.enabled ? lowerSceneryPosition.y - 24 : HEIGHT - 24));
-        }
-        else if (element >= static_cast<uint8_t>(SceneryElement::Cloud_AbovePlanes) && element <= static_cast<uint8_t>(SceneryElement::Cloud_BelowPlanes)) {
-          sceneryItems[x].element = static_cast<SceneryElement>(element);
-          sceneryItems[x].y = random(-8, HEIGHT - 24);
-        }
-        else {
+        switch (static_cast<SceneryElement>(element)) {
 
-//          #ifdef SAVE_MEMORY
+          case SceneryElement::Boat ... SceneryElement::Boat2:
             sceneryItems[x].element = static_cast<SceneryElement>(element);
-            sceneryItems[x].y = random((upperSceneryPosition.enabled ? upperSceneryPosition.y + 32 : 0), (lowerSceneryPosition.enabled ? lowerSceneryPosition.y - 30 : HEIGHT - 16));
-//           #else
-//             sceneryItems[x].element = static_cast<SceneryElement>(element);
-//             sceneryItems[x].y = random((upperSceneryPosition.enabled ? upperSceneryPosition.y + 32 : 0), (lowerSceneryPosition.enabled ? lowerSceneryPosition.y - 30 : HEIGHT - 16));
-//           #endif
+            sceneryItems[x].y = random((upperSceneryPosition.enabled ? upperSceneryPosition.y + 24 : 4), (lowerSceneryPosition.enabled ? lowerSceneryPosition.y - 24 : HEIGHT - 24));
+            break;
+
+          case SceneryElement::Cloud_AbovePlanes ... SceneryElement::Cloud_BelowPlanes:
+            sceneryItems[x].element = static_cast<SceneryElement>(element);
+            sceneryItems[x].y = random(-16, HEIGHT - 16);
+            break;
+
+          default: //case SceneryElement::Island1 ... SceneryElement::Island3:
+            sceneryItems[x].element = static_cast<SceneryElement>(element);
+            sceneryItems[x].y = random((upperSceneryPosition.enabled ? upperSceneryPosition.y + 24 : -6), (lowerSceneryPosition.enabled ? lowerSceneryPosition.y - 38 : HEIGHT - 16));
+            break;
+
         }
 
       }
@@ -320,8 +319,8 @@ void renderScenery(const uint8_t frame) {
       if (random(0, 40) == 0) {
         upperSceneryPosition.enabled = true;
         upperSceneryPosition.x = 162;
-        upperSceneryPosition.y = random(-10, -1);
-        
+        upperSceneryPosition.y = random(-4, 0);
+        upperSceneryPosition.image = random(0, 2);
       }
               
     }
@@ -337,8 +336,8 @@ void renderScenery(const uint8_t frame) {
       if (random(0, 40) == 0) {
         lowerSceneryPosition.enabled = true;
         lowerSceneryPosition.x = 162;
-        lowerSceneryPosition.y = random(52, 60);
-        
+        lowerSceneryPosition.y = random(53, 57);
+        lowerSceneryPosition.image = random(0, 2);
       }
               
     }

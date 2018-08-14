@@ -78,7 +78,6 @@ uint8_t missionIdx = 0;                                     // Byte index within
 uint8_t mission_formations = 0;                             // Number of formations in the current mission.
 uint8_t mission_formations_left = 0;                        // Number of formations left within current mission.
 uint8_t formation = 0;
-GameState gameState = GameState::Intro_Init;
 int16_t intro;
 uint16_t frameRate = INIT_FRAME_RATE;
 
@@ -92,8 +91,9 @@ SQ7x8 obstacleFuelValue = FUEL_MAX;
 uint8_t sceneryRestrictions = SCENERY_NONE; 
 SceneryGround upperSceneryPosition;
 SceneryGround lowerSceneryPosition;
-
 SceneryItem sceneryItems[NUMBER_OF_SCENERY_ITEMS];
+
+GameState gameState = GameState::Intro_Init;
 
 void initSceneryItems() {
   sceneryItems[0] = { 128, 20, SceneryElement::Boat2 };
@@ -237,13 +237,11 @@ void gameLoop() {
 
     
     // Handle player movement ..
-
     
     if (arduboy.pressed(UP_BUTTON) && player.getY() > PLAYER_MOVEMENT_INC_UP)                                     { player.setY(player.getY() - PLAYER_MOVEMENT_INC_UP); }
     if (arduboy.pressed(DOWN_BUTTON) && player.getY() < HEIGHT - PLAYER_HEIGHT)                                   { player.setY(player.getY() + PLAYER_MOVEMENT_INC_DOWN); }
     if (arduboy.pressed(LEFT_BUTTON) && player.getX() > PLAYER_MOVEMENT_INC_LEFT)                                 { player.setX(player.getX() - PLAYER_MOVEMENT_INC_LEFT); }
-    if (arduboy.pressed(RIGHT_BUTTON) && player.getX() < WIDTH - PLAYER_WIDTH - SCOREBOARD_OUTER_RECT_WIDTH)      { //player.decFuel(FUEL_DECREMENT_BOOST);
-                                                                                                                    player.setX(player.getX() + PLAYER_MOVEMENT_INC_RIGHT); }
+    if (arduboy.pressed(RIGHT_BUTTON) && player.getX() < WIDTH - PLAYER_WIDTH - SCOREBOARD_OUTER_RECT_WIDTH)      { player.setX(player.getX() + PLAYER_MOVEMENT_INC_RIGHT); }
   
     if (arduboy.justPressed(B_BUTTON))                                                                            { player.startRoll(); }
                                                                                                                     
@@ -366,7 +364,7 @@ void gameLoop() {
   }
   
   if (!player.getEnabled()) {
-    player.setGrandScore(player.getGrandScore() + player.getScore());
+    player.updateGrandScore();    
     gameState = GameState::End_Of_Game;
   }
 
@@ -722,7 +720,7 @@ Direction getAimDirection(const int8_t deltaX, const int8_t deltaY, const SQ15x1
  *  Check to see if the player has run over an obstacle.  If so, process the action ..
  * -----------------------------------------------------------------------------------------------------------------------------
  */
-void checkForObstacleCollision(){
+void checkForObstacleCollision() {
 
   if (obstacle.getEnabled()) {
 

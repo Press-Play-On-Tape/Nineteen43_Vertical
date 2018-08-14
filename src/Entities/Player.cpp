@@ -102,6 +102,12 @@ void Player::setGrandScore(const uint16_t value) {
 
 }
 
+void Player::updateGrandScore() {
+
+  _grandScore = _grandScore + _score;
+
+}
+
 void Player::startRoll() {
 
   _rollState = ROLL_DELAY;

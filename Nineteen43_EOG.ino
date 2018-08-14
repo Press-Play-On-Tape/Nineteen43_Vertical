@@ -1,3 +1,4 @@
+#include "src/Utils/Arduboy2Ext.h"
 
 
 /* -----------------------------------------------------------------------------------------------------------------------------
@@ -6,11 +7,11 @@
  */
 void endOfSequence_Render(bool endOfLevel) {
 
-  while (!(arduboy.nextFrame())) {}
-
   if (gameState == GameState::End_Of_Mission) {
+
     Sprites::drawOverwrite(117, 14, mission_successful_1, 0);
     Sprites::drawOverwrite(106, 0, mission_successful_2, 0);
+
   }
   else {
     if (endOfLevel) {
@@ -18,11 +19,11 @@ void endOfSequence_Render(bool endOfLevel) {
       Sprites::drawOverwrite(106, 10, level_complete_2, 0);
     }
     else {
-      Sprites::drawOverwrite(112, 7, game_over, 0);
+      Sprites::drawOverwrite(101, 0, game_over, 0);
     }
   }
 
-  arduboy.drawVerticalDottedLine(0, HEIGHT, 102, 2);
+  arduboy.drawVerticalDottedLine(0, HEIGHT, (gameState == GameState::End_Of_Mission || endOfLevel ? 102 : 97), 2);
   arduboy.drawVerticalDottedLine(0, HEIGHT, 127, 2);
 
 }
@@ -41,61 +42,63 @@ void endOfSequence(const uint8_t level) {
     uint16_t high = EEPROM_Utils::getHighScore();
   #endif
   
-  for (int8_t i = -20; i < 100; i++) {
-
-    arduboy.pollButtons();
-    endOfSequence_Render(endOfLevel); 
-
-    arduboy.fillRect(102, i - 18, 127, 200, BLACK);
-    Sprites::drawOverwrite(102, i - 18, zero_S, 0);
-    Sprites::drawOverwrite(111, i, zero_S, 0);
-  
-    arduboy.display();
-    if (arduboy.justPressed(A_BUTTON)) { break; }
-
-  }
+  int8_t i = -20;
 
   while (true) {
 
-    endOfSequence_Render(endOfLevel);
+    while (!(arduboy.nextFrame())) {}
     arduboy.pollButtons();
-    Sprites::drawOverwrite(68, 15, usaf, 0);
+    endOfSequence_Render(endOfLevel); 
 
+    if (i< 100) {
 
-    // Score ..
-    {
-      Sprites::drawOverwrite(47, 4, score_img, 0);
-      uint8_t digits[4] = {};
-      extractDigits(digits, player.getScore());
-      
-      for (uint8_t i = 0, y = 56; i < 4; ++i, y -= 6) {
-        Sprites::drawSelfMasked(47, y, numbers_vert, digits[i]);
-      }
-      
+      arduboy.fillRect(97, i - 18, 127, 200, BLACK);
+
+      Sprites::drawOverwrite((gameState == GameState::End_Of_Mission || endOfLevel ? 102 : 97), i - 18, zero_S, 0);
+      Sprites::drawOverwrite(111, i, zero_S, 0);
+      i++;
     }
+    else {
 
-    // Total ..
-    {
-      uint8_t digits[4] = {};
-      if (gameState == GameState::End_Of_Mission) {
-        Sprites::drawOverwrite(34, 4, total_img, 0);
-        extractDigits(digits, player.getGrandScore());
+      Sprites::drawOverwrite(66, 15, usaf, 0);
+
+
+      // Score ..
+      {
+        Sprites::drawOverwrite(45, 4, score_img, 0);
+        uint8_t digits[4] = {};
+        extractDigits(digits, player.getScore());
+        
+        for (uint8_t i = 0, y = 56; i < 4; ++i, y -= 6) {
+          Sprites::drawSelfMasked(45, y, numbers_vert, digits[i]);
+        }
+        
       }
-      else {
-        Sprites::drawOverwrite(32, 4, highScore_img, 0);
-        extractDigits(digits, high);
+
+      // Total ..
+      {
+        uint8_t digits[4] = {};
+        if (gameState == GameState::End_Of_Mission) {
+          Sprites::drawOverwrite(32, 4, total_img, 0);
+          extractDigits(digits, player.getGrandScore());
+        }
+        else {
+          Sprites::drawOverwrite(30, 4, highScore_img, 0);
+          extractDigits(digits, high);
+        }
+        
+        for (uint8_t i = 0, y = 56; i < 4; ++i, y -= 6) {
+          Sprites::drawSelfMasked(32, y, numbers_vert, digits[i]);
+        }
+        
       }
-      
-      for (uint8_t i = 0, y = 56; i < 4; ++i, y -= 6) {
-        Sprites::drawSelfMasked(34, y, numbers_vert, digits[i]);
-      }
-      
+
+      Sprites::drawOverwrite(2, 3, aButton, 0);
+      Sprites::drawOverwrite(5, 12, aButton_continue, 0);
+
     }
-
-    Sprites::drawOverwrite(2, 3, aButton_continue, 0);
 
     arduboy.display(true);
-
 
     if (gameState == GameState::End_Of_Mission) {
       if (arduboy.justPressed(A_BUTTON)) { gameState = GameState::Game_Init; break; }

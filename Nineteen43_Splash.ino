@@ -53,7 +53,8 @@ void credits_loop() {
   Sprites::drawOverwrite(75, 2, filmote, 0);
   Sprites::drawOverwrite(57, 2, pharap, 0);
   Sprites::drawOverwrite(41, 0, vampirics, 0);
-  Sprites::drawOverwrite(0, 3, aButton_continue, 0);
+  Sprites::drawOverwrite(0, 3, aButton, 0);
+  Sprites::drawOverwrite(3, 12, aButton_continue, 0);
   
   arduboy.display(true);
 
@@ -83,6 +84,7 @@ void introLoop() {
 
   Sprites::drawOverwrite(86, intro, title, 0);
   Sprites::drawOverwrite(14, 3, aButton, 0);
+  Sprites::drawOverwrite(14, 12, aButton_startgame, 0);
   
   Sprites::drawOverwrite(55, 70 - intro, zero_S, 0);
   Sprites::drawOverwrite(41, 52 - intro, zero_S, 0);

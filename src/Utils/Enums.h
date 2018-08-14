@@ -197,10 +197,8 @@ enum class SceneryElement : uint8_t {
   Cloud_AbovePlanes,
   Cloud_BelowPlanes,
   Island1,
-  IslandStart = Island1,
   Island2,
   Island3,
-  IslandEnd,
 };
 
 struct SceneryItem {
@@ -242,9 +240,11 @@ enum class Direction : uint8_t {
   None,
 };
 
+#define SCENERY_INACTIVE -91
 struct SceneryGround {
-  int16_t x;
+  int16_t x = -SCENERY_INACTIVE;
   int8_t y;
+  uint8_t image;
   bool enabled;
 };
 
