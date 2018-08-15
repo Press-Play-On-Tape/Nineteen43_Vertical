@@ -36,8 +36,11 @@ void endOfSequence(const uint8_t level) {
   if (level == 1 && mission == 60) { gameState = GameState::End_Of_Game; endOfLevel = true; }
 
   #ifdef SAVE_MEMORY
-    uint16_t high = eeprom_read_byte((uint8_t *)(EEPROM_SCORE + (level * 2)));
-    if (player.getGrandScore() > high) eeprom_update_byte((uint8_t *)(EEPROM_SCORE + (level * 2)), player.getGrandScore());
+    uint16_t high = eeprom_read_word((uint16_t *)(EEPROM_SCORE + (level * 2)));
+    if (player.getGrandScore() > high) { 
+      eeprom_update_word((uint16_t *)(EEPROM_SCORE + (level * 2)), player.getGrandScore());
+      high = player.getGrandScore();
+    }
   #else
     uint16_t high = EEPROM_Utils::getHighScore();
   #endif

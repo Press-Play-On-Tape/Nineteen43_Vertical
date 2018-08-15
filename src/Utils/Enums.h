@@ -9,7 +9,7 @@
 
 
 // Remove comment // to free up some PROGMEM for DUEB
-//#define DEBUG
+#define DEBUG
 
 
 // Game States ..

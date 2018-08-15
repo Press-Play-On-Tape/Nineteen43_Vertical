@@ -22,9 +22,9 @@ void Player::initMission() {
             
   _powerUp = false;
   _fuel = FUEL_MAX;
-  _health = HEALTH_MAX; 
+  _health = 1; //SJH HEALTH_MAX; 
   _bullets = BULLETS_MAX;
-  _score = 0; 
+  _score = 1200;//0; SJH
   _rollState = 0;
   _enabled = true;
   _x = 1;

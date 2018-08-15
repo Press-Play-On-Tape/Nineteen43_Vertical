@@ -197,8 +197,8 @@ void loop() {
  */
 void gameLoop() {
 
-  uint8_t offsetY = (mission > 99 ? 0 : (mission > 9 ? 3 : 6));
-  uint8_t offsetNumber = (mission > 99 ? 46 : (mission > 9 ? 44 : 41));
+  uint8_t offsetY = (mission >= 99 ? 0 : (mission >= 9 ? 3 : 6));
+  uint8_t offsetNumber = (mission >= 99 ? 46 : (mission >= 9 ? 44 : 41));
 
   renderScenery(arduboy.getFrameCount(2));
   
@@ -214,6 +214,7 @@ void gameLoop() {
       SpritesB::drawOverwrite(60, 2 + offsetY, mission_number, 0);
       if (mission >= 99) SpritesB::drawOverwrite(60, offsetNumber, numbers_vert, (mission + 1) / 100);
       if (mission >= 9)  SpritesB::drawOverwrite(60, offsetNumber + 6, numbers_vert, ((mission + 1) / 10) % 10);
+
       SpritesB::drawOverwrite(60, offsetNumber + 12, numbers_vert, (mission + 1) % 10);
       arduboy.drawVerticalDottedLine(offsetY, HEIGHT - offsetY, 57, 2);
       arduboy.drawVerticalDottedLine(offsetY, HEIGHT - offsetY, 69, 2);
@@ -916,15 +917,17 @@ void initEEPROM(const bool forceOverwrite) {
   uint8_t c1 = eeprom_read_byte((uint8_t *)EEPROM_START_C1);
   uint8_t c2 = eeprom_read_byte((uint8_t *)EEPROM_START_C2);
 
-  if (c1 != 52 || c2 != 51 || forceOverwrite) { 
-  
+  if (c1 != '4' || c2 != '3' || forceOverwrite) { 
+
     uint16_t score = 0;
+    uint8_t level = 0;
+
     eeprom_update_byte((uint8_t *)EEPROM_START_C1, 52);
     eeprom_update_byte((uint8_t *)EEPROM_START_C2, 51);
-    eeprom_update_byte((uint8_t *)EEPROM_SCORE, 0);
+    eeprom_update_word((uint16_t *)EEPROM_SCORE, score);
     eeprom_update_word((uint16_t *)(EEPROM_SCORE + 2), score);
     eeprom_update_word((uint16_t *)(EEPROM_SCORE + 4), score);
-    eeprom_update_word((uint16_t *)(EEPROM_SCORE + 6), score);
+    eeprom_update_byte((uint8_t *)(EEPROM_LEVEL), level);
     
   }
 
