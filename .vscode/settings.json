@@ -30,6 +30,11 @@
         "tuple": "cpp",
         "vector": "cpp",
         "array": "cpp",
-        "utility": "cpp"
+        "utility": "cpp",
+        "hash_map": "cpp",
+        "hash_set": "cpp",
+        "map": "cpp",
+        "set": "cpp",
+        "unordered_map": "cpp"
     }
 }

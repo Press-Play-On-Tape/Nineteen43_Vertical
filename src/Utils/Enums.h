@@ -6,10 +6,11 @@
 
 #define SAVE_MEMORY
 #define SHOW_CREDITS
+#define _OLD_OBSTACLES
 
 
 // Remove comment // to free up some PROGMEM for DUEB
-#define DEBUG
+//#define DEBUG
 
 
 // Game States ..
@@ -30,6 +31,8 @@ enum class GameState : uint8_t {
   #endif
 };
 
+
+#define MAX_BULLET_COUNTDOWN 20
 
 // Image array offsets ..
 

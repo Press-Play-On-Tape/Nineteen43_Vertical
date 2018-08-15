@@ -1,52 +1,73 @@
 #pragma once
 
-const uint8_t PROGMEM digit_0[] = {
+// const uint8_t PROGMEM digit_0[] = {
+//   5, 4,
+//   0x06, 0x09, 0x09, 0x09, 0x06,
+// };
+
+// const uint8_t PROGMEM digit_1[] = {
+//   5, 4,
+//   0x0E, 0x04, 0x04, 0x06, 0x04, 
+// };
+
+// const uint8_t PROGMEM digit_2[] = {
+//   5, 4,
+//  0x0F, 0x02, 0x04, 0x09, 0x06, 
+// };
+
+// const uint8_t PROGMEM digit_3[] = {
+//   5, 4,
+//   0x06, 0x09, 0x04, 0x09, 0x06, 
+// };
+
+// const uint8_t PROGMEM digit_4[] = {
+//   5, 4,
+//   0x04, 0x04, 0x0F, 0x05, 0x06, 
+// };
+
+// const uint8_t PROGMEM digit_5[] = {
+//   5, 4,
+//   0x07, 0x08, 0x07, 0x01, 0x0F,
+// };
+
+// const uint8_t PROGMEM digit_6[] = {
+//   5, 4,
+//   0x06, 0x09, 0x07, 0x01, 0x06, 
+// };
+
+// const uint8_t PROGMEM digit_7[] = {
+//   5, 4,
+//   0x02, 0x02, 0x04, 0x08, 0x0F,
+// };
+
+// const uint8_t PROGMEM digit_8[] = {
+//   5, 4,
+//   0x06, 0x09, 0x06, 0x09, 0x06, 
+// };
+
+// const uint8_t PROGMEM digit_9[] = {
+//   5, 4,
+//   0x03, 0x04, 0x0A, 0x09, 0x06, 
+// };
+
+// const uint8_t PROGMEM digit_mask[] = {
+//   0x0F, 0x0F, 0x0F, 0x0F, 0x0F,
+// };
+
+// const uint8_t* digits[] = {digit_0, digit_1, digit_2, digit_3, digit_4, digit_5, digit_6, digit_7, digit_8, digit_9};  
+
+
+const uint8_t PROGMEM digits[] = {
   5, 4,
   0x06, 0x09, 0x09, 0x09, 0x06,
-};
-
-const uint8_t PROGMEM digit_1[] = {
-  5, 4,
   0x0E, 0x04, 0x04, 0x06, 0x04, 
-};
-
-const uint8_t PROGMEM digit_2[] = {
-  5, 4,
- 0x0F, 0x02, 0x04, 0x09, 0x06, 
-};
-
-const uint8_t PROGMEM digit_3[] = {
-  5, 4,
+  0x0F, 0x02, 0x04, 0x09, 0x06, 
   0x06, 0x09, 0x04, 0x09, 0x06, 
-};
-
-const uint8_t PROGMEM digit_4[] = {
-  5, 4,
   0x04, 0x04, 0x0F, 0x05, 0x06, 
-};
-
-const uint8_t PROGMEM digit_5[] = {
-  5, 4,
   0x07, 0x08, 0x07, 0x01, 0x0F,
-};
-
-const uint8_t PROGMEM digit_6[] = {
-  5, 4,
   0x06, 0x09, 0x07, 0x01, 0x06, 
-};
-
-const uint8_t PROGMEM digit_7[] = {
-  5, 4,
   0x02, 0x02, 0x04, 0x08, 0x0F,
-};
-
-const uint8_t PROGMEM digit_8[] = {
-  5, 4,
   0x06, 0x09, 0x06, 0x09, 0x06, 
-};
-
-const uint8_t PROGMEM digit_9[] = {
-  5, 4,
   0x03, 0x04, 0x0A, 0x09, 0x06, 
 };
 
@@ -54,7 +75,6 @@ const uint8_t PROGMEM digit_mask[] = {
   0x0F, 0x0F, 0x0F, 0x0F, 0x0F,
 };
 
-const uint8_t* digits[] = {digit_0, digit_1, digit_2, digit_3, digit_4, digit_5, digit_6, digit_7, digit_8, digit_9};  
 
 const uint8_t PROGMEM fuel_gauge[] = {
   5, 3,

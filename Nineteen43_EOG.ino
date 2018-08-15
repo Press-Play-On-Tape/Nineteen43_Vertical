@@ -70,7 +70,8 @@ void endOfSequence(const uint8_t level) {
       {
         SpritesB::drawOverwrite(45, 4, score_img, 0);
         uint8_t digits[4] = {};
-        extractDigits(digits, player.getScore());
+//        extractDigits(digits, player.getScore());
+        extractDigits(digits, player.getGrandScore());
         
         for (uint8_t i = 0, y = 56; i < 4; ++i, y -= 6) {
           SpritesB::drawSelfMasked(45, y, numbers_vert, digits[i]);
@@ -81,14 +82,14 @@ void endOfSequence(const uint8_t level) {
       // Total ..
       {
         uint8_t digits[4] = {};
-        if (gameState == GameState::End_Of_Mission) {
-          SpritesB::drawOverwrite(32, 4, total_img, 0);
-          extractDigits(digits, player.getGrandScore());
-        }
-        else {
+        // if (gameState == GameState::End_Of_Mission) {
+        //   SpritesB::drawOverwrite(32, 4, total_img, 0);
+        //   extractDigits(digits, player.getGrandScore());
+        // }
+        // else {
           SpritesB::drawOverwrite(30, 4, highScore_img, 0);
           extractDigits(digits, high);
-        }
+        // }
         
         for (uint8_t i = 0, y = 56; i < 4; ++i, y -= 6) {
           SpritesB::drawSelfMasked(32, y, numbers_vert, digits[i]);

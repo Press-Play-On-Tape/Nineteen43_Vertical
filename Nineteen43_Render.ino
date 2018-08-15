@@ -115,7 +115,7 @@ void renderEndOfMission() {
  *  Render score board gauge. 
  * ----------------------------------------------------------------------------
  */
-uint16_t scoreFrameCnt;
+//uint16_t scoreFrameCnt;
 uint16_t scoreFlash;
 
 void renderScoreboadGauge(const uint8_t imageX, const uint8_t imageY, const uint8_t *image, const uint8_t scoreboardY, const uint8_t value) {
@@ -133,14 +133,14 @@ void renderScoreboadGauge(const uint8_t imageX, const uint8_t imageY, const uint
  *  Render the score board.
  * -----------------------------------------------------------------------------------------------------------------------------
  */
-
 void renderScoreboard() {
 
 
   // Increment the frame count
 
   ++scoreFlash;        if (scoreFlash > SCOREBOARD_FLASH_MAX) { scoreFlash = 0; }
-  ++scoreFrameCnt;     if (scoreFrameCnt > (SCOREBOARD_FRAME_COUNT_MAX * SCOREBOARD_NUMBER_OF_FRAMES)) { scoreFrameCnt = 0; }
+//  ++scoreFrameCnt;     if (scoreFrameCnt > (SCOREBOARD_FRAME_COUNT_MAX * SCOREBOARD_NUMBER_OF_FRAMES)) { scoreFrameCnt = 0; }
+  if (bulletCountdown > 0) bulletCountdown--;
 
   uint16_t player_score = player.getScore();
 
@@ -153,19 +153,31 @@ void renderScoreboard() {
     
   // Render kills ..
   
-  SpritesB::drawOverwrite(SCOREBOARD_KILLS_X, SCOREBOARD_KILLS_ICON_Y, kills_gauge, 0);
-  SpritesB::drawOverwrite(SCOREBOARD_KILLS_X, SCOREBOARD_KILLS_DIGIT_0_Y, digits[player_score / 100], 0);
-  player_score = player_score - (player_score / 100) * 100;
-  SpritesB::drawOverwrite(SCOREBOARD_KILLS_X, SCOREBOARD_KILLS_DIGIT_1_Y, digits[player_score / 10], 0);
-  SpritesB::drawOverwrite(SCOREBOARD_KILLS_X, SCOREBOARD_KILLS_DIGIT_2_Y, digits[player_score % 10], 0);
+  // SpritesB::drawOverwrite(SCOREBOARD_KILLS_X, SCOREBOARD_KILLS_ICON_Y, kills_gauge, 0);
+  // SpritesB::drawOverwrite(SCOREBOARD_KILLS_X, SCOREBOARD_KILLS_DIGIT_0_Y, digits[player_score / 100], 0);
+  // player_score = player_score - (player_score / 100) * 100;
+  // SpritesB::drawOverwrite(SCOREBOARD_KILLS_X, SCOREBOARD_KILLS_DIGIT_1_Y, digits[player_score / 10], 0);
+  // SpritesB::drawOverwrite(SCOREBOARD_KILLS_X, SCOREBOARD_KILLS_DIGIT_2_Y, digits[player_score % 10], 0);
 
+    // Score ..
+    {
+      uint8_t player_score_digits[4] = {};
+      extractDigits(player_score_digits, player_score);
+    
+      for (uint8_t i = 0, y2 = 15; i < 4; ++i, y2 = y2 - 5) {
+        SpritesB::drawExternalMask(SCOREBOARD_KILLS_X, y2, digits, digit_mask, player_score_digits[i], 0);
+      }
+      
+    }
+
+/* 
   switch (scoreFrameCnt / SCOREBOARD_FRAME_COUNT_MAX) {
 
     case 0:
-
+*/
       renderScoreboadGauge(SCOREBOARD_HEALTH_BAR_X, SCOREBOARD_HEALTH_BAR_Y, health_gauge, SCOREBOARD_HEALTH_BAR_TOP, (player.getHealth() < 0 ? 0 : player.getHealth().getInteger()));
       renderScoreboadGauge(SCOREBOARD_FUEL_BAR_X, SCOREBOARD_FUEL_BAR_Y, fuel_gauge, SCOREBOARD_FUEL_BAR_TOP, (player.getFuel() < 0 ? 0 : player.getFuel().getInteger()));
-      break;
+/*    break;
 
     case 1:
 
@@ -174,8 +186,35 @@ void renderScoreboard() {
       }
 
       renderScoreboadGauge(SCOREBOARD_BULLET_BAR_X, SCOREBOARD_BULLET_BAR_Y, bullets_gauge, SCOREBOARD_BULLET_BAR_TOP, (player.getBullets() / 3));
-      
       break;
+
+  }
+*/
+
+
+  // Render ammo gauge ..
+
+  if (bulletCountdown > 0) {
+
+    uint8_t bullets = player.getBullets();
+    uint8_t x = player.getX().getInteger();
+    uint8_t y = player.getY().getInteger();
+
+    if (y < 7  && renderBulletsAbove)  { renderBulletsAbove = false;}
+    if (y > 42 && !renderBulletsAbove) { renderBulletsAbove = true;}
+
+    int8_t yOffset = (renderBulletsAbove ? -6 : 19);
+
+    SpritesB::drawExternalMask(x, y + yOffset, ammo_gauge, ammo_gauge_mask, 0, 0);
+    if ((bullets <= 16 && scoreFlash >= (SCOREBOARD_FLASH_MAX / 2)) || bullets > 16) {
+
+      for (int i = 0, xOffset = x; i < bullets; i = i + 10, xOffset = xOffset + 2) {
+
+        SpritesB::drawExternalMask(xOffset, y + yOffset + 2, ammo_gauge_item, ammo_gauge_item_mask, 0, 0);
+
+      }
+
+    }
 
   }
 

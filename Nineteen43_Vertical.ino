@@ -59,7 +59,11 @@ Enemy enemies[NUMBER_OF_ENEMIES] = {
   { EnemyType::Zero, enemy_zero_images },
 };
 
+#ifdef OLD_OBSTACLES
 Obstacle obstacle = { -20, 24, fuel, fuel_mask, 0, 0 };
+#else
+Obstacle obstacle = { -20, 24, fuel, 0, 0 };
+#endif
 
 uint8_t playerBulletIdx = 0;
 uint8_t enemyBulletIdx = 0;
@@ -102,6 +106,8 @@ void initSceneryItems() {
   sceneryItems[3] = { 290, 35, SceneryElement::Wave1 };
 }
 
+bool renderBulletsAbove = true;
+uint8_t bulletCountdown = 0;
 
 /* -----------------------------------------------------------------------------------------------------------------------------
  *  Setup
@@ -386,6 +392,7 @@ void launchPlayerBullet(const uint8_t x, const uint8_t y, const Direction direct
   player.decBullets();
   ++playerBulletIdx;
   if (playerBulletIdx == PLAYER_BULLETS_MAX) playerBulletIdx = 0;
+  bulletCountdown = MAX_BULLET_COUNTDOWN;
 
 }
 
@@ -419,21 +426,33 @@ void launchObstacle() {
       minValue = (obstacleBulletsValue / (SQ7x8)2);
       maxValue = obstacleBulletsValue;
       bitmap = bullets;
+      #ifdef OLD_OBSTACLES
       mask = bullets_mask;
+      #else
+      mask = power_up_mask;
+      #endif
       break;
 
     case ObstacleType::Fuel:
       minValue = (obstacleFuelValue / (SQ7x8)2);
       maxValue = obstacleFuelValue;
       bitmap = fuel;
+      #ifdef OLD_OBSTACLES
       mask = fuel_mask;
+      #else
+      mask = power_up_mask;
+      #endif   
       break;
 
     case ObstacleType::Health:
       minValue = (obstacleHealthValue / (SQ7x8)2);
       maxValue = obstacleHealthValue;
       bitmap = health;
+      #ifdef OLD_OBSTACLES
       mask = health_mask;
+      #else
+      mask = power_up_mask;
+      #endif   
       break;
 
     case ObstacleType::PowerUp:
@@ -455,8 +474,10 @@ void launchObstacle() {
   obstacle.setSpeed(randomSFixed<7,8>(1, 2));
   obstacle.setValue(randomSFixed<7,8>(minValue, maxValue));
   obstacle.setBitmap(bitmap);
+  #ifdef OLD_OBSTACLES
   obstacle.setMask(mask);
-
+  #endif
+  
   obstacleLaunchCountdown = random(obstacleLaunchDelayMin, obstacleLaunchDelayMax);
 
 }
