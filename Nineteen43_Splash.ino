@@ -151,6 +151,7 @@ void gameInit() {
     enemyBullets[i].setEnabled(false);
   }
   
+  initSceneryItems();
   player.initMission();
   obstacle.setEnabled(false);
 

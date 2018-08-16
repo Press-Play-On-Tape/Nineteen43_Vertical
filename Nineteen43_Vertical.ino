@@ -155,7 +155,7 @@ void loop() {
 
     case GameState::Intro_Init:
       introInit();
-      break;
+      //break;
 
     case GameState::Intro_Loop:
       introLoop();
@@ -163,7 +163,7 @@ void loop() {
 
     case GameState::Game_Init:
       gameInit();
-      break;
+      //break;
 
     case GameState::Game_Loop:
       gameLoop();
@@ -221,7 +221,6 @@ void gameLoop() {
   switch (intro) {
 
     case 80: 
-      initSceneryItems();
       upperSceneryPosition.enabled = false;
       lowerSceneryPosition.enabled = false;
 
@@ -330,7 +329,7 @@ void gameLoop() {
   moveAndRenderObstacle();
   renderScenery_BelowPlanes();
   moveAndRenderEnemies(false);
-  player.renderImage(arduboy.getFrameCount(6) < 3);
+  player.renderImage(arduboy.getFrameCountHalf(6));
   renderScenery_AbovePlanes();
 
   renderScoreboard();
@@ -780,7 +779,7 @@ void checkForObstacleCollision() {
 
       }
 
-      arduboy.setRGBled(GREEN_LED, 16);
+      arduboy.setRGBled(GREEN_LED, 8);
       ledCountdown = LED_COUNTDOWN;
 
       obstacle.setEnabled(false);
@@ -852,6 +851,10 @@ void checkForPlayerShot() {
   
         enemyBullets[i].setEnabled(false);
         player.decHealth(PLAYER_HIT_BULLET_DECREMENT);
+
+        arduboy.setRGBled(RED_LED, 8);
+        ledCountdown = LED_COUNTDOWN;
+
         break;
   
       }
@@ -880,7 +883,7 @@ void checkForPlayerEnemyCollision() {
         player.decHealth(PLAYER_HIT_PLANE_DECREMENT);
         if (!sound.playing()) sound.tones(hit_by_plane);
 
-        arduboy.setRGBled(RED_LED, 16);
+        arduboy.setRGBled(RED_LED, 8);
         ledCountdown = LED_COUNTDOWN;
 
         break;

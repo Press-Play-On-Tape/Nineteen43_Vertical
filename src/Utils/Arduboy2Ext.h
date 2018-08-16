@@ -11,6 +11,9 @@ class Arduboy2Ext : public Arduboy2Base {
 
     uint8_t justPressedButtons() const;
     uint8_t pressedButtons() const;
+    uint16_t getFrameCount() const;
+    uint8_t getFrameCount(uint8_t mod) const;
+    bool getFrameCountHalf(uint8_t mod) const;
 
     void clearButtonState();
     

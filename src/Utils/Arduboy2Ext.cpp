@@ -33,6 +33,12 @@ uint8_t Arduboy2Ext::getFrameCount(uint8_t mod) const {
 
 }
 
+bool Arduboy2Ext::getFrameCountHalf(uint8_t mod) const {
+
+  return (frameCount % mod) > (mod / 2);
+
+}
+
 
 /* ----------------------------------------------------------------------------
  *  Draw a horizontal dotted line. 

@@ -241,7 +241,6 @@ void renderScenery(const uint8_t frame) {
 
   // Draw scenery elements ..
 
-  
   for (uint8_t x = 0; x < NUMBER_OF_SCENERY_ITEMS; x++) {
 
     switch (sceneryItems[x].element) {
@@ -283,8 +282,6 @@ void renderScenery(const uint8_t frame) {
     }
 
   }
-
-
 
 
   // Draw ground ..

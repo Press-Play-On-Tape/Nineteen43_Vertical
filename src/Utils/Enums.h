@@ -7,11 +7,11 @@
 #define SAVE_MEMORY
 #define SHOW_CREDITS
 #define _OLD_OBSTACLES
-#define _DASH
+#define DASH
 
 
 // Remove comment // to free up some PROGMEM for DUEB
-#define DEBUG
+//#define DEBUG
 
 
 // Game States ..
@@ -34,7 +34,7 @@ enum class GameState : uint8_t {
 
 
 #define MAX_BULLET_COUNTDOWN 20
-#define LED_COUNTDOWN 7
+#define LED_COUNTDOWN 4
 
 
 // Image array offsets ..
@@ -99,7 +99,7 @@ enum class GameState : uint8_t {
 #define PLAYER_MOVEMENT_INC_RIGHT       0.80
 #define PLAYER_BULLETS_MAX              15
 #define PLAYER_HIT_BULLET_DECREMENT     0.25 
-#define PLAYER_HIT_PLANE_DECREMENT      0.05 
+#define PLAYER_HIT_PLANE_DECREMENT      0.15 
 
 #define PLAYER_WIDTH                    18
 #define PLAYER_WIDTH_HALF               9
