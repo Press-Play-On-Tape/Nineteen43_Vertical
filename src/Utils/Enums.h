@@ -7,10 +7,11 @@
 #define SAVE_MEMORY
 #define SHOW_CREDITS
 #define _OLD_OBSTACLES
+#define _DASH
 
 
 // Remove comment // to free up some PROGMEM for DUEB
-//#define DEBUG
+#define DEBUG
 
 
 // Game States ..
@@ -33,6 +34,8 @@ enum class GameState : uint8_t {
 
 
 #define MAX_BULLET_COUNTDOWN 20
+#define LED_COUNTDOWN 7
+
 
 // Image array offsets ..
 
@@ -110,9 +113,14 @@ enum class GameState : uint8_t {
 #define ENEMY_BOAT_TURRENT_CENTER_X     ENEMY_BOAT_TURRENT_X + 5
 #define ENEMY_BOAT_TURRENT_CENTER_Y     ENEMY_BOAT_TURRENT_Y + 5
 
+#ifdef DASH
+#define SCOREBOARD_OUTER_RECT_X         119
+#define SCOREBOARD_OUTER_RECT_WIDTH     9
+#else
 #define SCOREBOARD_OUTER_RECT_X         120
-#define SCOREBOARD_OUTER_RECT_Y         0
 #define SCOREBOARD_OUTER_RECT_WIDTH     8
+#endif
+#define SCOREBOARD_OUTER_RECT_Y         0
 #define SCOREBOARD_OUTER_RECT_HEIGHT    HEIGHT
 #define SCOREBOARD_FRAME_COUNT_MAX      200
 #define SCOREBOARD_NUMBER_OF_FRAMES     2
@@ -122,14 +130,22 @@ enum class GameState : uint8_t {
 
 #define SCOREBOARD_FLASH_MAX            30
 
-#define SCOREBOARD_KILLS_X              123 
+#ifdef DASH
+#define SCOREBOARD_KILLS_X              122 
+#else
+#define SCOREBOARD_KILLS_X              123
+#endif
 #define SCOREBOARD_KILLS_ICON_Y         0 
 #define SCOREBOARD_KILLS_DIGIT_0_Y      6 
 #define SCOREBOARD_KILLS_DIGIT_1_Y      11 
 #define SCOREBOARD_KILLS_DIGIT_2_Y      16
 
 #define SCOREBOARD_HEALTH_BAR_X         SCOREBOARD_KILLS_X
+#ifdef DASH
+#define SCOREBOARD_HEALTH_BAR_Y         22 
+#else
 #define SCOREBOARD_HEALTH_BAR_Y         23
+#endif
 #define SCOREBOARD_HEALTH_BAR_TOP       30
 
 #define SCOREBOARD_FUEL_BAR_X           SCOREBOARD_KILLS_X

@@ -37,9 +37,9 @@ void endOfSequence(const uint8_t level) {
 
   #ifdef SAVE_MEMORY
     uint16_t high = eeprom_read_word((uint16_t *)(EEPROM_SCORE + (level * 2)));
-    if (player.getGrandScore() > high) { 
-      eeprom_update_word((uint16_t *)(EEPROM_SCORE + (level * 2)), player.getGrandScore());
-      high = player.getGrandScore();
+    if (player.getScore() > high) { 
+      eeprom_update_word((uint16_t *)(EEPROM_SCORE + (level * 2)), player.getScore());
+      high = player.getScore();
     }
   #else
     uint16_t high = EEPROM_Utils::getHighScore();
@@ -70,9 +70,8 @@ void endOfSequence(const uint8_t level) {
       {
         SpritesB::drawOverwrite(45, 4, score_img, 0);
         uint8_t digits[4] = {};
-//        extractDigits(digits, player.getScore());
-        extractDigits(digits, player.getGrandScore());
-        
+        extractDigits(digits, player.getScore());
+
         for (uint8_t i = 0, y = 56; i < 4; ++i, y -= 6) {
           SpritesB::drawSelfMasked(45, y, numbers_vert, digits[i]);
         }
@@ -109,7 +108,7 @@ void endOfSequence(const uint8_t level) {
     }
     else {
       #ifdef SAVE_MEMORY
-      if (arduboy.justPressed(UP_BUTTON) && arduboy.justPressed(DOWN_BUTTON)) { initEEPROM(true); player.setGrandScore(0); }
+      if (arduboy.justPressed(UP_BUTTON) && arduboy.justPressed(DOWN_BUTTON)) { initEEPROM(true); player.setScore(0); }
       if (arduboy.justPressed(A_BUTTON)) { gameState = GameState::Intro_Init; break; }
       #else
       if (arduboy.justPressed(A_BUTTON)) { gameState = GameState::Save_Score; break; }

@@ -13,7 +13,7 @@ Player::Player(const uint8_t * const * images) : Plane(images) {
 
 void Player::initGame() {
             
-  _grandScore = 0;
+  _score = 0;
   initMission();
   
 }
@@ -24,7 +24,6 @@ void Player::initMission() {
   _fuel = FUEL_MAX;
   _health = HEALTH_MAX; 
   _bullets = BULLETS_MAX;
-  _score = 0;
   _rollState = 0;
   _enabled = true;
   _x = 1;
@@ -87,24 +86,6 @@ uint16_t Player::getScore() {
 void Player::setScore(const uint16_t value) {
 
   _score = value;
-
-}
-
-uint16_t Player::getGrandScore() {
-
-  return _grandScore;
-
-}
-
-void Player::setGrandScore(const uint16_t value) {
-
-  _grandScore = value;
-
-}
-
-void Player::updateGrandScore() {
-
-  _grandScore = _grandScore + _score;
 
 }
 

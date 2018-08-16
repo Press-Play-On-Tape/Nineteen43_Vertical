@@ -101,6 +101,13 @@ const uint8_t PROGMEM power_up_gauge[] = {
   0x6E, 0x11, 0x71, 0x11, 0x6E,
 };
 
+#ifdef DASH
+const uint8_t PROGMEM I[] = {
+7, 3,
+0x07, 0x02, 0x02, 0x02, 0x02, 0x02, 0x07, 
+};
+#endif
+
 #ifndef SAVE_MEMORY
 const uint8_t PROGMEM arrow[] = {
 8, 1,

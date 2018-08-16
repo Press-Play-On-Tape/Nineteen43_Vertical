@@ -19,7 +19,6 @@ class Player : public Plane {
     SQ7x8 getFuel();
     uint8_t getBullets();
     uint16_t getScore();
-    uint16_t getGrandScore();
     bool inRoll();
     bool getPowerUp();
 
@@ -29,15 +28,12 @@ class Player : public Plane {
     void addBullets(const uint8_t value);
     void decBullets();
     void setScore(const uint16_t value);
-    void setGrandScore(const uint16_t value);
     void setPowerUp(boolean value);
     void decPowerUp();
     void startRoll();
-    void updateGrandScore();
     
   private:
     uint16_t _score;
-    uint16_t _grandScore;
     uint8_t _bullets;
     SQ7x8 _fuel;
     uint8_t _rollState;

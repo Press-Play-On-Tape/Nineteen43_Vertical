@@ -71,8 +71,6 @@ uint8_t enemyBulletIdx = 0;
 Bullet playerBullets[PLAYER_BULLETS_MAX];
 EnemyBullet enemyBullets[ENEMY_BULLETS_MAX];
 
-const uint8_t scrollIncrement = 2;
-
 uint16_t obstacleLaunchCountdown = OBSTACLE_LAUNCH_DELAY_MIN;
 uint8_t enemyShotCountdown = 5;
 uint8_t level = 0;
@@ -108,6 +106,7 @@ void initSceneryItems() {
 
 bool renderBulletsAbove = true;
 uint8_t bulletCountdown = 0;
+uint8_t ledCountdown = 0;
 
 /* -----------------------------------------------------------------------------------------------------------------------------
  *  Setup
@@ -123,6 +122,7 @@ void setup() {
 
   arduboy.boot();
   arduboy.flashlight(); 
+  arduboy.systemButtons();
   arduboy.audio.begin();
   
   obstacleLaunchDelayMin = OBSTACLE_LAUNCH_DELAY_MIN;
@@ -192,6 +192,16 @@ void loop() {
       break;
     #endif
 
+  }
+
+
+  // Distinguish any LEDs..
+
+  if (ledCountdown > 0) {
+    ledCountdown--;
+    if (ledCountdown == 0) {
+      arduboy.setRGBled(0, 0, 0);
+    }
   }
 
 }
@@ -350,7 +360,6 @@ void gameLoop() {
       }
       else {
 
-        player.setGrandScore(player.getGrandScore() + player.getScore());
         ++mission;
         intro = 40;
         sound.tones(mission_success);
@@ -371,7 +380,6 @@ void gameLoop() {
   }
   
   if (!player.getEnabled()) {
-    player.updateGrandScore();    
     gameState = GameState::End_Of_Game;
   }
 
@@ -477,7 +485,7 @@ void launchObstacle() {
   #ifdef OLD_OBSTACLES
   obstacle.setMask(mask);
   #endif
-  
+
   obstacleLaunchCountdown = random(obstacleLaunchDelayMin, obstacleLaunchDelayMax);
 
 }
@@ -772,6 +780,9 @@ void checkForObstacleCollision() {
 
       }
 
+      arduboy.setRGBled(GREEN_LED, 16);
+      ledCountdown = LED_COUNTDOWN;
+
       obstacle.setEnabled(false);
       if (!sound.playing()) sound.tones(collect_obstacle);
 
@@ -862,13 +873,16 @@ void checkForPlayerEnemyCollision() {
 
   for (uint8_t i = 0; i < NUMBER_OF_ENEMIES; ++i) {
 
-    if (enemies[i].getEnabled()) {
+    if (enemies[i].getEnabled() && enemies[i].getDelayStart() == 0) {
 
       if (enemies[i].getEnemyType() != EnemyType::Boat && arduboy.collide(playerRect, enemies[i].getRect())) {
 
         player.decHealth(PLAYER_HIT_PLANE_DECREMENT);
         if (!sound.playing()) sound.tones(hit_by_plane);
-        
+
+        arduboy.setRGBled(RED_LED, 16);
+        ledCountdown = LED_COUNTDOWN;
+
         break;
 
       }

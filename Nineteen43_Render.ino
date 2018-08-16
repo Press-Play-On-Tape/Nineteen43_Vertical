@@ -120,10 +120,18 @@ uint16_t scoreFlash;
 
 void renderScoreboadGauge(const uint8_t imageX, const uint8_t imageY, const uint8_t *image, const uint8_t scoreboardY, const uint8_t value) {
 
+  #ifdef DASH
+  SpritesB::drawSelfMasked(imageX, imageY + 1, image, 0);
+  #else
   SpritesB::drawOverwrite(imageX, imageY, image, 0);
+  #endif 
   if ((value <= 4 && scoreFlash >= (SCOREBOARD_FLASH_MAX / 2)) || value > 4) {
     for (uint8_t i = 0; i < (value); i += 2) {
+      #ifdef DASH
+      arduboy.drawLine(imageX + 1, scoreboardY + i, WIDTH - 3, scoreboardY + i);
+      #else
       arduboy.drawLine(imageX, scoreboardY + i, WIDTH, scoreboardY + i);
+      #endif
     }
   }
 
@@ -149,7 +157,10 @@ void renderScoreboard() {
 
   arduboy.fillRect(SCOREBOARD_OUTER_RECT_X, SCOREBOARD_OUTER_RECT_Y, SCOREBOARD_OUTER_RECT_WIDTH, SCOREBOARD_OUTER_RECT_HEIGHT, BLACK);
   arduboy.drawLine(SCOREBOARD_INNER_RECT_X, SCOREBOARD_INNER_RECT_Y, SCOREBOARD_INNER_RECT_X, HEIGHT, WHITE);
-
+  #ifdef DASH
+  SpritesB::drawOverwrite(SCOREBOARD_INNER_RECT_X + 1, 20, I, 0);
+  SpritesB::drawOverwrite(SCOREBOARD_INNER_RECT_X + 1, 43, I, 0);
+  #endif
     
   // Render kills ..
   
@@ -175,7 +186,11 @@ void renderScoreboard() {
 
     case 0:
 */
+      #ifdef DASH
+      renderScoreboadGauge(SCOREBOARD_HEALTH_BAR_X, SCOREBOARD_HEALTH_BAR_Y + 1, health_gauge, SCOREBOARD_HEALTH_BAR_TOP, (player.getHealth() < 0 ? 0 : player.getHealth().getInteger()));
+      #else      
       renderScoreboadGauge(SCOREBOARD_HEALTH_BAR_X, SCOREBOARD_HEALTH_BAR_Y, health_gauge, SCOREBOARD_HEALTH_BAR_TOP, (player.getHealth() < 0 ? 0 : player.getHealth().getInteger()));
+      #endif
       renderScoreboadGauge(SCOREBOARD_FUEL_BAR_X, SCOREBOARD_FUEL_BAR_Y, fuel_gauge, SCOREBOARD_FUEL_BAR_TOP, (player.getFuel() < 0 ? 0 : player.getFuel().getInteger()));
 /*    break;
 
