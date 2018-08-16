@@ -119,12 +119,16 @@ void renderHighScore(HighScore &highScore) {
       switch (clearScores) {
 
         case 21 ... 60:
+          #ifdef USE_LEDS             
           arduboy.setRGBled(128 - (clearScores * 2), 0, 0);
+          #endif
           break;
 
         case 61:
           clearScores = 0;
+          #ifdef USE_LEDS             
           arduboy.setRGBled(0, 0, 0);
+          #endif
           EEPROM_Utils::initEEPROM(true);
           sound.tone(NOTE_C6, 100);
           return;
@@ -136,7 +140,9 @@ void renderHighScore(HighScore &highScore) {
 
       if (clearScores > 0) {
       
+        #ifdef USE_LEDS             
         arduboy.setRGBled(0, 0, 0);
+        #endif
         clearScores = 0;
 
       }
@@ -144,7 +150,9 @@ void renderHighScore(HighScore &highScore) {
     }
 
     if (arduboy.justPressed(A_BUTTON) || arduboy.justPressed(B_BUTTON)) { 
+      #ifdef USE_LEDS             
       arduboy.setRGBled(0, 0, 0);
+      #endif
       gameState = GameState::Intro_Init; 
     }
     

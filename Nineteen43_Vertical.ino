@@ -106,7 +106,9 @@ void initSceneryItems() {
 
 bool renderBulletsAbove = true;
 uint8_t bulletCountdown = 0;
+#ifdef USE_LEDS             
 uint8_t ledCountdown = 0;
+#endif
 
 /* -----------------------------------------------------------------------------------------------------------------------------
  *  Setup
@@ -197,12 +199,14 @@ void loop() {
 
   // Distinguish any LEDs..
 
+  #ifdef USE_LEDS             
   if (ledCountdown > 0) {
     ledCountdown--;
     if (ledCountdown == 0) {
       arduboy.setRGBled(0, 0, 0);
     }
   }
+  #endif
 
 }
 
@@ -779,8 +783,10 @@ void checkForObstacleCollision() {
 
       }
 
+      #ifdef USE_LEDS             
       arduboy.setRGBled(GREEN_LED, 8);
       ledCountdown = LED_COUNTDOWN;
+      #endif
 
       obstacle.setEnabled(false);
       if (!sound.playing()) sound.tones(collect_obstacle);
@@ -852,8 +858,10 @@ void checkForPlayerShot() {
         enemyBullets[i].setEnabled(false);
         player.decHealth(PLAYER_HIT_BULLET_DECREMENT);
 
+        #ifdef USE_LEDS             
         arduboy.setRGBled(RED_LED, 8);
         ledCountdown = LED_COUNTDOWN;
+        #endif
 
         break;
   
@@ -883,8 +891,10 @@ void checkForPlayerEnemyCollision() {
         player.decHealth(PLAYER_HIT_PLANE_DECREMENT);
         if (!sound.playing()) sound.tones(hit_by_plane);
 
+        #ifdef USE_LEDS             
         arduboy.setRGBled(RED_LED, 8);
         ledCountdown = LED_COUNTDOWN;
+        #endif
 
         break;
 

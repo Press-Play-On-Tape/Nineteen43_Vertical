@@ -4,11 +4,47 @@
 #include "FixedPointsCommon.h"
 #include "Arduboy2Ext.h"
 
+// ---------------------------------------
+//  For an Arduboy
+// ---------------------------------------
+// 
+//  To use the original graphics:
+//    SAVE_MEMORY 
+//    SHOW_CREDITS
+//    OLD_OBSTACLES
+//    _DASH
+//    _USE_LEDS
+//
+//  To use new obstacle grpahics and dashboard:
+//    SAVE_MEMORY 
+//    SHOW_CREDITS
+//    _OLD_OBSTACLES
+//    DASH
+//    USE_LEDS
+//
+// ---------------------------------------
+//  For a Microcard
+// ---------------------------------------
+// 
+//  To use the original graphics:
+//    _SAVE_MEMORY 
+//    SHOW_CREDITS
+//    OLD_OBSTACLES
+//    _DASH
+//    _USE_LEDS
+//
+//  To use new obstacle grpahics and dashboard:
+//    _SAVE_MEMORY 
+//    SHOW_CREDITS
+//    _OLD_OBSTACLES
+//    DASH
+//    USE_LEDS
+//
 #define SAVE_MEMORY
 #define SHOW_CREDITS
-#define _OLD_OBSTACLES
-#define DASH
-
+#define OLD_OBSTACLES
+#define _DASH
+#define _USE_LEDS
 
 // Remove comment // to free up some PROGMEM for DUEB
 //#define DEBUG
@@ -34,7 +70,10 @@ enum class GameState : uint8_t {
 
 
 #define MAX_BULLET_COUNTDOWN 20
+
+#ifdef USE_LEDS             
 #define LED_COUNTDOWN 4
+#endif
 
 
 // Image array offsets ..
