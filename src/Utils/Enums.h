@@ -42,7 +42,7 @@
 //
 #define SAVE_MEMORY
 #define SHOW_CREDITS
-#define OLD_OBSTACLES
+#define _OLD_OBSTACLES
 #define _DASH
 #define USE_LEDS
 

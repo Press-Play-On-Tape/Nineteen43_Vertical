@@ -51,6 +51,9 @@ void EEPROM_Utils::initEEPROM(bool forceClear) {
       eeprom_update_word((uint16_t *)EEPROM_SCORE, score);
       eeprom_update_word((uint16_t *)(EEPROM_SCORE + 2), score);
       eeprom_update_word((uint16_t *)(EEPROM_SCORE + 4), score);
+      // EEPROM.put(EEPROM_SCORE, score);
+      // EEPROM.put(EEPROM_SCORE + 2, score);
+      // EEPROM.put(EEPROM_SCORE + 4, score);
 
     #else
 
