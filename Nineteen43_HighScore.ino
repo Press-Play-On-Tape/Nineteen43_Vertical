@@ -89,30 +89,35 @@ void renderHighScore(HighScore &highScore) {
 
     // Handle buttons ..
 
-    uint8_t charIndex = highScore.getCharIndex();
+    {
+      uint8_t justPressed = arduboy.justPressedButtons();
+      uint8_t charIndex = highScore.getCharIndex();
 
-    if (arduboy.justPressed(LEFT_BUTTON))       { highScore.incChar(charIndex); }
-    if (arduboy.justPressed(RIGHT_BUTTON))      { highScore.decChar(charIndex); }
-    if (arduboy.justPressed(UP_BUTTON))         { highScore.decCharIndex(); } 
-    if (arduboy.justPressed(DOWN_BUTTON))       { highScore.incCharIndex(); } 
+      if (justPressed & LEFT_BUTTON        { highScore.incChar(charIndex); }
+      if (justPressed & RIGHT_BUTTON)      { highScore.decChar(charIndex); }
+      if (justPressed & UP_BUTTON)         { highScore.decCharIndex(); } 
+      if (justPressed & DOWN_BUTTON)       { highScore.incCharIndex(); } 
 
-    if (arduboy.justPressed(A_BUTTON)) { 
-      
-      EEPROM_Utils::writeChars(highScore.getSlotNumber(), highScore);
-      highScore.disableEditting(); 
-      
+      if (justPressed & A_BUTTON) { 
+        
+        EEPROM_Utils::writeChars(highScore.getSlotNumber(), highScore);
+        highScore.disableEditting(); 
+        
+      }
+
     }
 
   }
   else {
 
+    uint8_t pressed = arduboy.pressedButtons();
     SpritesB::drawOverwrite(2, 3, aButton, 0);
     SpritesB::drawOverwrite(5, 12, aButton_continue, 0);
 
 
     // Clear scores ..
 
-    if (arduboy.pressed(UP_BUTTON) && arduboy.pressed(DOWN_BUTTON)) {
+    if ((pressed & UP_BUTTON) && (pressed & )DOWN_BUTTON)) {
 
       clearScores++;
 
@@ -149,11 +154,16 @@ void renderHighScore(HighScore &highScore) {
       
     }
 
-    if (arduboy.justPressed(A_BUTTON) || arduboy.justPressed(B_BUTTON)) { 
-      #ifdef USE_LEDS             
-      arduboy.setRGBled(0, 0, 0);
-      #endif
-      gameState = GameState::Intro_Init; 
+    {
+      uint8_t justPressed = ardubpy.justPressedButtons();
+
+      if ((justPressed & A_BUTTON) || (justPressed & B_BUTTON)) { 
+        #ifdef USE_LEDS             
+        arduboy.setRGBled(0, 0, 0);
+        #endif
+        gameState = GameState::Intro_Init; 
+      }
+
     }
     
   }

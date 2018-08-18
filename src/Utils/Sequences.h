@@ -22,12 +22,12 @@ const uint8_t PROGMEM mission_00[] = {
   SCENERY_NONE | 0, 
   SCENERY_NONE | 1, 
   SCENERY_NONE | 2, 
-  SCENERY_BOAT | 3, 
+  SCENERY_NONE | 3, 
   SCENERY_BOAT | 4, 
   SCENERY_BOAT | 5,    // Boat
   SCENERY_NONE | 6, 
   SCENERY_NONE | 7, 
-  SCENERY_BOAT | 8, 
+  SCENERY_NONE | 8, 
   SCENERY_BOAT | 9, 
   SCENERY_BOAT | 10,   // Boat
   SCENERY_NONE | 11, 
@@ -43,11 +43,11 @@ const uint8_t PROGMEM mission_01[] = {
   SCENERY_NONE | 13, 
   SCENERY_NONE | 0, 
   SCENERY_NONE | 1, 
-  SCENERY_BOAT | 2, 
+  SCENERY_NONE | 2, 
   SCENERY_BOAT | 3, 
   SCENERY_BOAT | 10,   // Boat 
   SCENERY_NONE | 11, 
-  SCENERY_BOAT | 12, 
+  SCENERY_NONE | 12, 
   SCENERY_BOAT | 4, 
   SCENERY_BOAT | 5,    // Boat
   SCENERY_NONE | 6 };
@@ -57,7 +57,7 @@ const uint8_t PROGMEM mission_02[] = {
   SCENERY_NONE | 0, 
   SCENERY_NONE | 2, 
   SCENERY_NONE | 4, 
-  SCENERY_BOAT | 6, 
+  SCENERY_NONE | 6, 
   SCENERY_BOAT | 8, 
   SCENERY_BOAT | 10,   // Boat 
   SCENERY_BOAT | 5,    // Boat
@@ -72,10 +72,10 @@ const uint8_t PROGMEM mission_02[] = {
 const uint8_t PROGMEM mission_03[] = { 
   14, 
   SCENERY_NONE | 2, 
-  SCENERY_BOAT | 1, 
+  SCENERY_NONE | 1, 
   SCENERY_BOAT | 7, 
   SCENERY_BOAT | 10,   // Boat 
-  SCENERY_BOAT | 4, 
+  SCENERY_NONE | 4, 
   SCENERY_BOAT | 12, 
   SCENERY_BOAT | 5,    // Boat
   SCENERY_NONE | 0, 
@@ -88,7 +88,7 @@ const uint8_t PROGMEM mission_03[] = {
 
 const uint8_t PROGMEM mission_04[] = { 
   14, 
-  SCENERY_BOAT | 2, 
+  SCENERY_NONE | 2, 
   SCENERY_BOAT | 1, 
   SCENERY_BOAT | 10,   // Boat
   SCENERY_NONE | 7, 
@@ -98,7 +98,7 @@ const uint8_t PROGMEM mission_04[] = {
   SCENERY_NONE | 8, 
   SCENERY_NONE | 9, 
   SCENERY_NONE | 13, 
-  SCENERY_BOAT | 3, 
+  SCENERY_NONE | 3, 
   SCENERY_BOAT | 11, 
   SCENERY_BOAT | 5,    // Boat
   SCENERY_NONE | 6,};

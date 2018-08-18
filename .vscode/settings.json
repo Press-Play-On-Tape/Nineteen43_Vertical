@@ -35,6 +35,7 @@
         "hash_set": "cpp",
         "map": "cpp",
         "set": "cpp",
-        "unordered_map": "cpp"
+        "unordered_map": "cpp",
+        "cstddef": "cpp"
     }
 }

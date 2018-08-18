@@ -23,13 +23,13 @@
 #include "src/Images/Images_Scenery.h"
 #include "src/Images/Images_Arrays.h"
 #include "src/Images/Images_Scenery.h"
+#include "src/Utils/EEPROM_Utils.h"
 
 Arduboy2Ext arduboy;
 ArduboyTones sound(arduboy.audio.enabled);
 
 #ifndef SAVE_MEMORY
 #include "src/Fonts/Fonts.h"
-#include "src/Utils/EEPROM_Utils.h"
 #include "src/Utils/HighScoreEditor.h"
 HighScore highScore;
 uint8_t alternate = 0;
@@ -80,7 +80,8 @@ uint8_t missionIdx = 0;                                     // Byte index within
 uint8_t mission_formations = 0;                             // Number of formations in the current mission.
 uint8_t mission_formations_left = 0;                        // Number of formations left within current mission.
 uint8_t formation = 0;
-int16_t intro;
+uint8_t introState;
+uint8_t intro;
 uint16_t frameRate = INIT_FRAME_RATE;
 
 uint16_t obstacleLaunchDelayMin = OBSTACLE_LAUNCH_DELAY_MIN;
@@ -116,11 +117,7 @@ uint8_t ledCountdown = 0;
  */
 void setup() {
 
-  #ifdef SAVE_MEMORY
-  initEEPROM(false);
-  #else
   EEPROM_Utils::initEEPROM(false);
-  #endif
 
   arduboy.boot();
   arduboy.flashlight(); 
@@ -253,19 +250,22 @@ void gameLoop() {
 
   if (player.getFuel() > 0 && player.getHealth() > 0 && !player.inRoll()) {
     
+    uint8_t pressed = arduboy.pressedButtons();
+    uint8_t justPressed = arduboy.justPressedButtons();
+    
     player.decFuel(FUEL_DECREMENT);
 
     
     // Handle player movement ..
     
-    if (arduboy.pressed(UP_BUTTON) && player.getY() > PLAYER_MOVEMENT_INC_UP)                                     { player.setY(player.getY() - PLAYER_MOVEMENT_INC_UP); }
-    if (arduboy.pressed(DOWN_BUTTON) && player.getY() < HEIGHT - PLAYER_HEIGHT)                                   { player.setY(player.getY() + PLAYER_MOVEMENT_INC_DOWN); }
-    if (arduboy.pressed(LEFT_BUTTON) && player.getX() > PLAYER_MOVEMENT_INC_LEFT)                                 { player.setX(player.getX() - PLAYER_MOVEMENT_INC_LEFT); }
-    if (arduboy.pressed(RIGHT_BUTTON) && player.getX() < WIDTH - PLAYER_WIDTH - SCOREBOARD_OUTER_RECT_WIDTH)      { player.setX(player.getX() + PLAYER_MOVEMENT_INC_RIGHT); }
+    if ((pressed & UP_BUTTON) && player.getY() > PLAYER_MOVEMENT_INC_UP)                                     { player.setY(player.getY() - PLAYER_MOVEMENT_INC_UP); }
+    if ((pressed & DOWN_BUTTON) && player.getY() < HEIGHT - PLAYER_HEIGHT)                                   { player.setY(player.getY() + PLAYER_MOVEMENT_INC_DOWN); }
+    if ((pressed & LEFT_BUTTON) && player.getX() > PLAYER_MOVEMENT_INC_LEFT)                                 { player.setX(player.getX() - PLAYER_MOVEMENT_INC_LEFT); }
+    if ((pressed & RIGHT_BUTTON) && player.getX() < WIDTH - PLAYER_WIDTH - SCOREBOARD_OUTER_RECT_WIDTH)      { player.setX(player.getX() + PLAYER_MOVEMENT_INC_RIGHT); }
   
-    if (arduboy.justPressed(B_BUTTON))                                                                            { player.startRoll(); }
+    if (justPressed & B_BUTTON)                                                                              { player.startRoll(); }
                                                                                                                     
-    if (arduboy.justPressed(A_BUTTON)) {
+    if (justPressed & A_BUTTON) {
 
       if (player.getBullets() > 0) {
         
@@ -342,7 +342,7 @@ void gameLoop() {
 
   // New wave ?
 
-  if (intro == 0) {
+  if (intro == 0 && player.getHealth() > 0) {
       
     bool newFormation = true;
     for (uint8_t i = 0; i < NUMBER_OF_ENEMIES; ++i) {
@@ -420,15 +420,17 @@ void launchObstacle() {
   ObstacleType type = (ObstacleType)random((uint8_t)ObstacleType::First, (uint8_t)ObstacleType::Count);;
   SQ7x8 minValue = 0;
   SQ7x8 maxValue = 0;
+
   const uint8_t *bitmap = nullptr;
   const uint8_t *mask = nullptr;
 
-
-  if (player.getFuel() <= 4) {
-    type = ObstacleType::Fuel;
-  }
-  else if (player.getHealth() <= 4) {
-    type = ObstacleType::Health;
+  if (level < 2) {
+    if (player.getFuel() <= 4) {
+      type = ObstacleType::Fuel;
+    }
+    else if (player.getHealth() <= 4) {
+      type = ObstacleType::Health;
+    }
   }
   
   switch (type) {
@@ -501,7 +503,6 @@ void launchObstacle() {
 void launchMission(bool firstFormation, const uint8_t *missionRef) {
 
   if (firstFormation) {
-
     missionIdx = 0;
     mission_formations_left = pgm_read_byte(&missionRef[missionIdx++]);
     mission_formations = mission_formations_left;
@@ -575,7 +576,7 @@ void launchFormation(const int8_t *formation) {
 
       case EnemyType::Boat:
         enemies[i] = { EnemyType::Boat, enemy_boat };
-        enemies[i].setTurretDirection(Direction::SouthWest);
+        // enemies[i].setTurretDirection(Direction::SouthWest);
         break;
 
       case EnemyType::Count:
@@ -606,8 +607,8 @@ void launchFormation(const int8_t *formation) {
  */
 bool isAimingAtPlayer(const uint8_t enemyIdx) {
   
-  const int16_t playerX = player.getX().getInteger() + PLAYER_WIDTH_HALF;
-  const int16_t playerY = player.getY().getInteger() + PLAYER_HEIGHT_HALF;
+  const int8_t playerX = player.getX().getInteger() + PLAYER_WIDTH_HALF;
+  const int8_t playerY = player.getY().getInteger() + PLAYER_HEIGHT_HALF;
 
   const int16_t enemyX = enemies[enemyIdx].getX().getInteger() + (enemies[enemyIdx].getEnemyType() == EnemyType::Boat ? ENEMY_BOAT_TURRENT_CENTER_X : enemies[enemyIdx].getWidth() / 2);
   const int16_t enemyY = enemies[enemyIdx].getY().getInteger() + (enemies[enemyIdx].getEnemyType() == EnemyType::Boat ? ENEMY_BOAT_TURRENT_CENTER_Y : enemies[enemyIdx].getHeight() / 2);
@@ -671,8 +672,8 @@ bool isAimingAtPlayer(const uint8_t enemyIdx) {
  */
 Direction aimAtPlayer(const uint8_t enemyIdx) {
 
-  int16_t playerX = player.getX().getInteger() + PLAYER_WIDTH_HALF;
-  int16_t playerY = player.getY().getInteger() + PLAYER_HEIGHT_HALF;
+  int8_t playerX = player.getX().getInteger() + PLAYER_WIDTH_HALF;
+  int8_t playerY = player.getY().getInteger() + PLAYER_HEIGHT_HALF;
 
   int16_t enemyX = enemies[enemyIdx].getX().getInteger() + ENEMY_BOAT_TURRENT_X + 5;
   int16_t enemyY = enemies[enemyIdx].getY().getInteger() + (enemies[enemyIdx].getHeight() / 2);
@@ -951,33 +952,4 @@ void checkCanEnemyShoot() {
 }
 
 
-/* ----------------------------------------------------------------------------
- *   Is the EEPROM initialised? 
- *   
- *   Looks for the characters '4' and '3' in the first two bytes of the EEPROM
- *   memory range starting from byte EEPROM_STORAGE_SPACE_START.  If not found,
- *   it resets the settings ..
- * ----------------------------------------------------------------------------
- */
-#ifdef SAVE_MEMORY
-void initEEPROM(const bool forceOverwrite) {
 
-  uint8_t c1 = eeprom_read_byte((uint8_t *)EEPROM_START_C1);
-  uint8_t c2 = eeprom_read_byte((uint8_t *)EEPROM_START_C2);
-
-  if (c1 != '4' || c2 != '3' || forceOverwrite) { 
-
-    uint16_t score = 0;
-    uint8_t level = 0;
-
-    eeprom_update_byte((uint8_t *)EEPROM_START_C1, 52);
-    eeprom_update_byte((uint8_t *)EEPROM_START_C2, 51);
-    eeprom_update_word((uint16_t *)EEPROM_SCORE, score);
-    eeprom_update_word((uint16_t *)(EEPROM_SCORE + 2), score);
-    eeprom_update_word((uint16_t *)(EEPROM_SCORE + 4), score);
-    eeprom_update_byte((uint8_t *)(EEPROM_LEVEL), level);
-    
-  }
-
-}
-#endif

@@ -15,7 +15,7 @@
 //    _DASH
 //    _USE_LEDS
 //
-//  To use new obstacle grpahics and dashboard:
+//  To use new obstacle graphics and dashboard:
 //    SAVE_MEMORY 
 //    SHOW_CREDITS
 //    _OLD_OBSTACLES
@@ -33,7 +33,7 @@
 //    _DASH
 //    _USE_LEDS
 //
-//  To use new obstacle grpahics and dashboard:
+//  To use new obstacle graphics and dashboard:
 //    _SAVE_MEMORY 
 //    SHOW_CREDITS
 //    _OLD_OBSTACLES
@@ -44,7 +44,7 @@
 #define SHOW_CREDITS
 #define OLD_OBSTACLES
 #define _DASH
-#define _USE_LEDS
+#define USE_LEDS
 
 // Remove comment // to free up some PROGMEM for DUEB
 //#define DEBUG
@@ -107,8 +107,8 @@ enum class GameState : uint8_t {
 #define HEALTH_MAX                      14
 #define HEALTH_MIN                      HEALTH_MAX / 2
 #define HEALTH_DECREMENT_L0             (SQ7x8)0.000
-#define HEALTH_DECREMENT_L1             (SQ7x8)0.300
-#define HEALTH_DECREMENT_L2             (SQ7x8)0.600
+#define HEALTH_DECREMENT_L1             (SQ7x8)0.500
+#define HEALTH_DECREMENT_L2             (SQ7x8)1.000
 
 #define POWER_UP_MAX                    10
 
@@ -117,14 +117,14 @@ enum class GameState : uint8_t {
 #define FUEL_DECREMENT                  0.010
 #define FUEL_DECREMENT_BOOST            0.005
 #define FUEL_DECREMENT_L0               (SQ7x8)0.000
-#define FUEL_DECREMENT_L1               (SQ7x8)0.080
-#define FUEL_DECREMENT_L2               (SQ7x8)0.160
+#define FUEL_DECREMENT_L1               (SQ7x8)0.120
+#define FUEL_DECREMENT_L2               (SQ7x8)0.300
 
 #define OBSTACLE_LAUNCH_DELAY_MAX       300
 #define OBSTACLE_LAUNCH_DELAY_MIN       125
 #define OBSTACLE_LAUNCH_DELAY_INC_L0    0
-#define OBSTACLE_LAUNCH_DELAY_INC_L1    5
-#define OBSTACLE_LAUNCH_DELAY_INC_L2    10
+#define OBSTACLE_LAUNCH_DELAY_INC_L1    10
+#define OBSTACLE_LAUNCH_DELAY_INC_L2    20
 #define OBSTACLE_WIDTH                  8
 
 #define FRAME_RATE_INC_L0               2
@@ -138,7 +138,7 @@ enum class GameState : uint8_t {
 #define PLAYER_MOVEMENT_INC_RIGHT       0.80
 #define PLAYER_BULLETS_MAX              15
 #define PLAYER_HIT_BULLET_DECREMENT     0.25 
-#define PLAYER_HIT_PLANE_DECREMENT      0.15 
+#define PLAYER_HIT_PLANE_DECREMENT      0.12 
 
 #define PLAYER_WIDTH                    18
 #define PLAYER_WIDTH_HALF               9
@@ -256,7 +256,7 @@ enum class SceneryElement : uint8_t {
   Cloud_BelowPlanes,
   Island1,
   Island2,
-  Island3,
+  Island3,  
 };
 
 struct SceneryItem {

@@ -115,7 +115,6 @@ void renderEndOfMission() {
  *  Render score board gauge. 
  * ----------------------------------------------------------------------------
  */
-//uint16_t scoreFrameCnt;
 uint16_t scoreFlash;
 
 void renderScoreboadGauge(const uint8_t imageX, const uint8_t imageY, const uint8_t *image, const uint8_t scoreboardY, const uint8_t value) {
@@ -162,49 +161,24 @@ void renderScoreboard() {
   SpritesB::drawOverwrite(SCOREBOARD_INNER_RECT_X + 1, 43, I, 0);
   #endif
     
-  // Render kills ..
+
+  // Score ..
+  {
+    uint8_t player_score_digits[4] = {};
+    extractDigits(player_score_digits, player_score);
   
-  // SpritesB::drawOverwrite(SCOREBOARD_KILLS_X, SCOREBOARD_KILLS_ICON_Y, kills_gauge, 0);
-  // SpritesB::drawOverwrite(SCOREBOARD_KILLS_X, SCOREBOARD_KILLS_DIGIT_0_Y, digits[player_score / 100], 0);
-  // player_score = player_score - (player_score / 100) * 100;
-  // SpritesB::drawOverwrite(SCOREBOARD_KILLS_X, SCOREBOARD_KILLS_DIGIT_1_Y, digits[player_score / 10], 0);
-  // SpritesB::drawOverwrite(SCOREBOARD_KILLS_X, SCOREBOARD_KILLS_DIGIT_2_Y, digits[player_score % 10], 0);
-
-    // Score ..
-    {
-      uint8_t player_score_digits[4] = {};
-      extractDigits(player_score_digits, player_score);
-    
-      for (uint8_t i = 0, y2 = 15; i < 4; ++i, y2 = y2 - 5) {
-        SpritesB::drawExternalMask(SCOREBOARD_KILLS_X, y2, digits, digit_mask, player_score_digits[i], 0);
-      }
-      
+    for (uint8_t i = 0, y2 = 15; i < 4; ++i, y2 = y2 - 5) {
+      SpritesB::drawExternalMask(SCOREBOARD_KILLS_X, y2, digits, digit_mask, player_score_digits[i], 0);
     }
-
-/* 
-  switch (scoreFrameCnt / SCOREBOARD_FRAME_COUNT_MAX) {
-
-    case 0:
-*/
-      #ifdef DASH
-      renderScoreboadGauge(SCOREBOARD_HEALTH_BAR_X, SCOREBOARD_HEALTH_BAR_Y + 1, health_gauge, SCOREBOARD_HEALTH_BAR_TOP, (player.getHealth() < 0 ? 0 : player.getHealth().getInteger()));
-      #else      
-      renderScoreboadGauge(SCOREBOARD_HEALTH_BAR_X, SCOREBOARD_HEALTH_BAR_Y, health_gauge, SCOREBOARD_HEALTH_BAR_TOP, (player.getHealth() < 0 ? 0 : player.getHealth().getInteger()));
-      #endif
-      renderScoreboadGauge(SCOREBOARD_FUEL_BAR_X, SCOREBOARD_FUEL_BAR_Y, fuel_gauge, SCOREBOARD_FUEL_BAR_TOP, (player.getFuel() < 0 ? 0 : player.getFuel().getInteger()));
-/*    break;
-
-    case 1:
-
-      if (player.getPowerUp() && scoreFlash >= (SCOREBOARD_FLASH_MAX / 2)) {
-        SpritesB::drawOverwrite(SCOREBOARD_BULLET_PU_X, SCOREBOARD_BULLET_PU_Y, power_up_gauge, 0);
-      }
-
-      renderScoreboadGauge(SCOREBOARD_BULLET_BAR_X, SCOREBOARD_BULLET_BAR_Y, bullets_gauge, SCOREBOARD_BULLET_BAR_TOP, (player.getBullets() / 3));
-      break;
-
+    
   }
-*/
+
+  #ifdef DASH
+  renderScoreboadGauge(SCOREBOARD_HEALTH_BAR_X, SCOREBOARD_HEALTH_BAR_Y + 1, health_gauge, SCOREBOARD_HEALTH_BAR_TOP, (player.getHealth() < 0 ? 0 : player.getHealth().getInteger()));
+  #else      
+  renderScoreboadGauge(SCOREBOARD_HEALTH_BAR_X, SCOREBOARD_HEALTH_BAR_Y, health_gauge, SCOREBOARD_HEALTH_BAR_TOP, (player.getHealth() < 0 ? 0 : player.getHealth().getInteger()));
+  #endif
+  renderScoreboadGauge(SCOREBOARD_FUEL_BAR_X, SCOREBOARD_FUEL_BAR_Y, fuel_gauge, SCOREBOARD_FUEL_BAR_TOP, (player.getFuel() < 0 ? 0 : player.getFuel().getInteger()));
 
 
   // Render ammo gauge ..
@@ -299,6 +273,7 @@ void renderScenery(const uint8_t frame) {
       sceneryItems[x].x--;
 
       #define FREQ_OF_COMMON_ELEMENTS 2
+      #define NUMBER_OF_ELEMENTS 9
       #define NUMBER_OF_COMMON_ELEMENTS (static_cast<uint8_t>(SceneryElement::Cloud_BelowPlanes) + 1)
 
       if (sceneryItems[x].x < -90 && gameState != GameState::End_Of_Mission) {
@@ -319,10 +294,10 @@ void renderScenery(const uint8_t frame) {
 
         }
 
-        switch (element / FREQ_OF_COMMON_ELEMENTS) {
+        switch (element / NUMBER_OF_COMMON_ELEMENTS) {
 
-          case 0 ... (NUMBER_OF_COMMON_ELEMENTS - 1):
-            element = element / FREQ_OF_COMMON_ELEMENTS;
+          case 0 ... (FREQ_OF_COMMON_ELEMENTS - 1):
+            element = element % NUMBER_OF_COMMON_ELEMENTS;
             break;
 
           default:
