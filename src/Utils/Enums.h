@@ -102,13 +102,13 @@ enum class GameState : uint8_t {
 #define BULLETS_MIN                     BULLETS_MAX / 2
 #define BULLETS_DECREMENT_L0            (SQ7x8)0.000
 #define BULLETS_DECREMENT_L1            (SQ7x8)0.500
-#define BULLETS_DECREMENT_L2            (SQ7x8)1.000
+#define BULLETS_DECREMENT_L2            (SQ7x8)1.100
 
 #define HEALTH_MAX                      14
 #define HEALTH_MIN                      HEALTH_MAX / 2
 #define HEALTH_DECREMENT_L0             (SQ7x8)0.000
 #define HEALTH_DECREMENT_L1             (SQ7x8)0.500
-#define HEALTH_DECREMENT_L2             (SQ7x8)1.000
+#define HEALTH_DECREMENT_L2             (SQ7x8)1.100
 
 #define POWER_UP_MAX                    10
 
@@ -118,13 +118,13 @@ enum class GameState : uint8_t {
 #define FUEL_DECREMENT_BOOST            0.005
 #define FUEL_DECREMENT_L0               (SQ7x8)0.000
 #define FUEL_DECREMENT_L1               (SQ7x8)0.120
-#define FUEL_DECREMENT_L2               (SQ7x8)0.300
+#define FUEL_DECREMENT_L2               (SQ7x8)0.400
 
 #define OBSTACLE_LAUNCH_DELAY_MAX       300
 #define OBSTACLE_LAUNCH_DELAY_MIN       125
 #define OBSTACLE_LAUNCH_DELAY_INC_L0    0
 #define OBSTACLE_LAUNCH_DELAY_INC_L1    10
-#define OBSTACLE_LAUNCH_DELAY_INC_L2    20
+#define OBSTACLE_LAUNCH_DELAY_INC_L2    25
 #define OBSTACLE_WIDTH                  8
 
 #define FRAME_RATE_INC_L0               2

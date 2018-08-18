@@ -424,13 +424,11 @@ void launchObstacle() {
   const uint8_t *bitmap = nullptr;
   const uint8_t *mask = nullptr;
 
-  if (level < 2) {
-    if (player.getFuel() <= 4) {
-      type = ObstacleType::Fuel;
-    }
-    else if (player.getHealth() <= 4) {
-      type = ObstacleType::Health;
-    }
+  if (player.getFuel() <= 4) {
+    type = ObstacleType::Fuel;
+  }
+  else if (player.getHealth() <= 4) {
+    type = ObstacleType::Health;
   }
   
   switch (type) {
