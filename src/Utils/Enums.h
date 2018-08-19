@@ -85,16 +85,6 @@ enum class GameState : uint8_t {
 #define IMAGES_SHRINK_MASK_OFFSET       28
 
 
-// EEPROM settings for high score ..
-
-#define EEPROM_START                    200
-#define EEPROM_START_C1                 EEPROM_START
-#define EEPROM_START_C2                 EEPROM_START + 1
-#define EEPROM_SCORE                    EEPROM_START_C1 + 2
-#define EEPROM_LEVEL                    EEPROM_START_C1 + 8
-#define EEPROM_TOP_START                EEPROM_LEVEL + 1
-#define EEPROM_ENTRY_SIZE               5
-
 #define NUMBER_OF_ENEMIES               6
 #define NUMBER_OF_MISSIONS              5
 
@@ -248,12 +238,12 @@ struct SceneryInfo {
 };
 
 enum class SceneryElement : uint8_t {
-  Boat,
   Wave1,
-  Wave2,
-  Boat2,
   Cloud_AbovePlanes,
+  Wave2,
   Cloud_BelowPlanes,
+  Boat,
+  Boat2,
   Island1,
   Island2,
   Island3,  

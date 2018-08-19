@@ -4,6 +4,19 @@
 #include "../Entities/Slot.h"
 #include "HighScoreEditor.h"
 
+// EEPROM settings for high score ..
+
+#define EEPROM_START                    ((uint8_t *)200)
+#define EEPROM_START_C1                 ((uint8_t *)200)
+#define EEPROM_START_C2                 ((uint8_t *)201)
+#define EEPROM_SCORE                    202
+#define EEPROM_SCORE_1                  ((uint16_t *)202)
+#define EEPROM_SCORE_2                  ((uint16_t *)204)
+#define EEPROM_SCORE_3                  ((uint16_t *)206)
+#define EEPROM_LEVEL                    ((uint8_t *)208)
+#define EEPROM_TOP_START                209
+#define EEPROM_ENTRY_SIZE               5
+
 class EEPROM_Utils {
 
   public: 
@@ -14,7 +27,9 @@ class EEPROM_Utils {
     static Slot getSlot(uint8_t x);
     static uint8_t saveScore(uint16_t score);
     static void writeChars(uint8_t slotIndex, HighScore &highScore);
+    #ifndef SAVE_MEMORY
     static uint16_t getHighScore();
+    #endif
 
 };
 
@@ -28,29 +43,29 @@ class EEPROM_Utils {
  */
 void EEPROM_Utils::initEEPROM(bool forceClear) {
 
-  uint8_t c1 = eeprom_read_byte((uint8_t *)EEPROM_START_C1);
-  uint8_t c2 = eeprom_read_byte((uint8_t *)EEPROM_START_C2);
+  uint8_t c1 = eeprom_read_byte(EEPROM_START_C1);
+  uint8_t c2 = eeprom_read_byte(EEPROM_START_C2);
 
   if (forceClear || c1 != '4' || c2 != '3') { 
 
-    eeprom_update_byte((uint8_t *)EEPROM_START_C1, '4');
-    eeprom_update_byte((uint8_t *)EEPROM_START_C2, '3');
-    eeprom_update_byte((uint8_t *)EEPROM_LEVEL, 0);
+    eeprom_update_byte(EEPROM_START_C1, '4');
+    eeprom_update_byte(EEPROM_START_C2, '3');
+    eeprom_update_byte(EEPROM_LEVEL, 0);
 
     #ifdef SAVE_MEMORY
 
       uint16_t score = 0;
       uint8_t level = 0;
 
-      eeprom_update_byte((uint8_t *)EEPROM_SCORE, level);
+      // eeprom_update_byte((uint8_t *)EEPROM_SCORE, level);
       // eeprom_update_byte((uint8_t *)(EEPROM_SCORE + 1), level);
       // eeprom_update_byte((uint8_t *)(EEPROM_SCORE + 2), level);
       // eeprom_update_byte((uint8_t *)(EEPROM_SCORE + 3), level);
       // eeprom_update_byte((uint8_t *)(EEPROM_SCORE + 4), level);
       // eeprom_update_byte((uint8_t *)(EEPROM_SCORE + 5), level);
-      eeprom_update_word((uint16_t *)EEPROM_SCORE, score);
-      eeprom_update_word((uint16_t *)(EEPROM_SCORE + 2), score);
-      eeprom_update_word((uint16_t *)(EEPROM_SCORE + 4), score);
+      eeprom_update_word(EEPROM_SCORE_1, score);
+      eeprom_update_word(EEPROM_SCORE_2, score);
+      eeprom_update_word(EEPROM_SCORE_3, score);
       // EEPROM.put(EEPROM_SCORE, score);
       // EEPROM.put(EEPROM_SCORE + 2, score);
       // EEPROM.put(EEPROM_SCORE + 4, score);
@@ -82,13 +97,11 @@ void EEPROM_Utils::initEEPROM(bool forceClear) {
 #ifndef SAVE_MEMORY
 uint16_t EEPROM_Utils::getHighScore() {
 
-  uint16_t score = eeprom_read_word((uint16_t *)(EEPROM_TOP_START + 3));
-
+  uint16_t score = eeprom_read_word((EEPROM_TOP_START + 3));
   return score;
 
 }
 #endif
-
 
 /* -----------------------------------------------------------------------------
  *   Get slot details. 
@@ -172,3 +185,6 @@ void EEPROM_Utils::writeChars(uint8_t slotIndex, HighScore &highScore) {
 
 }
 #endif
+
+
+

@@ -272,11 +272,11 @@ void renderScenery(const uint8_t frame) {
 
       sceneryItems[x].x--;
 
-      #define FREQ_OF_COMMON_ELEMENTS 2
+      // #define FREQ_OF_COMMON_ELEMENTS 2
       #define NUMBER_OF_ELEMENTS 9
       #define NUMBER_OF_COMMON_ELEMENTS (static_cast<uint8_t>(SceneryElement::Cloud_BelowPlanes) + 1)
 
-      if (sceneryItems[x].x < -90 && gameState != GameState::End_Of_Mission) {
+      if (sceneryItems[x].x < -90) {//} && gameState != GameState::End_Of_Mission) {
 
         sceneryItems[x].x = 162;
         SceneryElement previousElement = (x > 0 ? sceneryItems[x - 1].element : sceneryItems[NUMBER_OF_SCENERY_ITEMS - 1].element);
@@ -284,27 +284,33 @@ void renderScenery(const uint8_t frame) {
 
         switch (previousElement) {
 
-          case SceneryElement::Boat ... SceneryElement::Cloud_BelowPlanes:
-            element = random(0, (FREQ_OF_COMMON_ELEMENTS * NUMBER_OF_COMMON_ELEMENTS) + (sceneryRestrictions == 0 ? 3 : 0) + 1);
+          //case SceneryElement::Boat ... SceneryElement::Cloud_BelowPlanes:
+            // element = random(0, (FREQ_OF_COMMON_ELEMENTS * NUMBER_OF_COMMON_ELEMENTS) + (sceneryRestrictions == 0 ? 5 : 0));
+          case SceneryElement::Wave1 ... SceneryElement::Boat2:
+            // element = random((sceneryRestrictions == 0 ? static_cast<uint8_t>(SceneryElement::Wave2) : static_cast<uint8_t>(SceneryElement::Wave1)), NUMBER_OF_ELEMENTS);
+            element = random(
+              (sceneryRestrictions == 0 ? static_cast<uint8_t>(SceneryElement::Wave2) : static_cast<uint8_t>(SceneryElement::Wave1)), 
+              (sceneryRestrictions == 0 ? NUMBER_OF_ELEMENTS : NUMBER_OF_COMMON_ELEMENTS));
             break;
 
           default:
-            element = random(0, (FREQ_OF_COMMON_ELEMENTS * NUMBER_OF_COMMON_ELEMENTS) + 1);
+//            element = random(0, (FREQ_OF_COMMON_ELEMENTS * NUMBER_OF_COMMON_ELEMENTS));
+            element = random(0, NUMBER_OF_COMMON_ELEMENTS);
             break;
 
         }
 
-        switch (element / NUMBER_OF_COMMON_ELEMENTS) {
+        // switch (element / NUMBER_OF_COMMON_ELEMENTS) {
 
-          case 0 ... (FREQ_OF_COMMON_ELEMENTS - 1):
-            element = element % NUMBER_OF_COMMON_ELEMENTS;
-            break;
+        //   case 0 ... (FREQ_OF_COMMON_ELEMENTS - 1):
+        //     element = element % NUMBER_OF_COMMON_ELEMENTS;
+        //     break;
 
-          default:
-            element = static_cast<uint8_t>(SceneryElement::Island1) + (element % NUMBER_OF_COMMON_ELEMENTS);
-            break;
+        //   default:
+        //     element = static_cast<uint8_t>(SceneryElement::Island1) + (element % NUMBER_OF_COMMON_ELEMENTS);
+        //     break;
 
-        }
+        // }
 
         switch (static_cast<SceneryElement>(element)) {
 
@@ -322,8 +328,8 @@ void renderScenery(const uint8_t frame) {
             sceneryItems[x].element = static_cast<SceneryElement>(element);
             sceneryItems[x].y = random((upperSceneryPosition.enabled ? upperSceneryPosition.y + 24 : -6), (lowerSceneryPosition.enabled ? lowerSceneryPosition.y - 38 : HEIGHT - 16));
 
-            if (!upperSceneryPosition.enabled)  { launchScenery(random(200, 250), -4, 0, &upperSceneryPosition); }
-            if (!lowerSceneryPosition.enabled)  { launchScenery(random(200, 250), 53, 57, &lowerSceneryPosition); }
+            if (!upperSceneryPosition.enabled)  { launchScenery(random(200, 250), 0, &upperSceneryPosition); }
+            if (!lowerSceneryPosition.enabled)  { launchScenery(random(200, 250), 53, &lowerSceneryPosition); }
 
             break;
 
@@ -343,7 +349,7 @@ void renderScenery(const uint8_t frame) {
       }
     }
     else {
-      if (random(0, 40) == 0) { launchScenery(162, -4, 0, &upperSceneryPosition); }
+      if (random(0, 40) == 0) { launchScenery(162, 0, &upperSceneryPosition); }
     }
 
     if (lowerSceneryPosition.enabled) {
@@ -353,18 +359,18 @@ void renderScenery(const uint8_t frame) {
       }
     }
     else {
-      if (random(0, 40) == 0) { launchScenery(162, 53, 57, &lowerSceneryPosition); }
+      if (random(0, 40) == 0) { launchScenery(162, 53, &lowerSceneryPosition); }
     }
 
   }
 
 }
 
-void launchScenery(int16_t xOffset, int8_t lowerY, int8_t upperY, SceneryGround *sceneryItem) {
+void launchScenery(int16_t xOffset, uint8_t yPos, SceneryGround *sceneryItem) {
 
       sceneryItem->enabled = true;
       sceneryItem->x = xOffset;
-      sceneryItem->y = random(lowerY, upperY);
+      sceneryItem->y = yPos;
       sceneryItem->image = random(0, 2);
 
 }
