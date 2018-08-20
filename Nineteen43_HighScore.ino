@@ -93,7 +93,7 @@ void renderHighScore(HighScore &highScore) {
       uint8_t justPressed = arduboy.justPressedButtons();
       uint8_t charIndex = highScore.getCharIndex();
 
-      if (justPressed & LEFT_BUTTON        { highScore.incChar(charIndex); }
+      if (justPressed & LEFT_BUTTON)       { highScore.incChar(charIndex); }
       if (justPressed & RIGHT_BUTTON)      { highScore.decChar(charIndex); }
       if (justPressed & UP_BUTTON)         { highScore.decCharIndex(); } 
       if (justPressed & DOWN_BUTTON)       { highScore.incCharIndex(); } 
@@ -117,7 +117,7 @@ void renderHighScore(HighScore &highScore) {
 
     // Clear scores ..
 
-    if ((pressed & UP_BUTTON) && (pressed & )DOWN_BUTTON)) {
+    if ((pressed & UP_BUTTON) && (pressed & DOWN_BUTTON)) {
 
       clearScores++;
 
@@ -155,7 +155,7 @@ void renderHighScore(HighScore &highScore) {
     }
 
     {
-      uint8_t justPressed = ardubpy.justPressedButtons();
+      uint8_t justPressed = arduboy.justPressedButtons();
 
       if ((justPressed & A_BUTTON) || (justPressed & B_BUTTON)) { 
         #ifdef USE_LEDS             
