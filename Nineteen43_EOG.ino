@@ -9,8 +9,8 @@ void endOfSequence_Render(bool endOfLevel) {
 
   if (gameState == GameState::End_Of_Mission) {
 
-    SpritesB::drawOverwrite(117, 0, mission_successful_1, 0);
-    SpritesB::drawOverwrite(106, 0, mission_successful_2, 0);
+    SpritesB::drawOverwrite(114, 0, mission_successful_1, 0);
+    SpritesB::drawOverwrite(101, 0, mission_successful_2, 0);
 
   }
   else {
