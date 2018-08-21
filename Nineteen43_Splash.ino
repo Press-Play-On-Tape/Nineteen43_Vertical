@@ -37,24 +37,27 @@ void credits_loop() {
 
     while (!(arduboy.nextFrame())) {}
 
-    SpritesB::drawOverwrite(116, 12, credits_img, 0);
-    arduboy.drawVerticalDottedLine(0, HEIGHT, 110, 2);
+    SpritesB::drawOverwrite(113, 6, credits_01, 0);
+    SpritesB::drawOverwrite(104, 4, credits_02, 0);
+    arduboy.drawVerticalDottedLine(0, HEIGHT, 97, 2);
     arduboy.drawVerticalDottedLine(0, HEIGHT, 127, 2);
 
-    arduboy.fillRect(110, i - 18, 127, 200, BLACK);
-    SpritesB::drawOverwrite(104, i - 18, zero_S, 0);
-    SpritesB::drawOverwrite(113, i, zero_S, 0);
+    arduboy.fillRect(97, i - 18, 127, 200, BLACK);
+    SpritesB::drawOverwrite(97, i - 18, zero_S, 0);
+    SpritesB::drawOverwrite(111, i, zero_S, 0);
   
     arduboy.display();
     gameState = GameState::Game_Init;
 
   }  
 
-  SpritesB::drawOverwrite(75, 2, filmote, 0);
-  SpritesB::drawOverwrite(57, 2, pharap, 0);
-  SpritesB::drawOverwrite(41, 0, vampirics, 0);
-  SpritesB::drawOverwrite(0, 3, aButton, 0);
-  SpritesB::drawOverwrite(3, 12, aButton_continue, 0);
+  SpritesB::drawOverwrite(70, 9, filmote_01, 0);
+  SpritesB::drawOverwrite(70, 26, filmote_02, 0);
+  SpritesB::drawOverwrite(52, 9, pharap_01, 0);
+  SpritesB::drawOverwrite(53, 26, pharap_02, 0);
+  SpritesB::drawOverwrite(36, 8, vampirics_01, 0);
+  SpritesB::drawOverwrite(37, 26, vampirics_02, 0);
+  SpritesB::drawOverwrite(0, 15, splash_press_a, 0);
   
   arduboy.display(true);
 

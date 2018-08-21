@@ -15,7 +15,8 @@ void renderHighScore(HighScore &highScore) {
 
 
   arduboy.drawVerticalDottedLine(0, HEIGHT, 127, 2);
-  SpritesB::drawOverwrite(99, 0, flying_aces, 0);
+  SpritesB::drawOverwrite(111, 0, flying_aces_01, 0);
+  SpritesB::drawOverwrite(99, 0, flying_aces_02, 0);
   arduboy.drawVerticalDottedLine(0, HEIGHT, 93, 2);
 
   
@@ -111,8 +112,7 @@ void renderHighScore(HighScore &highScore) {
   else {
 
     uint8_t pressed = arduboy.pressedButtons();
-    SpritesB::drawOverwrite(2, 3, aButton, 0);
-    SpritesB::drawOverwrite(5, 12, aButton_continue, 0);
+    SpritesB::drawOverwrite(0, 15, splash_press_a, 0);
 
 
     // Clear scores ..
