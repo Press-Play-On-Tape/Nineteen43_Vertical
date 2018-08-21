@@ -54,8 +54,7 @@ void Bullet::setEnabled(const bool value) {
 
 void Bullet::move() {
   
-  const int8_t xOffset[] = { 0, 1, 1, 1, 0, -1, -1, -1 };
-  const int8_t yOffset[] = { -1, -1, 0, 1, 1, 1, 0, -1 };
+  // FIX 20180821
   // switch (getDirection()) {
   
   //   case Direction::North:
@@ -97,11 +96,14 @@ void Bullet::move() {
   //   default: break;
       
   // }
-  _x = _x + xOffset[(uint8_t)getDirection()];
-  _y = _y + yOffset[(uint8_t)getDirection()];
+  uint8_t direction = static_cast<uint8_t>(getDirection());
+  _x = _x + static_cast<int8_t>(pgm_read_byte(&movement_x_offset[direction]));
+  _y = _y + static_cast<int8_t>(pgm_read_byte(&movement_y_offset[direction]));
 
-  if (_x > WIDTH - SCOREBOARD_OUTER_RECT_WIDTH) setEnabled(false);    
-  if (_y > HEIGHT) setEnabled(false);
-  
+  // FIX 20180821
+  // if (_x > WIDTH - SCOREBOARD_OUTER_RECT_WIDTH) setEnabled(false);    
+  // if (_y > HEIGHT) setEnabled(false);
+  if (_x > WIDTH - SCOREBOARD_OUTER_RECT_WIDTH || _y > HEIGHT) setEnabled(false);
+
 }
 

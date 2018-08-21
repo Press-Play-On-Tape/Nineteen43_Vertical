@@ -50,6 +50,10 @@
 //#define DEBUG
 
 
+// FIX 20180821
+const int8_t PROGMEM movement_x_offset[] = { 0, 1, 1, 1, 0, -1, -1, -1 };
+const int8_t PROGMEM movement_y_offset[] = { -1, -1, 0, 1, 1, 1, 0, -1 };
+
 // Game States ..
 
 enum class GameState : uint8_t {

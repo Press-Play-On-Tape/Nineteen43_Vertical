@@ -118,6 +118,8 @@ bool Player::getPowerUp() {
   return (_powerUp != 0);
 
 }
+// FIX 20180821
+const int8_t PROGMEM roll_x_offset[] = { 0, 7, 14, 7, 0, -1, -2, -1 };
 
 void Player::renderImage(uint8_t frame) {
 
@@ -128,42 +130,44 @@ void Player::renderImage(uint8_t frame) {
 
     if (_fuel > 0 && _health >= -5) {
 
-      auto roll = _rollState / ROLL_DELAY;
-      auto rollX = x;
+      uint8_t roll = _rollState / ROLL_DELAY;
+      // FIX 20180821
+      // auto rollX = x;
+      int8_t rollX = x + static_cast<int8_t>(pgm_read_byte(&roll_x_offset[roll])); 
 
-      switch (roll) {
+      // switch (roll) {
  
-        case 0:
-          break;
+      //   case 0:
+      //     break;
 
-        case 1:
-          rollX += 7;
-          break;
+      //   case 1:
+      //     rollX += 7;
+      //     break;
 
-        case 2:
-          rollX += 14;
-          break;
+      //   case 2:
+      //     rollX += 14;
+      //     break;
 
-        case 3:
-          rollX += 7;
-          break;
+      //   case 3:
+      //     rollX += 7;
+      //     break;
 
-        case 4:
-          break;
+      //   case 4:
+      //     break;
 
-        case 5:
-          rollX -= 1;
-          break;
+      //   case 5:
+      //     rollX -= 1;
+      //     break;
 
-        case 6:
-          rollX -= 2;
-          break;
+      //   case 6:
+      //     rollX -= 2;
+      //     break;
 
-        case 7:
-          rollX -= 1;
-          break;
+      //   case 7:
+      //     rollX -= 1;
+      //     break;
 
-      }
+      // }
 
       if (roll > 0 && roll < 8) {
         ++_rollState;
