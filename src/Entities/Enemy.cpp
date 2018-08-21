@@ -197,71 +197,47 @@ void Enemy::renderImage() {
     
       uint16_t bitmap = 0;
       uint16_t mask = 0;
-      // const uint8_t *bitmap = nullptr;
-      // const uint8_t *mask = nullptr;
       
       switch (healthInt) {
   
         case -1 ... 0:
-          // SpritesB::drawExternalMask(x, y, pgm_read_word_near(&_bitmaps[IMAGES_EXPLOSION_OFFSET + static_cast<uint8_t>(absHealthInt)]), pgm_read_word_near(&_bitmaps[IMAGES_EXPLOSION_MASK_OFFSET + static_cast<uint8_t>(absHealthInt)]), 0, 0);
           bitmap = pgm_read_word_near(&_bitmaps[IMAGES_EXPLOSION_OFFSET + static_cast<uint8_t>(absHealthInt)]);
           mask = pgm_read_word_near(&_bitmaps[IMAGES_EXPLOSION_MASK_OFFSET + static_cast<uint8_t>(absHealthInt)]);
-          // bitmap = static_cast<uint8_t *>(&_bitmaps[IMAGES_EXPLOSION_OFFSET + static_cast<uint8_t>(absHealthInt)]);
-          // mask = static_cast<uint8_t *>(&_bitmaps[IMAGES_EXPLOSION_MASK_OFFSET + static_cast<uint8_t>(absHealthInt)]);
           break;
           
         case -3 ... -2:
-          // SpritesB::drawExternalMask(x, y, pgm_read_word_near(&_bitmaps[IMAGES_EXPLOSION_OFFSET + static_cast<uint8_t>(absHealthInt)]), pgm_read_word_near(&_bitmaps[IMAGES_EXPLOSION_MASK_OFFSET + static_cast<uint8_t>(absHealthInt)]), 0, 0);
           bitmap = pgm_read_word_near(&_bitmaps[IMAGES_EXPLOSION_OFFSET + static_cast<uint8_t>(absHealthInt)]);
           mask = pgm_read_word_near(&_bitmaps[IMAGES_EXPLOSION_MASK_OFFSET + static_cast<uint8_t>(absHealthInt)]);
-          // bitmap = static_cast<uint8_t *>(&_bitmaps[IMAGES_EXPLOSION_OFFSET + static_cast<uint8_t>(absHealthInt)]);
-          // mask = static_cast<uint8_t *>(&_bitmaps[IMAGES_EXPLOSION_MASK_OFFSET + static_cast<uint8_t>(absHealthInt)]);
           break;
 
         case -4:
-          // SpritesB::drawExternalMask(x, y, pgm_read_word_near(&_bitmaps[IMAGES_EXPLOSION_OFFSET + 3]), pgm_read_word_near(&_bitmaps[IMAGES_EXPLOSION_MASK_OFFSET + 3]), 0, 0);
           bitmap = pgm_read_word_near(&_bitmaps[IMAGES_EXPLOSION_OFFSET + 3]);
           mask = pgm_read_word_near(&_bitmaps[IMAGES_EXPLOSION_MASK_OFFSET + 3]);
-          // bitmap = static_cast<uint8_t *>(&_bitmaps[IMAGES_EXPLOSION_OFFSET + 3]);
-          // mask = static_cast<uint8_t *>(&_bitmaps[IMAGES_EXPLOSION_MASK_OFFSET + 3]);
           _enabled = false;
           break;
         
       }
 
       if (bitmap != 0) {
-      // if (bitmap != nullptr) {
        SpritesB::drawExternalMask(x, y, (uint8_t *)bitmap, (uint8_t *)mask, 0, 0);
-        // SpritesB::drawExternalMask(x, y, pgm_read_word_near(bitmap), pgm_read_word_near(mask), 0, 0);
       }
       
 	  }
 	
     if (_explosionImage > 0) {
 
-      // uint16_t bitmap = 0;
-      // uint16_t mask = 0;
-	
       switch (_explosionImage.getInteger()) {
 	
         case 1:
         case 3:
           SpritesB::drawExternalMask(x, y, pgm_read_word_near(&_bitmaps[IMAGES_EXPLOSION_OFFSET]), pgm_read_word_near(&_bitmaps[IMAGES_EXPLOSION_MASK_OFFSET]), 0, 0);
-          // bitmap = pgm_read_word_near(&_bitmaps[IMAGES_EXPLOSION_OFFSET]);
-          // mask = pgm_read_word_near(&_bitmaps[IMAGES_EXPLOSION_MASK_OFFSET]);
           break;
 
         case 2:
           SpritesB::drawExternalMask(x, y, pgm_read_word_near(&_bitmaps[IMAGES_EXPLOSION_OFFSET + 1]), pgm_read_word_near(&_bitmaps[IMAGES_EXPLOSION_MASK_OFFSET + 1]), 0, 0);
-          // bitmap = pgm_read_word_near(&_bitmaps[IMAGES_EXPLOSION_OFFSET + 1]);
-          // mask = pgm_read_word_near(&_bitmaps[IMAGES_EXPLOSION_MASK_OFFSET + 1]);
           break;
 
       }
-
-      // if (bitmap != 0) {
-      //   SpritesB::drawExternalMask(x, y, (uint8_t *)bitmap, (uint8_t *)mask, 0, 0);
-      // }
           
       --_explosionImage = _explosionImage - 0.25;
       

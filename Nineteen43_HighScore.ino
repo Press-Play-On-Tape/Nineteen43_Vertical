@@ -15,9 +15,9 @@ void renderHighScore(HighScore &highScore) {
 
 
   arduboy.drawVerticalDottedLine(0, HEIGHT, 127, 2);
-  SpritesB::drawOverwrite(111, 0, flying_aces_01, 0);
-  SpritesB::drawOverwrite(99, 0, flying_aces_02, 0);
-  arduboy.drawVerticalDottedLine(0, HEIGHT, 93, 2);
+  SpritesB::drawOverwrite(114, 0, flying_aces_01, 0);
+  SpritesB::drawOverwrite(101, 0, flying_aces_02, 0);
+  arduboy.drawVerticalDottedLine(0, HEIGHT, 97, 2);
 
   
   for (uint8_t x =0; x < MAX_NUMBER_OF_SCORES; x++) {

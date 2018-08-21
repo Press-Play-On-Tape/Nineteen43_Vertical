@@ -10,16 +10,12 @@
 // 
 //  To use the original graphics:
 //    SAVE_MEMORY 
-//    SHOW_CREDITS
 //    OLD_OBSTACLES
-//    _DASH
 //    _USE_LEDS
 //
 //  To use new obstacle graphics and dashboard:
 //    SAVE_MEMORY 
-//    SHOW_CREDITS
 //    _OLD_OBSTACLES
-//    DASH
 //    USE_LEDS
 //
 // ---------------------------------------
@@ -28,29 +24,22 @@
 // 
 //  To use the original graphics:
 //    _SAVE_MEMORY 
-//    SHOW_CREDITS
 //    OLD_OBSTACLES
-//    _DASH
 //    _USE_LEDS
 //
 //  To use new obstacle graphics and dashboard:
 //    _SAVE_MEMORY 
-//    SHOW_CREDITS
 //    _OLD_OBSTACLES
-//    DASH
 //    USE_LEDS
 //
 #define SAVE_MEMORY
-#define SHOW_CREDITS
 #define _OLD_OBSTACLES
-#define _DASH
 #define USE_LEDS
 
 // Remove comment // to free up some PROGMEM for DUEB
 //#define DEBUG
 
 
-// FIX 20180821
 const int8_t PROGMEM movement_x_offset[] = { 0, 1, 1, 1, 0, -1, -1, -1 };
 const int8_t PROGMEM movement_y_offset[] = { -1, -1, 0, 1, 1, 1, 0, -1 };
 
@@ -63,9 +52,7 @@ enum class GameState : uint8_t {
   Game_Loop,
   End_Of_Mission,
   End_Of_Game,
-  #ifdef SHOW_CREDITS
   Credits_Loop,
-  #endif
   #ifndef SAVE_MEMORY
   Save_Score,
   High_Score,
@@ -146,13 +133,8 @@ enum class GameState : uint8_t {
 #define ENEMY_BOAT_TURRENT_CENTER_X     ENEMY_BOAT_TURRENT_X + 5
 #define ENEMY_BOAT_TURRENT_CENTER_Y     ENEMY_BOAT_TURRENT_Y + 5
 
-#ifdef DASH
-#define SCOREBOARD_OUTER_RECT_X         119
-#define SCOREBOARD_OUTER_RECT_WIDTH     9
-#else
 #define SCOREBOARD_OUTER_RECT_X         120
 #define SCOREBOARD_OUTER_RECT_WIDTH     8
-#endif
 #define SCOREBOARD_OUTER_RECT_Y         0
 #define SCOREBOARD_OUTER_RECT_HEIGHT    HEIGHT
 #define SCOREBOARD_FRAME_COUNT_MAX      200
@@ -163,22 +145,14 @@ enum class GameState : uint8_t {
 
 #define SCOREBOARD_FLASH_MAX            30
 
-#ifdef DASH
-#define SCOREBOARD_KILLS_X              122 
-#else
 #define SCOREBOARD_KILLS_X              123
-#endif
 #define SCOREBOARD_KILLS_ICON_Y         0 
 #define SCOREBOARD_KILLS_DIGIT_0_Y      6 
 #define SCOREBOARD_KILLS_DIGIT_1_Y      11 
 #define SCOREBOARD_KILLS_DIGIT_2_Y      16
 
 #define SCOREBOARD_HEALTH_BAR_X         SCOREBOARD_KILLS_X
-#ifdef DASH
-#define SCOREBOARD_HEALTH_BAR_Y         22 
-#else
 #define SCOREBOARD_HEALTH_BAR_Y         23
-#endif
 #define SCOREBOARD_HEALTH_BAR_TOP       30
 
 #define SCOREBOARD_FUEL_BAR_X           SCOREBOARD_KILLS_X

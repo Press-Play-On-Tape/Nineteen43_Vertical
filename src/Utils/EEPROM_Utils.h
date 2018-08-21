@@ -57,18 +57,9 @@ void EEPROM_Utils::initEEPROM(bool forceClear) {
       uint16_t score = 0;
       uint8_t level = 0;
 
-      // eeprom_update_byte((uint8_t *)EEPROM_SCORE, level);
-      // eeprom_update_byte((uint8_t *)(EEPROM_SCORE + 1), level);
-      // eeprom_update_byte((uint8_t *)(EEPROM_SCORE + 2), level);
-      // eeprom_update_byte((uint8_t *)(EEPROM_SCORE + 3), level);
-      // eeprom_update_byte((uint8_t *)(EEPROM_SCORE + 4), level);
-      // eeprom_update_byte((uint8_t *)(EEPROM_SCORE + 5), level);
       eeprom_update_word(EEPROM_SCORE_1, score);
       eeprom_update_word(EEPROM_SCORE_2, score);
       eeprom_update_word(EEPROM_SCORE_3, score);
-      // EEPROM.put(EEPROM_SCORE, score);
-      // EEPROM.put(EEPROM_SCORE + 2, score);
-      // EEPROM.put(EEPROM_SCORE + 4, score);
 
     #else
 

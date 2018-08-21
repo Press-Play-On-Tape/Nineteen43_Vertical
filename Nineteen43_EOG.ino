@@ -23,7 +23,6 @@ void endOfSequence_Render(bool endOfLevel) {
     }
   }
 
-//  arduboy.drawVerticalDottedLine(0, HEIGHT, (gameState == GameState::End_Of_Mission || endOfLevel ? 102 : 97), 2);
   arduboy.drawVerticalDottedLine(0, HEIGHT, 97, 2);
   arduboy.drawVerticalDottedLine(0, HEIGHT, 127, 2);
 
@@ -57,7 +56,6 @@ void endOfSequence(const uint8_t level) {
     if (i < 100) {
 
       arduboy.fillRect(97, i - 18, 127, 200, BLACK);
-      // SpritesB::drawOverwrite((gameState == GameState::End_Of_Mission || endOfLevel ? 102 : 97), i - 18, zero_S, 0);
       SpritesB::drawOverwrite(97, i - 18, zero_S, 0);
       SpritesB::drawOverwrite(111, i, zero_S, 0);
       i++;

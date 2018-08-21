@@ -173,11 +173,9 @@ void loop() {
       endOfSequence(level);
       break;
     
-    #ifdef SHOW_CREDITS
     case GameState::Credits_Loop:
       credits_loop();
       break;
-    #endif
 
     #ifndef SAVE_MEMORY
     case GameState::Save_Score:
@@ -574,7 +572,6 @@ void launchFormation(const int8_t *formation) {
 
       case EnemyType::Boat:
         enemies[i] = { EnemyType::Boat, enemy_boat };
-        // enemies[i].setTurretDirection(Direction::SouthWest);
         break;
 
       case EnemyType::Count:

@@ -30,7 +30,6 @@ void introInit() {
  *  Credits loop ..
  * -----------------------------------------------------------------------------------------------------------------------------
  */
-#ifdef SHOW_CREDITS
 void credits_loop() {
 
   for (int16_t i = -20; i < 100; i++) {
@@ -74,7 +73,6 @@ void credits_loop() {
   #endif
 
 }
-#endif
 
 
 /* -----------------------------------------------------------------------------------------------------------------------------
@@ -157,7 +155,6 @@ void introLoop() {
           arrowDelay--;
           introState = (introState & 0b11111000) | arrowDelay;
           if (arrowDelay == 0) {
-//            introState = static_cast<uint8_t>(state);//introState & 0b11100000;
             introState = introState & 0b11100000;
           }
         }
@@ -231,11 +228,9 @@ void introLoop() {
       if (state != IntroState::PressA) {
         introState = 0;
       }
-    #ifdef SHOW_CREDITS
       else {
         gameState = GameState::Credits_Loop;   
       }
-    #endif
     }
 
     if (justPressed & A_BUTTON) { 

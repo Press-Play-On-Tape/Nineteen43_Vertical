@@ -119,18 +119,10 @@ uint16_t scoreFlash;
 
 void renderScoreboadGauge(const uint8_t imageX, const uint8_t imageY, const uint8_t *image, const uint8_t scoreboardY, const uint8_t value) {
 
-  #ifdef DASH
-  SpritesB::drawSelfMasked(imageX, imageY + 1, image, 0);
-  #else
   SpritesB::drawOverwrite(imageX, imageY, image, 0);
-  #endif 
   if ((value <= 4 && scoreFlash >= (SCOREBOARD_FLASH_MAX / 2)) || value > 4) {
     for (uint8_t i = 0; i < (value); i += 2) {
-      #ifdef DASH
-      arduboy.drawLine(imageX + 1, scoreboardY + i, WIDTH - 3, scoreboardY + i);
-      #else
       arduboy.drawLine(imageX, scoreboardY + i, WIDTH, scoreboardY + i);
-      #endif
     }
   }
 
@@ -146,7 +138,6 @@ void renderScoreboard() {
   // Increment the frame count
 
   ++scoreFlash;        if (scoreFlash > SCOREBOARD_FLASH_MAX) { scoreFlash = 0; }
-//  ++scoreFrameCnt;     if (scoreFrameCnt > (SCOREBOARD_FRAME_COUNT_MAX * SCOREBOARD_NUMBER_OF_FRAMES)) { scoreFrameCnt = 0; }
   if (bulletCountdown > 0) bulletCountdown--;
 
   uint16_t player_score = player.getScore();
@@ -156,10 +147,6 @@ void renderScoreboard() {
 
   arduboy.fillRect(SCOREBOARD_OUTER_RECT_X, SCOREBOARD_OUTER_RECT_Y, SCOREBOARD_OUTER_RECT_WIDTH, SCOREBOARD_OUTER_RECT_HEIGHT, BLACK);
   arduboy.drawLine(SCOREBOARD_INNER_RECT_X, SCOREBOARD_INNER_RECT_Y, SCOREBOARD_INNER_RECT_X, HEIGHT, WHITE);
-  #ifdef DASH
-  SpritesB::drawOverwrite(SCOREBOARD_INNER_RECT_X + 1, 20, I, 0);
-  SpritesB::drawOverwrite(SCOREBOARD_INNER_RECT_X + 1, 43, I, 0);
-  #endif
     
 
   // Score ..
@@ -173,11 +160,7 @@ void renderScoreboard() {
     
   }
 
-  #ifdef DASH
-  renderScoreboadGauge(SCOREBOARD_HEALTH_BAR_X, SCOREBOARD_HEALTH_BAR_Y + 1, health_gauge, SCOREBOARD_HEALTH_BAR_TOP, (player.getHealth() < 0 ? 0 : player.getHealth().getInteger()));
-  #else      
   renderScoreboadGauge(SCOREBOARD_HEALTH_BAR_X, SCOREBOARD_HEALTH_BAR_Y, health_gauge, SCOREBOARD_HEALTH_BAR_TOP, (player.getHealth() < 0 ? 0 : player.getHealth().getInteger()));
-  #endif
   renderScoreboadGauge(SCOREBOARD_FUEL_BAR_X, SCOREBOARD_FUEL_BAR_Y, fuel_gauge, SCOREBOARD_FUEL_BAR_TOP, (player.getFuel() < 0 ? 0 : player.getFuel().getInteger()));
 
 
@@ -272,11 +255,10 @@ void renderScenery(const uint8_t frame) {
 
       sceneryItems[x].x--;
 
-      // #define FREQ_OF_COMMON_ELEMENTS 2
       #define NUMBER_OF_ELEMENTS 9
       #define NUMBER_OF_COMMON_ELEMENTS (static_cast<uint8_t>(SceneryElement::Cloud_BelowPlanes) + 1)
 
-      if (sceneryItems[x].x < -90) {//} && gameState != GameState::End_Of_Mission) {
+      if (sceneryItems[x].x < -90) {
 
         sceneryItems[x].x = 162;
         SceneryElement previousElement = (x > 0 ? sceneryItems[x - 1].element : sceneryItems[NUMBER_OF_SCENERY_ITEMS - 1].element);
@@ -284,33 +266,17 @@ void renderScenery(const uint8_t frame) {
 
         switch (previousElement) {
 
-          //case SceneryElement::Boat ... SceneryElement::Cloud_BelowPlanes:
-            // element = random(0, (FREQ_OF_COMMON_ELEMENTS * NUMBER_OF_COMMON_ELEMENTS) + (sceneryRestrictions == 0 ? 5 : 0));
           case SceneryElement::Wave1 ... SceneryElement::Boat2:
-            // element = random((sceneryRestrictions == 0 ? static_cast<uint8_t>(SceneryElement::Wave2) : static_cast<uint8_t>(SceneryElement::Wave1)), NUMBER_OF_ELEMENTS);
             element = random(
               (sceneryRestrictions == 0 ? static_cast<uint8_t>(SceneryElement::Wave2) : static_cast<uint8_t>(SceneryElement::Wave1)), 
               (sceneryRestrictions == 0 ? NUMBER_OF_ELEMENTS : NUMBER_OF_COMMON_ELEMENTS));
             break;
 
           default:
-//            element = random(0, (FREQ_OF_COMMON_ELEMENTS * NUMBER_OF_COMMON_ELEMENTS));
             element = random(0, NUMBER_OF_COMMON_ELEMENTS);
             break;
 
         }
-
-        // switch (element / NUMBER_OF_COMMON_ELEMENTS) {
-
-        //   case 0 ... (FREQ_OF_COMMON_ELEMENTS - 1):
-        //     element = element % NUMBER_OF_COMMON_ELEMENTS;
-        //     break;
-
-        //   default:
-        //     element = static_cast<uint8_t>(SceneryElement::Island1) + (element % NUMBER_OF_COMMON_ELEMENTS);
-        //     break;
-
-        // }
 
         switch (static_cast<SceneryElement>(element)) {
 
