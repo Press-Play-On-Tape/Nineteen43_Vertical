@@ -36,6 +36,9 @@
         "map": "cpp",
         "set": "cpp",
         "unordered_map": "cpp",
-        "cstddef": "cpp"
+        "cstddef": "cpp",
+        "__locale": "cpp",
+        "__config": "cpp",
+        "__nullptr": "cpp"
     }
 }

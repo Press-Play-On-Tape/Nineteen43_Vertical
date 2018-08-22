@@ -35,8 +35,6 @@
 #define SAVE_MEMORY
 #define _OLD_OBSTACLES
 #define USE_LEDS
-#define USE_GROUND_2
-#define _USE_ISLAND_3
 #define USE_ROLL_MOVEMENT
 
 // Remove comment // to free up some PROGMEM for DEBUG

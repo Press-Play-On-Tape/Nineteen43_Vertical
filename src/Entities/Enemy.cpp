@@ -195,31 +195,26 @@ void Enemy::renderImage() {
       const auto healthInt = _health.getInteger();
       const auto absHealthInt = abs(healthInt);
     
-      uint16_t bitmap = 0;
-      uint16_t mask = 0;
+      uint8_t bitmap = 0;
+      uint8_t mask = 0;
       
       switch (healthInt) {
   
-        case -1 ... 0:
-          bitmap = pgm_read_word_near(&_bitmaps[IMAGES_EXPLOSION_OFFSET + static_cast<uint8_t>(absHealthInt)]);
-          mask = pgm_read_word_near(&_bitmaps[IMAGES_EXPLOSION_MASK_OFFSET + static_cast<uint8_t>(absHealthInt)]);
-          break;
-          
-        case -3 ... -2:
-          bitmap = pgm_read_word_near(&_bitmaps[IMAGES_EXPLOSION_OFFSET + static_cast<uint8_t>(absHealthInt)]);
-          mask = pgm_read_word_near(&_bitmaps[IMAGES_EXPLOSION_MASK_OFFSET + static_cast<uint8_t>(absHealthInt)]);
+        case -3 ... 0:
+          bitmap = IMAGES_EXPLOSION_OFFSET + static_cast<uint8_t>(absHealthInt);
+          mask = IMAGES_EXPLOSION_MASK_OFFSET + static_cast<uint8_t>(absHealthInt);
           break;
 
         case -4:
-          bitmap = pgm_read_word_near(&_bitmaps[IMAGES_EXPLOSION_OFFSET + 3]);
-          mask = pgm_read_word_near(&_bitmaps[IMAGES_EXPLOSION_MASK_OFFSET + 3]);
+          bitmap = IMAGES_EXPLOSION_OFFSET + 3;
+          mask = IMAGES_EXPLOSION_MASK_OFFSET + 3;
           _enabled = false;
           break;
         
       }
 
       if (bitmap != 0) {
-       SpritesB::drawExternalMask(x, y, (uint8_t *)bitmap, (uint8_t *)mask, 0, 0);
+        SpritesB::drawExternalMask(x, y, (uint8_t *)pgm_read_word_near(&_bitmaps[bitmap]), (uint8_t *)pgm_read_word_near(&_bitmaps[mask]), 0, 0);
       }
       
 	  }
@@ -230,7 +225,7 @@ void Enemy::renderImage() {
 	
         case 1:
         case 3:
-          SpritesB::drawExternalMask(x, y, pgm_read_word_near(&_bitmaps[IMAGES_EXPLOSION_OFFSET]), pgm_read_word_near(&_bitmaps[IMAGES_EXPLOSION_MASK_OFFSET]), 0, 0);
+         SpritesB::drawExternalMask(x, y, pgm_read_word_near(&_bitmaps[IMAGES_EXPLOSION_OFFSET]), pgm_read_word_near(&_bitmaps[IMAGES_EXPLOSION_MASK_OFFSET]), 0, 0);
           break;
 
         case 2:
@@ -238,7 +233,7 @@ void Enemy::renderImage() {
           break;
 
       }
-          
+        
       --_explosionImage = _explosionImage - 0.25;
       
     }

@@ -34,16 +34,12 @@ void credits_loop() {
 
   SpritesB::drawOverwrite(113, 6, credits_01, 0);
   SpritesB::drawOverwrite(104, 4, credits_02, 0);
-  arduboy.drawVerticalDottedLine(0, HEIGHT, 97, 2);
-  arduboy.drawVerticalDottedLine(0, HEIGHT, 127, 2);
+  arduboy.drawVerticalDottedLine(0, HEIGHT, 97);
+  arduboy.drawVerticalDottedLine(0, HEIGHT, 127);
 
   if (intro < 120) {
 
-    arduboy.fillRect(97, intro - 38, 127, 200, BLACK);
-    SpritesB::drawOverwrite(97, intro - 38, zero_S, 0);
-    SpritesB::drawOverwrite(111, intro - 20, zero_S, 0);
-  
-    intro++;
+    drawFlyingPair();
   
   }
   else {  
@@ -57,7 +53,7 @@ void credits_loop() {
     SpritesB::drawOverwrite(0, 15, splash_press_a, 0);
 
   }
-  
+
   if (arduboy.justPressed(A_BUTTON)) {
     #ifdef SAVE_MEMORY
     gameState = GameState::Intro_Init;

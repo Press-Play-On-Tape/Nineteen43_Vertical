@@ -230,11 +230,9 @@ void renderScenery(const uint8_t frame) {
         SpritesB::drawSelfMasked(sceneryItems[x].x, sceneryItems[x].y, island_02, 0);
         break;
 
-      #ifdef USE_ISLAND_3
-        case SceneryElement::Island3:
-          SpritesB::drawSelfMasked(sceneryItems[x].x, sceneryItems[x].y, island_03, 0);
-          break;
-      #endif
+      case SceneryElement::Island3:
+        SpritesB::drawSelfMasked(sceneryItems[x].x, sceneryItems[x].y, island_03, 0);
+        break;
 
       default: break;
 
@@ -257,11 +255,7 @@ void renderScenery(const uint8_t frame) {
 
       sceneryItems[x].x--;
 
-      #ifdef USE_ISLAND_3
-        #define NUMBER_OF_ELEMENTS 9
-      #else
-        #define NUMBER_OF_ELEMENTS 8
-      #endif
+      #define NUMBER_OF_ELEMENTS 9
       #define NUMBER_OF_COMMON_ELEMENTS (static_cast<uint8_t>(SceneryElement::Cloud_BelowPlanes) + 1)
 
       if (sceneryItems[x].x < -90) {
@@ -343,9 +337,7 @@ void launchScenery(int16_t xOffset, uint8_t yPos, SceneryGround *sceneryItem) {
   sceneryItem->enabled = true;
   sceneryItem->x = xOffset;
   sceneryItem->y = yPos;
-  #ifdef USE_GROUND_2
   sceneryItem->image = random(0, 2);
-  #endif
 
 }
 

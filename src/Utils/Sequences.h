@@ -18,21 +18,21 @@
 #define SCENERY_BOAT                0b00010000
 
 const uint8_t PROGMEM mission_00[] = { 
-  1,/*4,*/
+  14,
   SCENERY_NONE | 0, 
-  // SCENERY_NONE | 1, 
-  // SCENERY_NONE | 2, 
-  // SCENERY_NONE | 3, 
-  // SCENERY_BOAT | 4, 
-  // SCENERY_BOAT | 5,    // Boat
-  // SCENERY_NONE | 6, 
-  // SCENERY_NONE | 7, 
-  // SCENERY_NONE | 8, 
-  // SCENERY_BOAT | 9, 
-  // SCENERY_BOAT | 10,   // Boat
-  // SCENERY_NONE | 11, 
-  // SCENERY_NONE | 12, 
-  // SCENERY_NONE | 13 
+  SCENERY_NONE | 1, 
+  SCENERY_NONE | 2, 
+  SCENERY_NONE | 3, 
+  SCENERY_BOAT | 4, 
+  SCENERY_BOAT | 5,    // Boat
+  SCENERY_NONE | 6, 
+  SCENERY_NONE | 7, 
+  SCENERY_NONE | 8, 
+  SCENERY_BOAT | 9, 
+  SCENERY_BOAT | 10,   // Boat
+  SCENERY_NONE | 11, 
+  SCENERY_NONE | 12, 
+  SCENERY_NONE | 13 
   };
 
 const uint8_t PROGMEM mission_01[] = { 

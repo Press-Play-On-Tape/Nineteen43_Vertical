@@ -195,7 +195,7 @@ void loop() {
 
   }
 
-  arduboy.display(true);
+  arduboy.display();
 
 
   // Distinguish any LEDs..
@@ -237,8 +237,8 @@ void gameLoop() {
       SpritesB::drawOverwrite(60, offsetNumber + 12, numbers_vert, (mission + 1) % 10);
 
 
-      arduboy.drawVerticalDottedLine(offsetY, HEIGHT - offsetY, 57, 2);
-      arduboy.drawVerticalDottedLine(offsetY, HEIGHT - offsetY, 69, 2);
+      arduboy.drawVerticalDottedLine(offsetY, HEIGHT - offsetY, 57);
+      arduboy.drawVerticalDottedLine(offsetY, HEIGHT - offsetY, 69);
       intro--;
       break;
 
