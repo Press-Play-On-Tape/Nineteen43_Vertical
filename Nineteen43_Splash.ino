@@ -32,45 +32,40 @@ void introInit() {
  */
 void credits_loop() {
 
-  for (int16_t i = -20; i < 100; i++) {
+  SpritesB::drawOverwrite(113, 6, credits_01, 0);
+  SpritesB::drawOverwrite(104, 4, credits_02, 0);
+  arduboy.drawVerticalDottedLine(0, HEIGHT, 97, 2);
+  arduboy.drawVerticalDottedLine(0, HEIGHT, 127, 2);
 
-    while (!(arduboy.nextFrame())) {}
+  if (intro < 120) {
 
-    SpritesB::drawOverwrite(113, 6, credits_01, 0);
-    SpritesB::drawOverwrite(104, 4, credits_02, 0);
-    arduboy.drawVerticalDottedLine(0, HEIGHT, 97, 2);
-    arduboy.drawVerticalDottedLine(0, HEIGHT, 127, 2);
-
-    arduboy.fillRect(97, i - 18, 127, 200, BLACK);
-    SpritesB::drawOverwrite(97, i - 18, zero_S, 0);
-    SpritesB::drawOverwrite(111, i, zero_S, 0);
+    arduboy.fillRect(97, intro - 38, 127, 200, BLACK);
+    SpritesB::drawOverwrite(97, intro - 38, zero_S, 0);
+    SpritesB::drawOverwrite(111, intro - 20, zero_S, 0);
   
-    arduboy.display();
-    gameState = GameState::Game_Init;
-
-  }  
-
-  SpritesB::drawOverwrite(70, 9, filmote_01, 0);
-  SpritesB::drawOverwrite(70, 26, filmote_02, 0);
-  SpritesB::drawOverwrite(52, 9, pharap_01, 0);
-  SpritesB::drawOverwrite(53, 26, pharap_02, 0);
-  SpritesB::drawOverwrite(36, 8, vampirics_01, 0);
-  SpritesB::drawOverwrite(37, 26, vampirics_02, 0);
-  SpritesB::drawOverwrite(0, 15, splash_press_a, 0);
+    intro++;
   
-  arduboy.display(true);
-
-  while (!arduboy.pressed(A_BUTTON)) {
-    delay(100);
   }
+  else {  
 
-  arduboy.pollButtons();
-  #ifdef SAVE_MEMORY
-  gameState = GameState::Intro_Init;
-  #else
-  arduboy.pollButtons();
-  gameState = GameState::Save_Score;
-  #endif
+    SpritesB::drawOverwrite(70, 9, filmote_01, 0);
+    SpritesB::drawOverwrite(70, 26, filmote_02, 0);
+    SpritesB::drawOverwrite(52, 9, pharap_01, 0);
+    SpritesB::drawOverwrite(53, 26, pharap_02, 0);
+    SpritesB::drawOverwrite(36, 8, vampirics_01, 0);
+    SpritesB::drawOverwrite(37, 26, vampirics_02, 0);
+    SpritesB::drawOverwrite(0, 15, splash_press_a, 0);
+
+  }
+  
+  if (arduboy.justPressed(A_BUTTON)) {
+    #ifdef SAVE_MEMORY
+    gameState = GameState::Intro_Init;
+    #else
+    arduboy.pollButtons();
+    gameState = GameState::Save_Score;
+    #endif
+  }
 
 }
 
@@ -165,7 +160,7 @@ void introLoop() {
 
   }
 
-  arduboy.display(true);
+  //arduboy.display(true);
 
   {
    
@@ -229,7 +224,7 @@ void introLoop() {
         introState = 0;
       }
       else {
-        gameState = GameState::Credits_Loop;   
+        gameState = GameState::Credits_Init;   
       }
     }
 

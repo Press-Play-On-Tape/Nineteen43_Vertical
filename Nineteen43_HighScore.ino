@@ -168,7 +168,7 @@ void renderHighScore(HighScore &highScore) {
     
   }
 
-  arduboy.display(true);
+  //arduboy.display(true);
 
 }
 

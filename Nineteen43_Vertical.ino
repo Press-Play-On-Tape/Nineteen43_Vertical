@@ -173,6 +173,10 @@ void loop() {
       endOfSequence(level);
       break;
     
+    case GameState::Credits_Init:
+      intro = 0;
+      gameState = GameState::Credits_Loop;
+    
     case GameState::Credits_Loop:
       credits_loop();
       break;
@@ -190,6 +194,8 @@ void loop() {
     #endif
 
   }
+
+  arduboy.display(true);
 
 
   // Distinguish any LEDs..
@@ -336,7 +342,7 @@ void gameLoop() {
   renderScenery_AbovePlanes();
 
   renderScoreboard();
-  arduboy.display(true);
+  //arduboy.display(true);
 
 
   // New wave ?

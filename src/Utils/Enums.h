@@ -55,6 +55,7 @@ enum class GameState : uint8_t {
   Game_Loop,
   End_Of_Mission,
   End_Of_Game,
+  Credits_Init,
   Credits_Loop,
   #ifndef SAVE_MEMORY
   Save_Score,

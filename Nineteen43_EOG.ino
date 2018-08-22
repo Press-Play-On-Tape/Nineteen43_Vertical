@@ -45,20 +45,20 @@ void endOfSequence(const uint8_t level) {
     uint16_t high = EEPROM_Utils::getHighScore();
   #endif
   
-  int8_t i = -20;
+  //int8_t i = -20;
 
-  while (true) {
+  // while (true) {
 
-    while (!(arduboy.nextFrame())) {}
-    arduboy.pollButtons();
+  //   while (!(arduboy.nextFrame())) {}
+  //   arduboy.pollButtons();
     endOfSequence_Render(endOfLevel); 
 
-    if (i < 100) {
+    if (intro < 120) {
 
-      arduboy.fillRect(97, i - 18, 127, 200, BLACK);
-      SpritesB::drawOverwrite(97, i - 18, zero_S, 0);
-      SpritesB::drawOverwrite(111, i, zero_S, 0);
-      i++;
+      arduboy.fillRect(97, intro - 38, 127, 200, BLACK);
+      SpritesB::drawOverwrite(97, intro - 38, zero_S, 0);
+      SpritesB::drawOverwrite(111, intro - 20, zero_S, 0);
+      intro++;
 
     }
     else {
@@ -94,27 +94,27 @@ void endOfSequence(const uint8_t level) {
 
     }
 
-    arduboy.display(true);
+    //arduboy.display(true);
 
     {
       uint8_t justPressed = arduboy.justPressedButtons();
       uint8_t pressed = arduboy.pressedButtons();
 
       if (gameState == GameState::End_Of_Mission) {
-        if (justPressed & A_BUTTON) { gameState = GameState::Game_Init; break; }
+        if (justPressed & A_BUTTON) { gameState = GameState::Game_Init; }
       }
       else {
         #ifdef SAVE_MEMORY
         if ((pressed & UP_BUTTON) && (pressed & DOWN_BUTTON)) { EEPROM_Utils::initEEPROM(true); player.setScore(0); high = 0; }
-        if (justPressed & A_BUTTON) { gameState = GameState::Intro_Init; break; }
+        if (justPressed & A_BUTTON) { gameState = GameState::Intro_Init; }
         #else
-        if (justPressed & A_BUTTON) { gameState = GameState::Save_Score; break; }
+        if (justPressed & A_BUTTON) { gameState = GameState::Save_Score; }
         #endif
 
       }
 
     }
 
-  }
+  //}
 
 }
