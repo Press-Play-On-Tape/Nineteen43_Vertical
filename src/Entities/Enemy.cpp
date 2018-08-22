@@ -23,7 +23,7 @@ Enemy::Enemy(const EnemyType type,
 }
 
 const Rect Enemy::getRect() {
-  return { static_cast<int16_t>(_x.getInteger() + 1), static_cast<int16_t>(_y.getInteger() + 1), getWidth() - 2, getHeight() - 2 };
+  return { static_cast<int16_t>(_x.getInteger() + 1), static_cast<int16_t>(_y.getInteger() + 1), static_cast<uint8_t>(getWidth() - 2), static_cast<uint8_t>(getHeight() - 2) };
 }
 
 uint8_t Enemy::getWidth() {

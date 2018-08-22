@@ -230,9 +230,11 @@ void renderScenery(const uint8_t frame) {
         SpritesB::drawSelfMasked(sceneryItems[x].x, sceneryItems[x].y, island_02, 0);
         break;
 
-      case SceneryElement::Island3:
-        SpritesB::drawSelfMasked(sceneryItems[x].x, sceneryItems[x].y, island_03, 0);
-        break;
+      #ifdef USE_LEVEL_3
+        case SceneryElement::Island3:
+          SpritesB::drawSelfMasked(sceneryItems[x].x, sceneryItems[x].y, island_03, 0);
+          break;
+      #endif
 
       default: break;
 
@@ -243,8 +245,8 @@ void renderScenery(const uint8_t frame) {
 
   // Draw ground ..
 
-  if (upperSceneryPosition.enabled) { SpritesB::drawOverwrite(upperSceneryPosition.x, upperSceneryPosition.y, (upperSceneryPosition.image == 0 ? ground_upper_01 : ground_upper_02), 0); }
-  if (lowerSceneryPosition.enabled) { SpritesB::drawOverwrite(lowerSceneryPosition.x, lowerSceneryPosition.y, (lowerSceneryPosition.image == 0 ? ground_lower_01 : ground_lower_02), 0); }
+  if (upperSceneryPosition.enabled) { SpritesB::drawOverwrite(upperSceneryPosition.x, upperSceneryPosition.y, ground_upper, upperSceneryPosition.image); }
+  if (lowerSceneryPosition.enabled) { SpritesB::drawOverwrite(lowerSceneryPosition.x, lowerSceneryPosition.y, ground_lower, lowerSceneryPosition.image); }
 
   if (frame == 0) {
 
@@ -255,7 +257,11 @@ void renderScenery(const uint8_t frame) {
 
       sceneryItems[x].x--;
 
-      #define NUMBER_OF_ELEMENTS 9
+      #ifdef USE_LEVEL_3
+        #define NUMBER_OF_ELEMENTS 9
+      #else
+        #define NUMBER_OF_ELEMENTS 8
+      #endif
       #define NUMBER_OF_COMMON_ELEMENTS (static_cast<uint8_t>(SceneryElement::Cloud_BelowPlanes) + 1)
 
       if (sceneryItems[x].x < -90) {
@@ -334,10 +340,12 @@ void renderScenery(const uint8_t frame) {
 
 void launchScenery(int16_t xOffset, uint8_t yPos, SceneryGround *sceneryItem) {
 
-      sceneryItem->enabled = true;
-      sceneryItem->x = xOffset;
-      sceneryItem->y = yPos;
-      sceneryItem->image = random(0, 2);
+  sceneryItem->enabled = true;
+  sceneryItem->x = xOffset;
+  sceneryItem->y = yPos;
+  #ifdef USE_GROUND_2
+  sceneryItem->image = random(0, 2);
+  #endif
 
 }
 

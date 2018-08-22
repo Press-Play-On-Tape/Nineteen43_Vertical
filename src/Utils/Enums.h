@@ -34,9 +34,11 @@
 //
 #define SAVE_MEMORY
 #define _OLD_OBSTACLES
-#define USE_LEDS
+#define _USE_LEDS
+#define _USE_GROUND_2
+#define _USE_LEVEL_3
 
-// Remove comment // to free up some PROGMEM for DUEB
+// Remove comment // to free up some PROGMEM for DEBUG
 //#define DEBUG
 
 
@@ -75,6 +77,9 @@ enum class GameState : uint8_t {
 #define IMAGES_SHRINK_OFFSET            24
 #define IMAGES_SHRINK_MASK_OFFSET       28
 
+#define PLAYER_MOVE_NONE                0
+#define PLAYER_MOVE_UP                  1
+#define PLAYER_MOVE_DOWN                2
 
 #define NUMBER_OF_ENEMIES               6
 #define NUMBER_OF_MISSIONS              5

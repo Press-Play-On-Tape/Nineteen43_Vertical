@@ -102,7 +102,7 @@ void initSceneryItems() {
   sceneryItems[0] = { 128, 20, SceneryElement::Boat2 };
   sceneryItems[1] = { 182, 25, SceneryElement::Wave1 };
   sceneryItems[2] = { 236, 30, SceneryElement::Wave2 };
-  sceneryItems[3] = { 290, 35, SceneryElement::Wave1 };
+  sceneryItems[3] = { 290, 35, SceneryElement::Boat };
 }
 
 bool renderBulletsAbove = true;
@@ -228,8 +228,9 @@ void gameLoop() {
       SpritesB::drawOverwrite(60, 2 + offsetY, mission_number, 0);
       if (mission >= 99) SpritesB::drawOverwrite(60, offsetNumber, numbers_vert, (mission + 1) / 100);
       if (mission >= 9)  SpritesB::drawOverwrite(60, offsetNumber + 6, numbers_vert, ((mission + 1) / 10) % 10);
-
       SpritesB::drawOverwrite(60, offsetNumber + 12, numbers_vert, (mission + 1) % 10);
+
+
       arduboy.drawVerticalDottedLine(offsetY, HEIGHT - offsetY, 57, 2);
       arduboy.drawVerticalDottedLine(offsetY, HEIGHT - offsetY, 69, 2);
       intro--;
@@ -420,7 +421,9 @@ void launchObstacle() {
   SQ7x8 maxValue = 0;
 
   const uint8_t *bitmap = nullptr;
+  #ifdef OLD_OBSTACLES  
   const uint8_t *mask = nullptr;
+  #endif
 
   if (player.getFuel() <= 4) {
     type = ObstacleType::Fuel;
@@ -437,8 +440,6 @@ void launchObstacle() {
       bitmap = bullets;
       #ifdef OLD_OBSTACLES
       mask = bullets_mask;
-      #else
-      mask = power_up_mask;
       #endif
       break;
 
@@ -448,8 +449,6 @@ void launchObstacle() {
       bitmap = fuel;
       #ifdef OLD_OBSTACLES
       mask = fuel_mask;
-      #else
-      mask = power_up_mask;
       #endif   
       break;
 
@@ -459,8 +458,6 @@ void launchObstacle() {
       bitmap = health;
       #ifdef OLD_OBSTACLES
       mask = health_mask;
-      #else
-      mask = power_up_mask;
       #endif   
       break;
 
@@ -468,7 +465,9 @@ void launchObstacle() {
       minValue = (obstacleBulletsValue / (SQ7x8)2);
       maxValue = obstacleBulletsValue;
       bitmap = power_up;
+      #ifdef OLD_OBSTACLES
       mask = power_up_mask;
+      #endif
       break;
       
     case ObstacleType::Count:
