@@ -230,7 +230,7 @@ void renderScenery(const uint8_t frame) {
         SpritesB::drawSelfMasked(sceneryItems[x].x, sceneryItems[x].y, island_02, 0);
         break;
 
-      #ifdef USE_LEVEL_3
+      #ifdef USE_ISLAND_3
         case SceneryElement::Island3:
           SpritesB::drawSelfMasked(sceneryItems[x].x, sceneryItems[x].y, island_03, 0);
           break;
@@ -257,7 +257,7 @@ void renderScenery(const uint8_t frame) {
 
       sceneryItems[x].x--;
 
-      #ifdef USE_LEVEL_3
+      #ifdef USE_ISLAND_3
         #define NUMBER_OF_ELEMENTS 9
       #else
         #define NUMBER_OF_ELEMENTS 8

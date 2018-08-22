@@ -110,7 +110,7 @@ const uint8_t PROGMEM island_02[] = {
 };
 #endif
 
-#ifdef USE_LEVEL_3
+#ifdef USE_ISLAND_3
 
     #ifndef DEBUG
     const uint8_t PROGMEM island_03[] = {
