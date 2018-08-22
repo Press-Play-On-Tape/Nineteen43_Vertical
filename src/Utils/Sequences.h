@@ -32,7 +32,8 @@ const uint8_t PROGMEM mission_00[] = {
   SCENERY_BOAT | 10,   // Boat
   SCENERY_NONE | 11, 
   SCENERY_NONE | 12, 
-  SCENERY_NONE | 13 };
+  SCENERY_NONE | 13 
+  };
 
 const uint8_t PROGMEM mission_01[] = { 
   14,

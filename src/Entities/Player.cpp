@@ -2,6 +2,7 @@
 #include <Sprites.h>
 #include "Player.h"
 #include "../Utils/Enums.h"
+#include "../Images/Images_Player.h"
 
 #define ROLL_DELAY  8
 
@@ -10,6 +11,17 @@ Player::Player(const uint8_t * const * images) : Plane(images) {
   initGame();
 
 }
+
+#ifdef USE_ROLL_MOVEMENT
+void Player::setY(const SQ15x16 value) {
+
+  _movement = PLAYER_MOVE_NONE;
+  if (value < _y) _movement = PLAYER_MOVE_UP;
+  if (value > _y) _movement = PLAYER_MOVE_DOWN;
+  _y = value;
+
+}
+#endif
 
 void Player::initGame() {
             
@@ -142,8 +154,17 @@ void Player::renderImage(uint8_t frame) {
 
       if (_health > -3) {
 
-        SpritesB::drawExternalMask(rollX, y, pgm_read_word_near(&_bitmaps[static_cast<uint8_t>(roll) ]), pgm_read_word_near(&_bitmaps[IMAGES_MASK_OFFSET + (static_cast<uint8_t>(roll) )]), (roll == 0 ? frame : 0), 0);
-
+        #ifdef USE_ROLL_MOVEMENT
+        if (roll != 0 || (roll == 0 && _movement == PLAYER_MOVE_NONE)) {
+        #endif
+          SpritesB::drawExternalMask(rollX, y, pgm_read_word_near(&_bitmaps[static_cast<uint8_t>(roll) ]), pgm_read_word_near(&_bitmaps[IMAGES_MASK_OFFSET + (static_cast<uint8_t>(roll) )]), (roll == 0 ? frame : 0), 0);
+        #ifdef USE_ROLL_MOVEMENT
+        }
+        else {
+          SpritesB::drawExternalMask(rollX, y, p38_move, p38_move_mask, _movement - 1, _movement - 1);
+          _movement = PLAYER_MOVE_NONE;
+        }
+        #endif
       }
 
     }

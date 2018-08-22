@@ -55,7 +55,6 @@ void EEPROM_Utils::initEEPROM(bool forceClear) {
     #ifdef SAVE_MEMORY
 
       uint16_t score = 0;
-      uint8_t level = 0;
 
       eeprom_update_word(EEPROM_SCORE_1, score);
       eeprom_update_word(EEPROM_SCORE_2, score);
